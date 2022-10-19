@@ -1,0 +1,25 @@
+#+title: Architecture
+In order to develop a valid and realistic model, it was necessary to gain additional knowledge about the structure and the intricacies of the system we wanted to reproduce and to make sound decisions about the structure of the model we were about to create.
+
+For this reason, this work is split into two main steps:
+- the analysis and retrieval of insights about the Mimic dataset
+- the development of the generative model itself.
+
+The two steps were performed almost in succession, with smaller additional analyses performed during the development process.
+
+* Structure of the analysis
+The first analysis we made were centered around gathering informations about the system.
+
+** Gathering informations about the tables
+First of all, we focused on understanding the relationships between the distinct tables of the dataset and the way their data was gathered.
+
+** Analysis of the interactions
+We then analyzed the interactions between the patients and the hospital system in order to figure a general pattern of interaction of the user.
+We were able to identify a common set of interactions performed during the hospial stay of a patient.
+
+** Analysis of the patients
+In order to develop a more specific model, given the huge amount of events registered for each stay of each patient, we decided to split the dataset in classes, chosen to resemble distinct characteristics of the users and their admissions.
+
+** Rate calculations
+Once all the interactions were located and the classes were chosen, we gathered the various distributions of time needed to
+

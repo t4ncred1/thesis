@@ -1,0 +1,9 @@
+#+title: Approach
+
+* Introduction
+
+The objective of this work is to create a customizable model that will realistically simulate the workload imposed on a datalake used in an hospital environment.
+
+This work was born as part of a project aimed at the creation of a benchmark for architectures intended for the deployment of Data Lakes in the medical environment;
+%#TODO{HBD} Mi piacerebbe aggiungere "nell'ambito del gruppo Health Big Data", aggiungendo qualche caratteristica descrittiva del progetto, ma non ho trovato una home page o un sito a cui fare riferimento per una descrizione corretta.
+Nonetheless, I hope it will be useful to anybody working in the performance evaluation field, in the medical environment or generally in need of a synthetic trace of the data sent by the patients of an hospital.

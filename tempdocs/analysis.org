@@ -1,0 +1,48 @@
+#+title: Analysis
+* Errori trovati durante l'analisi
+[[file:~/Documenti/University/Magistrale/tesi/MIMIC-III_demo/analysis/dati_incongruenti.ipynb]]
+
+** Chartevents che partono dopo la icustay
+
+** ICUstays starting before an admission
+
+** Overlapping admissions for the same patient
+
+** Waveforms non collegate a una ICU stay
+
+* Analisi effettuate a priori della classificazione
+
+** Etnia, lingua, stato maritale, sesso e età della prima admission di ogni paziente
+[[file:~/Documenti/University/Magistrale/tesi/MIMIC-III_demo/analysis/patients_analysis.ipynb]]
+
+** Numero di admissions per paziente
+[[file:~/Documenti/University/Magistrale/tesi/MIMIC-III_demo/analysis/patients_analysis.ipynb]]
+
+** Distribuzione delle admissions nei giorni della settimana
+[[file:~/Documenti/University/Magistrale/tesi/MIMIC-III_demo/analysis/admissions_analysis.ipynb]]
+Non si nota la differenza.
+C'è però una differenza sostanziale nel numero di admissions.
+
+** Admissions senza una ICU o con una icu immediata
+[[file:~/Documenti/University/Magistrale/tesi/MIMIC-III_demo/analysis/immediateICU.ipynb]]
+
+** Analisi degli eventi
+[[file:~/Documenti/University/Magistrale/tesi/MIMIC-III_demo/analysis/event_analysis.ipynb]]
+Questo notebook in realtà è stato fatto dopo la generazione per verificare le distribuzioni dei dati.
+
+* Motivazioni della classificazione
+Perché ogni classificazione è stata fatta?
+Per creare delle distribuzioni più specializzate per il modello.
+Fare le distribuzioni a partire da una media di tutti gli utenti avrebbe reso il modello meno specifico.
+
+** Età e genere
+Osservando le analisi fatte in [[*Etnia, lingua, stato maritale, sesso e età della prima admission di ogni paziente][Etnia, lingua, stato maritale, sesso e età della prima admission di ogni paziente]] si capisce che queste sono le uniche categorie su cui una classificazione dei pazienti può essere fatta.
+
+** Giorno della settimana della admission
+Osservando la distribuzione delle admission, vediamo che in generale le admissions sono distribuite in modo equilibrato tra tutti i giorni infrasettimanali, con una caduta nel numero di admissions durante il week end.
+
+La lunghezza delle admissions, tuttavia, rimane pressoché uguale.
+
+* Analisi effettuate dopo la classificazione
+
+* Analisi delle singole tabelle

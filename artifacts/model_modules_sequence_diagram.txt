@@ -1,0 +1,28 @@
+actor "User" as U
+participant "Handler" as H
+participant "Classification module" as C
+participant "Interaction Pattern module" as I
+participant "Data Generation module" as D
+
+
+U->H: generate_trace(//number_of_patients)
+
+loop for _ in number_of_patients
+H->C: get_class()
+activate C
+H<-C://class//
+deactivate C
+H->I: get_interaction_pattern(//class//)
+activate I
+I->H: //interactions_pattern//
+deactivate I
+H->D: get_trace(//class//, //interactions_pattern//)
+activate D
+D->H: //patient_trace//
+deactivate D
+end
+
+H->H: join_traces(//patient_traces//)
+activate H
+H->U: //trace//
+deactivate H

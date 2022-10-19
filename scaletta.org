@@ -1,0 +1,110 @@
+#+title: Scaletta
+* TODO Intro
+* TODO Stato dell'arte
+* TODO Contributions
+** Background
+*** Mimic Description
+**** Origins
+Beth Israel, time period
+**** What it contains
+Events mostly (also talk about dictionary tables)
+***** What do we mean when we say "events"
+**** What the dataset was designed to do
+not performance analysis
+**** Mimic deidentification
+**** Discrepancies found
+**** Mimic III vs Mimic IV
+***** Why did we chose Mimic III
+**** Mimic tables
+*** Phase type distributions
+*** Hyperstar
+*** Kolm-Smir test
+*** JMT
+
+* STRT Approach
+** Intro
+*** DONE Thesis objective
+**** thesis description
+analisi su dati medici con l'obiettivo di fare uno studio sul workload in un contesto di datalake
+**** NO which work is this part of
+Breve descrizione del progetto generale (benchmark) e di Health Big Data
+*Move to another section
+**** why is it useful
+
+** Design decisions
+
+*** The obstacle of mimic deidentification
+**** what is deidentified (briefly)
+**** how it influenced our work
+We had to consider the patients singularly.
+
+*** Two step work (design decisions)
+(analysis + model creation)
+**** why we need an analysis
+to gain additional knowledge about the structure of and the intricacies of the system we wanted to reproduce and to make sound decisions about the structure of the model we were about to create.
+**** how were the steps performed
+in succession, with smaller additional analyses perfomed during the development process.
+*** Step 1: analysis
+**** Which analyses were performed
+***** which informations of interest about our work can we retrieve
+***** reconstruction of the patient-hospital interactions
+***** analysis of the data exchange
+***** Waveform specific analysis
+Waveform analysis requires a section by itself (?)
+**** Classification
+**** NO How did we gather the distributions of events and interactions
+of both interaction times and events intertime
+*** Step 2: model
+**** Main objectives of the generator model
+modularity, configurability and usability
+**** Modules of the generator model (in general)
+- classification
+- layered data structure
+- objective usage (as a library, to be extended)
+  An example usage will be showcased ...
+
+** Analysis
+*** Analysis of the interactions
+**** Classification
+***** Analysis of the patients
+****** Marital status :graph:
+****** Language :graph:
+****** Ethnicity :graph:
+****** Gender :graph:
+****** Age :graph:
+****** Number of admissions :graph:
+***** [?] Analysis of the admissions
+***** Why these classes
+****** Valid
+Every one of the chosen classes has a relevant presence in the dataset
+****** Relevant
+The classifications made "make sense" (medical relevance, probabilistic relevance (weekday))
+Ethnicity would have been another relevant
+**** Found interactions
+***** default interactions (single icustay, single admission)
+***** which are the special cases found for the interactions
+****** Multiple icu stays & multiple admissions :graph:
+****** immediate icu admission :graph:
+****** immediate finish after icu (no posticu) :graph:
+****** noicu :graph:
+
+**** which distributions did we use to model the duration of each interaction
+***** Why phase type
+versatile
+****** Needed tools (hyperstar)
+****** Limitations of hyperstar
+Needs user input
+***** How did they perform? :graph:
+some example, not all of them? Appendix probably.
+**** Analysis of the data exchange
+**** Distribution fitting for interaction times
+**** Distribution fitting for events exchange
+
+* TODO Model generator
+
+* [?] Implementation
+
+* TODO Evaluation
+** Design of evaluation
+** Metrics
+** Results
