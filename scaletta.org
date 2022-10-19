@@ -1,3 +1,4 @@
+# -*- eval: (flyspell-mode 0) -*-
 #+title: Scaletta
 * TODO Intro
 * TODO Stato dell'arte
@@ -12,6 +13,7 @@ Events mostly (also talk about dictionary tables)
 **** What the dataset was designed to do
 not performance analysis
 **** Mimic deidentification
+What is kept
 **** Discrepancies found
 **** Mimic III vs Mimic IV
 ***** Why did we chose Mimic III
@@ -25,14 +27,16 @@ not performance analysis
 ** Intro
 *** DONE Thesis objective
 **** thesis description
-analisi su dati medici con l'obiettivo di fare uno studio sul workload in un contesto di datalake
-**** NO which work is this part of
-Breve descrizione del progetto generale (benchmark) e di Health Big Data
-*Move to another section
-**** why is it useful
+Questo lavore rivolve intorno l'analisi di un set di dati health-related dei pazienti di un'ospedale,
+**** Obiettivi
+- creazione di un modello delle interazioni
+- rendere tale modello riutilizzabile
+**** How it was born
+Breve descrizione del progetto generale (benchmark)
+
+**** Why is it useful
 
 ** Design decisions
-
 *** The obstacle of mimic deidentification
 **** what is deidentified (briefly)
 **** how it influenced our work

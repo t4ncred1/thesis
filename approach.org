@@ -1,9 +1,73 @@
 #+title: Approach
 
 * Introduction
-
+#+begin_comment old introduction
 The objective of this work is to create a customizable model that will realistically simulate the workload imposed on a datalake used in an hospital environment.
 
 This work was born as part of a project aimed at the creation of a benchmark for architectures intended for the deployment of Data Lakes in the medical environment;
 %#TODO{HBD} Mi piacerebbe aggiungere "nell'ambito del gruppo Health Big Data", aggiungendo qualche caratteristica descrittiva del progetto, ma non ho trovato una home page o un sito a cui fare riferimento per una descrizione corretta.
 Nonetheless, I hope it will be useful to anybody working in the performance evaluation field, in the medical environment or generally in need of a synthetic trace of the data sent by the patients of an hospital.
+#+end_comment
+
+This work revolves around the analysis of heterogeneous health related data about the patients of a hospital with two main objectives:
+1. The creation of a model of the interactions between the patients and the hospital data system.
+2. Making such model reusable, configurable and extensible, so that it could be used in different settings and with different data sources.
+As previously noted in /chapter x/, the term heterogeneous is used in this context to indicate a set of structured and unstructured data.
+
+It was developed as part of a wider project aimed at the creation of a benchmark for architectures intended for the deployment of Data Lakes (see /chapter x/ for a term explanation) in a health-centered environment.
+
+In this context, a similar model would enable the workload characterization of a number of health-related systems and, as such, would make it possible to define the architecture necessary to support the aforementioned workload with a chosen performance degree.
+
+# introduce mimic here
+
+* Design decisions
+#+begin_comment old design decisions
+As previously explained in chapter \ref{capitolo2}, one of the obstacles we met during the development of this work was the lack of information about existing datalake architectures in the medical environment.  %#TODO Parlare nella sezione "state of the art" della mancanza di informazioni riguardanti la struttura dei data lakes in ambito medico.
+After a long period of research, we found MIMIC: a large, freely-available dataset comprising deidentified health-related data associated with the patients of the Beth Israel Deaconess Medical Center. %#TODO link biblio al sito di MIMIC-III.
+
+Different versions of MIMIC are available. Version IV is the latest, and covers the years from 2008 to 2019. Version III is the previously released version and covers the years from 2001 to 2012.
+
+During the starting phase of our work, we considered which version of MIMIC to use and we ended up choosing MIMIC-III.
+The reason behind this apparently controversial choice lies in the deidentification procedures applied to the two datasets.
+
+Both versions of MIMIC (and previous versions too) had all the dates and timestamps associated with each patient moved in the future by a random amount of time. This transformation step was performed by the authors to avoid the recognition of patients of the hospital by their hospitalization date, their date of birth or any other timing-related information, therefore preventing any privacy violation.
+
+MIMIC-III kept some information valid after the modification.
+During the deidentification process, in the MIMIC-III dataset:
+\begin{itemize}
+    \item The day of the week of each date or timestamp after the deidentification process matches the week day of the original date or timestamp.
+    \item The season  of each date or timestamp after the deidentification process roughly matches the season of the original date or timestamp.
+%\item The time of the day of each timestamp after the deidentification process matches the time of the day of the original timestamp.
+    \item Although each individual date was shifted in the future by a random offset, intervals were preserved for each individual patient.
+\end{itemize}
+Not all this information is preserved in MIMIC-IV.
+
+Since our work revolves around an analysis of the time at which each event is registered to model the interaction between the user and the hospital system, we decided to use MIMIC-III instead of MIMIC-IV to develop our model.
+
+The lack of information caused by the deidentification procedure highlighted above deeply influenced the way the model is shaped, too.
+
+Particularly, due to the random shift in time applied to the timestamps of the data associated with each patient, an analysis of the exchange of data between the patients as a whole and the hospital system was basically impossible; For this reason, we decided to focus our model on the interaction between the single user and the hospital system.
+#+end_comment
+
+** MIMIC-III and its deidentification procedures
+
+# To comply to the legal requirements on public health related information, the data that comprises MIMIC-III had to undergo a deidentification procedure (cit. https://physionet.org/content/mimiciii/1.4/) before it could be incorporated into the dataset.
+
+# During this procedure personal informations about the patients, like phone numbers, addresses and names were discarded from both structured and unstructured data.
+
+# Moreover, to avoid the recognition of the patients based on known habits or
+As previously stated in /chapter X/, the data that comprises MIMIC-III had to undergo a deidentification procedure before it could be incorporated into the dataset.
+
+In particular, in order to avoid the recognition of the patients based on known habits or conditions, for each individual patient the dates were shifted into the future by a random offset in a consistent manner.
+
+This way, although any time correlation between different patients is lost, all the time intervals between two entries associated to the same patient are kept intact; other than that, only a handful of characteristics of the original date were still valid after the random shift, like the day of the week, the general season and the time of the day.
+
+Below you can find an image that describes the deintification process with an example.
+
+[[./artifacts/deidentification.png]]
+
+# This deeply influenced the structure of our work because
+Since the creation of a model of the interactions between a user and a system revolves around the analysis of the timing of such interactions, the deidentification procedure applied on MIMIC-III deeply influenced the structure of our work.
+An analysis of the exchange of data between the patients as a whole and the hospital system was made basically impossible and, for this reason, we decided to focus on modelling the interactions of each single patient with the hospital system and to avoid.
+
+** A two step work
