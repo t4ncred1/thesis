@@ -8,8 +8,13 @@
 **** Origins
 Beth Israel, time period
 **** What it contains
-Events mostly (also talk about dictionary tables)
+Events mostly (also talk about dictionary tables etc)
 ***** What do we mean when we say "events"
+Describe how tuples are formed:
+- row id
+- a reference to the admission id
+- eventually a reference to the icustay id
+- eventually a timing value (we will mostly focus on events that have this attribute)
 **** What the dataset was designed to do
 not performance analysis
 **** Mimic deidentification
@@ -18,13 +23,16 @@ What is kept
 **** Mimic III vs Mimic IV
 ***** Why did we chose Mimic III
 **** Mimic tables
+**** How did we retrieve data
+***** MIMIC (demo + corso)
+***** Waveform (struttura del codice per ottenere i dati)
 *** Phase type distributions
 *** Hyperstar
 *** Kolm-Smir test
 *** JMT
 
 * STRT Approach
-** Intro
+** WAIT Intro
 *** DONE Thesis objective
 **** thesis description
 Questo lavore rivolve intorno l'analisi di un set di dati health-related dei pazienti di un'ospedale,
@@ -42,7 +50,7 @@ Breve descrizione del progetto generale (benchmark)
 **** how it influenced our work
 We had to consider the patients singularly.
 
-*** Two step work (design decisions)
+*** Two step work
 (analysis + model creation)
 **** why we need an analysis
 to gain additional knowledge about the structure of and the intricacies of the system we wanted to reproduce and to make sound decisions about the structure of the model we were about to create.
@@ -60,30 +68,18 @@ Waveform analysis requires a section by itself (?)
 of both interaction times and events intertime
 *** Step 2: model
 **** Main objectives of the generator model
-modularity, configurability and usability
+reusability and extensibility
+***** Why reusability and extensibility?
 **** Modules of the generator model (in general)
 - classification
 - layered data structure
 - objective usage (as a library, to be extended)
   An example usage will be showcased ...
+**** Impossibilità di utilizzare valori reali
+
 
 ** Analysis
 *** Analysis of the interactions
-**** Classification
-***** Analysis of the patients
-****** Marital status :graph:
-****** Language :graph:
-****** Ethnicity :graph:
-****** Gender :graph:
-****** Age :graph:
-****** Number of admissions :graph:
-***** [?] Analysis of the admissions
-***** Why these classes
-****** Valid
-Every one of the chosen classes has a relevant presence in the dataset
-****** Relevant
-The classifications made "make sense" (medical relevance, probabilistic relevance (weekday))
-Ethnicity would have been another relevant
 **** Found interactions
 ***** default interactions (single icustay, single admission)
 ***** which are the special cases found for the interactions
@@ -101,10 +97,26 @@ Needs user input
 ***** How did they perform? :graph:
 some example, not all of them? Appendix probably.
 **** Analysis of the data exchange
+*** Classification
+**** Analysis of the patients
+***** Marital status :graph:
+***** Language :graph:
+***** Ethnicity :graph:
+***** Gender :graph:
+***** Age :graph:
+***** Number of admissions :graph:
+**** [?] Analysis of the admissions
+**** Why these classes
+***** Valid
+Every one of the chosen classes has a relevant presence in the dataset
+***** Relevant
+The classifications made "make sense" (medical relevance, probabilistic relevance (weekday))
+Ethnicity would have been another relevant
+*** Distribution fitting
 **** Distribution fitting for interaction times
 **** Distribution fitting for events exchange
 
-* TODO Model generator
+** TODO Model generator
 
 * [?] Implementation
 
@@ -112,3 +124,5 @@ some example, not all of them? Appendix probably.
 ** Design of evaluation
 ** Metrics
 ** Results
+* TODO Future Work
+** Include values other than timings
