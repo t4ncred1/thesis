@@ -86,3 +86,28 @@ Because of this requirement, the two steps were performed in succession, with mi
 
 # Possibile immagine: una pipeline (tipo fabbrica) dove l'output dell'analisi è dato in pasto development del modello, che senza non può funzionare. Magari aggiungi come canale secondario gli obiettivi del modello (estensibilità, reusabilità). Potrebbe anche contenere info che andrai a spiegare nelle due sez successive e avere una caption del tipo "Questa sarà la struttura generale del discorso"
 
+** TODO First step: the analysis
+As previously explained, the analysis of the available data is the foundamental step towards the creation of the model.
+
+The research performed on MIMIC-III is comprised of multiple and various analyses, but they can ultimately be split into three main kinds:
+
+1. Analyses focused on discovering the interactions between the patient and the hospital system.
+
+2. Analyses focused on choosing the possible categories to split the data into.
+   The decision to split the data into categories was taken to fit better the various distributions and, in turn, make a more precise and realistic model.
+
+3. Analyses focused on fitting and testing the distributions of the various times considered.
+
+# The research performed on MIMIC is comprised of multiple and various analyses.
+
+# The main focus of the analysis we scanned the dataset to discover the not evident interactions between the patient and the hospital system, with a special focus on uncommon cases.
+
+# Since the
+
+The procedures followed and the methodologies used for each analysis will be explained in more depth in /chapter X/.
+
+** TODO Second step: the development of the model
+The next stage of our work revolved around the development of the model.
+
+# desired outputs
+As with the analysis, the development of the model count be split into multiple modules

@@ -1,0 +1,11 @@
+#+title: Analysis
+
+* Introduzione
+
+* Analisi delle interazioni
+
+** Default interactions
+
+MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
+
+Doing so, it also provides informations about the generic hospital stay (not necessarily in an ICU) of those patients.
