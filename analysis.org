@@ -1,11 +1,35 @@
 #+title: Analysis
 
-* Introduzione
+* TODO Introduzione
 
-* Analisi delle interazioni
+* Analisys of the interactions
 
-** Default interactions
+** Why? :traduzione:
+Volendo modellare e riprodurre il flusso di dati tra il paziente e il sistema ospedaliero di cui mimic ci fornisce uno squarcio, è utilie, come prima cosa, cercare di individuare il pattern di interazione tra utenti e ospedale.
 
-MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
+** Default interactions :traduzione:
 
-Doing so, it also provides informations about the generic hospital stay (not necessarily in an ICU) of those patients.
+As introduced in section X, MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
+
+Oltre a contenere le informazioni sulle permanenze in ICU dei pazienti (quali ad esempio data e ora di inizio e fine della icy stay) ha anche informazioni riguardati la loro intera permanenza ospedaliera fuori dai reparti di terapia intensiva.
+
+Alcune tipologie di eventi sono collegate a (e avvengono durante) una permanenza in ICU, mentre altre sono invece associate all'intera permanenza ospedaliera.
+# Per questo motivo, è importante definire i periodi in cui ciascuna di queste tipologie di eventi viene generata.
+
+Utilizzando i termini di MIMIC, diremo che il paziente è associato a una Admission dal momento in cui viene generato l'evento che segnala l'inizio della permanenza ospedaliera a quando viene segnata la fine della permanenza, mentre diremo che il paziente è associato a una ICU stay quando viene generato l'evento che segnala l'inizio della permanenza in ICU.
+# TODO: capitolo MIMIC
+
+Una prima approssimazione del comportamento dei pazienti può essere la seguente:
+
+- Dopo l'inizio della permanenza ospedaliera, c'é un periodo di tempo prima dell'inizio della permanenza in ICU del paziente in cui il paziente è associato a un'admission ma non a una ICUstay.
+- Il paziente viene quindi ammesso in una ICU, dove comincia la sua ICU stay. Durante questo periodo, sono generati gli eventi associati alla ICU stay.
+- Il paziente esce dall'ICU
+- Dopo un periodo di tempo fuori dall'ICU, si conclude la sua admission.
+
+In tutti questi periodi di tempo, il paziente ha continuato a generare eventi legati alla sua admission.
+
+# TODO: immagine modello fin qui.
+
+
+
+# Doing so, it also provides informations about the generic hospital stay (not necessarily in an ICU) of those patients.
