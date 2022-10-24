@@ -1,11 +1,69 @@
 #+title: Analysis
 
-* Introduzione
+* TODO Introduzione
 
-* Analisi delle interazioni
+* Analisys of the interactions
 
-** Default interactions
+** Why? :traduzione:
+Volendo modellare e riprodurre il flusso di dati tra il paziente e il sistema ospedaliero di cui mimic ci fornisce uno squarcio, è utilie, come prima cosa, cercare di individuare il pattern di interazione tra utenti e ospedale.
 
-MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
+** Default interactions :traduzione:
 
-Doing so, it also provides informations about the generic hospital stay (not necessarily in an ICU) of those patients.
+As introduced in section X, MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
+
+Oltre a contenere le informazioni sulle permanenze in ICU dei pazienti (quali ad esempio data e ora di inizio e fine della icy stay) ha anche informazioni riguardati la loro intera permanenza ospedaliera fuori dai reparti di terapia intensiva.
+
+Alcune tipologie di eventi sono collegate a (e avvengono durante) una permanenza in ICU, mentre altre sono invece associate all'intera permanenza ospedaliera.
+# Per questo motivo, è importante definire i periodi in cui ciascuna di queste tipologie di eventi viene generata.
+
+Utilizzando i termini di MIMIC, diremo che il paziente è associato a una Admission dal momento in cui viene generato l'evento che segnala l'inizio della permanenza ospedaliera a quando viene segnata la fine della permanenza, mentre diremo che il paziente è associato a una ICU stay quando viene generato l'evento che segnala l'inizio della permanenza in ICU.
+# TODO: capitolo MIMIC
+
+Una prima approssimazione del comportamento dei pazienti può essere la seguente:
+
+- Dopo l'inizio della permanenza ospedaliera, c'é un periodo di tempo prima dell'inizio della permanenza in ICU del paziente in cui il paziente è associato a un'admission ma non a una ICUstay.
+- Il paziente viene quindi ammesso in una ICU, dove comincia la sua ICU stay. Durante questo periodo, sono generati gli eventi associati alla ICU stay.
+- Il paziente esce dall'ICU
+- Dopo un periodo di tempo fuori dall'ICU, si conclude la sua admission.
+
+In tutti questi periodi di tempo, il paziente ha continuato a generare eventi legati alla sua admission.
+
+Le interazioni appena descritte sono formalizzate nel seguente UML activity diagram (gli elementi formali degli activity diagram sono descritti in link )
+
+# %#TODO: insert link to UML activity diagram sprcification
+
+# %#TODO: UML activity diagram base
+
+** Refinements on the interaction model
+Il modello appena visto può essere migliorato facendo alcune considerazioni riguardanti MIMIC e confrontandole con i dati contenuti in esso.
+
+*** Multiple hospitalizations and multiple ICU stays
+
+Una delle prime considerazioni fatte ha introdotto la possibilità che lo stesso paziente avesse molteplici admissions e, all'interno della stessa permanenza ospedaliera, molteplici ICU stays.
+Le analisi fatte su MIMIC a riguardo hanno dato supporto a queste ipotesi, come mostrano i grafici riportati sotto:
+
+# %#TODO: grafico admissions_amount.png
+# %#TODO: grafico icustays_amount.png
+
+Come possiamo vedere, nonostante la maggioranza dei pazienti abbia una sola permanenza ospedaliera registrata e una singola permanenza in ICU, una porzione non trascurabile hanno molteplici admissions associate o molteplici icu stays associate alla stessa permanenza ospedaliera.
+
+Visti questi risultati, è utile modificare il nostro modello delle interazioni per tenere in considerazione i pazienti sopra citati.
+L'activity diagram mostrato di seguito mostra il nuovo modello, considerando la possibilità che l'admission si ripeta o che ci sia un ulteriore permanenza in ICU oltre la prima.
+
+# %#TODO: activity diagram 2
+
+Come si può notare, tra permanenze ICU successive viene considerato un intervallo di tempo, denominato nel diagramma "wait time between icu stays".
+Questo periodo di tempo poteva non essere considerato separatamente dall'azione "wait after the ICU stay", ma abbiamo deciso di considerarli separamente già a questo stadio nell'eventualità che avessero una distribuzione differente.
+
+*** TODO ICU stays that start immediately
+Non le abbiamo considerate alla fine, ma possiamo mostrare che alcune partono dopo pochissimo tempo.
+
+*** Hospitalizations that end immediately after discharge from ICU
+Analizzando MIMIC alla ricerca di comportamenti fuori dallo standard abbiamo notato che un numero importante di permanenze ICU finisce dopo la permanenza ospedaliera a cui sono collegati (12762 permanenze in ICU su 61532).
+Come possiamo notare nel grafico sotto, che rappresenta la cumulative density function delle icustays "anomale", la maggior parte di esse ha al più un giorno di distanza dalla fine della admission ad essa collegata, con oltre il 75% al di sotto della soglia delle 3 ore.
+
+Non avendo trovato informazioni a riguardo nella documentazione di MIMIC-III, abbiamo deciso di considerarle come dei refusi.
+
+Tuttavia, non abbiamo mancato di considerarle nella nostra analisi: onde evitare che venissero perse o considerate scorrettamente, abbiamo deciso di modificare il nostro modello introducendo la possibilità che la permanenza ospedaliera termini immediatamente dopo la fine della permanenza in ICU.
+
+L'activity diagram del nuovo modello è mostrato di seguito:

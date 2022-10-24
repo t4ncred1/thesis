@@ -25,6 +25,7 @@ What is kept
 **** Mimic tables
 **** How did we retrieve data
 ***** MIMIC (demo + corso)
+***** Postgres Container
 ***** Waveform (struttura del codice per ottenere i dati)
 *** Phase type distributions
 *** Hyperstar
@@ -56,7 +57,7 @@ We had to consider the patients singularly.
 to gain additional knowledge about the structure of and the intricacies of the system we wanted to reproduce and to make sound decisions about the structure of the model we were about to create.
 **** how were the steps performed
 in succession, with smaller additional analyses perfomed during the development process.
-*** Step 1: analysis
+*** [?] Step 1: analysis
 **** Which analyses were performed
 ***** which informations of interest about our work can we retrieve
 ***** reconstruction of the patient-hospital interactions
@@ -66,7 +67,7 @@ Waveform analysis requires a section by itself (?)
 **** Classification
 **** NO How did we gather the distributions of events and interactions
 of both interaction times and events intertime
-*** Step 2: model
+*** [?] Step 2: model
 **** Main objectives of the generator model
 reusability and extensibility
 ***** Why reusability and extensibility?
@@ -84,7 +85,7 @@ reusability and extensibility
 ***** default interactions (single icustay, single admission)
 ***** which are the special cases found for the interactions
 ****** Multiple icu stays & multiple admissions :graph:
-****** immediate icu admission :graph:
+****** immediate finish after icu :graph:
 ****** immediate finish after icu (no posticu) :graph:
 ****** noicu :graph:
 
@@ -116,7 +117,7 @@ Ethnicity would have been another relevant
 **** Distribution fitting for interaction times
 **** Distribution fitting for events exchange
 
-** TODO Model generator
+** TODO Model development
 
 * [?] Implementation
 
