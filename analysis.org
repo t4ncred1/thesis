@@ -72,3 +72,6 @@ L'activity diagram aggiornato è mostrato di seguito:
 
 # %#TODO: activity diagram
 
+*** HOLD Hospitalizations that don't have an ICU stay
+
+Nel cercare informazioni aggiuntive riguardanti MIMIC, abbiamo trovato un altro caso limite, anche se meno evidente dei precedenti: una piccola porzione delle permanenze ospedaliere (1190 su 58976, corrispondente al 2%) non ha una permanenza in ICU associata.
