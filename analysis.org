@@ -55,15 +55,20 @@ L'activity diagram mostrato di seguito mostra il nuovo modello, considerando la 
 Come si può notare, tra permanenze ICU successive viene considerato un intervallo di tempo, denominato nel diagramma "wait time between icu stays".
 Questo periodo di tempo poteva non essere considerato separatamente dall'azione "wait after the ICU stay", ma abbiamo deciso di considerarli separamente già a questo stadio nell'eventualità che avessero una distribuzione differente.
 
-*** TODO ICU stays that start immediately
+*** HOLD ICU stays that start immediately
 Non le abbiamo considerate alla fine, ma possiamo mostrare che alcune partono dopo pochissimo tempo.
 
 *** Hospitalizations that end immediately after discharge from ICU
 Analizzando MIMIC alla ricerca di comportamenti fuori dallo standard abbiamo notato che un numero importante di permanenze ICU finisce dopo la permanenza ospedaliera a cui sono collegati (12762 permanenze in ICU su 61532).
 Come possiamo notare nel grafico sotto, che rappresenta la cumulative density function delle icustays "anomale", la maggior parte di esse ha al più un giorno di distanza dalla fine della admission ad essa collegata, con oltre il 75% al di sotto della soglia delle 3 ore.
 
-Non avendo trovato informazioni a riguardo nella documentazione di MIMIC-III, abbiamo deciso di considerarle come dei refusi.
+# %#TODO: image: icustays-end-before-admissions_cdf
 
-Tuttavia, non abbiamo mancato di considerarle nella nostra analisi: onde evitare che venissero perse o considerate scorrettamente, abbiamo deciso di modificare il nostro modello introducendo la possibilità che la permanenza ospedaliera termini immediatamente dopo la fine della permanenza in ICU.
+Non avendo trovato informazioni a riguardo nella documentazione di MIMIC-III, per evitare che venissero perse o considerate scorrettamente successivamente, abbiamo deciso di considerarle come la fine reale delle permanenze ospedaliere.
 
-L'activity diagram del nuovo modello è mostrato di seguito:
+In accordo con questa considerazione, visto l'alto numero di permanenze ospedaliere che terminano immediatamente dopo la permanenza in ICU, abbiamo ritenuto opportuno considerare questa opportunità separatamente, introducendola nel nostro modello.
+
+L'activity diagram aggiornato è mostrato di seguito:
+
+# %#TODO: activity diagram
+
