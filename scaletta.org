@@ -28,6 +28,8 @@ What is kept
 ***** Postgres Container
 ***** Waveform (struttura del codice per ottenere i dati)
 *** Phase type distributions
+**** versatilità
+[cite:@bladtReviewPhasetypeDistributions2005]
 *** Hyperstar
 *** Kolm-Smir test
 *** JMT
