@@ -8,6 +8,7 @@
 # Volendo modellare e riprodurre il flusso di dati tra il paziente e il sistema ospedaliero di cui mimic ci fornisce uno squarcio, è utilie, come prima cosa, cercare di individuare il pattern di interazione tra utenti e ospedale.
 
 Since we wanted to model and reproduce the stram of information between the patient and the hospital system of which Mimic gives us a glimpse, it is useful, as a first step, to try and understand the registered behavior of the users in the hospital system.
+
 ** Default interactions :traduzione:
 As introduced in section X, MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
 
@@ -116,17 +117,39 @@ The updated activity diagram is shown in the following figure.
 
 *** HOLD Hospitalizations that don't have an ICU stay
 
-Nel cercare informazioni aggiuntive riguardanti MIMIC, abbiamo trovato un altro caso limite, anche se meno evidente dei precedenti: una piccola porzione delle permanenze ospedaliere (1190 su 58976, corrispondente al 2%) non ha una permanenza in ICU associata.
+# Nel cercare informazioni aggiuntive riguardanti MIMIC, abbiamo trovato un altro caso limite, anche se meno evidente dei precedenti: una piccola porzione delle permanenze ospedaliere (1190 su 58976, corrispondente al 2%) non è associata con alcuna permanenza icu nella tabella ICUSTAYS di MIMIC-III (vedi la sezione [] per riguardanti le tabelle di mimic).
+
+While looking for additional informations in MIMIC, we found another limit case, less evident than the ones previously considered: A small portion of the hospital stays (1190 over 58976, 2%) is not associated to any ICU stay in the ICUSTAYS table of MIMIC-III (see section [] for a presentation of the tables that comprise MIMIC-III).
+# %#TODO: mimic
+
+Although they do not represent a big portion of the cases considered (but still a significant one), due to their outstanding behavior we deemed useful to consider these admissions separately in our model, of which you can see the updated version below.
+
+# %#TODO: diagramma noicu
+
+# Alla fine del percorso di sviluppo del modello (quasi per caso) ci siamo resi conto del fatto che questa caratteristica fuori dalla norma per un dataset specializzato sulle permanenze in ICU è effettivamente un caso particolare: Queste permanenze ospedaliere erano collegate a degli eventi a loro volta associati a una permanenza in ICU, ma tale permanenza in ICU, nella tabella ICUSTAYS, era associata a una permanenza ospedaliera differente (anche se dello stesso paziente);
+# Questa casistica non è sottolineata nella documentazione di MIMIC e mette in dubbio il fatto che durante alcune permanenze ospedaliere possano non avvenire icustays.
+
+During the final stages of the development process for the model, we realized that this outstanding characteristic was indeed a peculiar case: the hospital stays described above are connected with some events, which in turn are associated to some icu stays, but these icu stays are associated to a different hospital stay (from the same patient) in the ICUSTAYS table;
+This possibility is not described in MIMIC's documentation, and jeopardizes the correctness of the updated model.
+
+# Essendo uno dei principali obiettivi del nostro modello la riusabilità (come sottolineato nella sezione []), abbiamo deciso di mantenere questa casistica in quanto, considerando un caso più generico, possiamo comunque assumere che durante alcune permanenze ospedaliere i pazienti non permangano in una ICU.
+
+Since one of the main objective of our model is reusability though (as explained in section []), we decided to keep the modifications applied. After all, if we considered a more general case that did not cover only ICU patients, we could safely assume that some hospital stays would not result in an ICU stay.
+# %#TODO: sezione design decisions
+
+The activity updated activity diagram is shown in the figure below.
+
+# %#TODO: activity diagram
 
 *** Conclusion
-In the model whose development was shown in this section we have identified a total of 5 time intervals:
+In the model whose development was shown in this section we identified a total of 5 time intervals:
 - The time in ICU, in which the events associated with the ICU are created.
 - The time waiting before an admission and the first ICU stay
 - The time between two consecutive ICU stays.
 - The time between the end of the last ICU stay and the end of the entire hospital stay.
 - The total time in the hospital, which shall be considered as the sum of the times listed above.
 
-The next step in our analysis is to find a distribution that correctly fits each of these time intervals (except the last one).
+The next step in our analysis is to find the distributions that correctly fit each of these time intervals (except the last one, which can be derived from the others).
 
 ** Fitting the interactions
 Once the behavior of the patients of the Beth Israel Institute were explored and the model shown in section [1] has been developed, the next step is to find the distributions of each of the time intervals identified.
