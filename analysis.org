@@ -4,10 +4,10 @@
 
 * Analisys of the interactions
 
-** Why? :traduzione:
+** Why?
 # Volendo modellare e riprodurre il flusso di dati tra il paziente e il sistema ospedaliero di cui mimic ci fornisce uno squarcio, è utilie, come prima cosa, cercare di individuare il pattern di interazione tra utenti e ospedale.
 
-Since we wanted to model and reproduce the stram of information between the patient and the hospital system of which Mimic gives us a glimpse, it is useful, as a first step, to try and understand the registered behavior of the users in the hospital system.
+Since we wanted to model and reproduce the stream of information between the patient and the hospital system of which Mimic gives us a glimpse, it is useful, as a first step, to try and understand the behavior of the users registered in the hospital system.
 
 ** Default interactions :traduzione:
 As introduced in section X, MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
