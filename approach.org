@@ -9,19 +9,22 @@ This work was born as part of a project aimed at the creation of a benchmark for
 Nonetheless, I hope it will be useful to anybody working in the performance evaluation field, in the medical environment or generally in need of a synthetic trace of the data sent by the patients of an hospital.
 #+end_comment
 
-This work revolves around the analysis of heterogeneous health related data about the patients of a hospital with two main objectives:
-1. The creation of a model of the interactions between the patients and the hospital data system.
+This work revolves around the analysis of a dataset comprising heterogeneous health related data about the patients of a hospital with two main objectives:
+1. The creation of a model capable of mimicking the stream of data between the patients and the hospital data system.
 2. Making such model reusable and extensible, so that it could be easily adapted to different settings and different data sources.
 
 # As previously noted in /chapter x/, the term heterogeneous is used in this context to indicate a set of structured and unstructured data.
 
-It was developed as part of a wider project aimed at the creation of a benchmark for architectures intended for the deployment of Data Lakes (see /chapter x/ for a term explanation) in a health-centered environment.
+This work was developed as part of a wider project aimed at the creation of a benchmark for architectures intended for the deployment of Data Lakes (see chapter [] for a term explanation) in a health-centered environment.
 
-In this context, a similar model would enable the workload characterization of a number of health-related systems and, as such, would make it possible to define the architecture necessary to support the aforementioned workload with a chosen performance degree.
+In this context, a model capable of generating data similar to the reference source would enable the workload characterization of a number of health-related systems and, as such, would make it possible to define the architecture necessary to support the aforementioned workload with a chosen performance degree.
+
+The reference data source chosen for the model is MIMIC-III, a freely-available database comprising deidentified health-related data associated with over forty thousand patients who stayed in critical care units of the Beth Israel Deaconess Medical Center of Boston between 2001 and 2012. A thorough description of the dataset can be found in chapter [].
+# %#TODO: capitolo mimic
 
 The focus of the model will be on emulating the timings of the reference set of data; A possible extension to also include realistic values associated with each event (which in turn would make for a nice tool to evaluate the performance of real systems) is discussed in the /Future Works section/.
 
-The expected output of the model is therefore a trace of events, similar to the events described in /chaper x/, with the columns containing health related values stripped away.
+The expected output of the model is therefore a trace of events similar to those described in /section x/, with the columns containing health related values stripped away.
 
 # introduce mimic here
 
@@ -61,7 +64,8 @@ Particularly, due to the random shift in time applied to the timestamps of the d
 # During this procedure personal informations about the patients, like phone numbers, addresses and names were discarded from both structured and unstructured data.
 
 # Moreover, to avoid the recognition of the patients based on known habits or
-As previously stated in /chapter X/, the data that comprises MIMIC-III had to undergo a deidentification procedure before it could be incorporated into the dataset.
+As previously stated in chapter [], the data that comprises MIMIC-III had to undergo a deidentification procedure before it could be incorporated into the dataset.
+# %#TODO: capitolo mimic
 
 In particular, in order to avoid the recognition of the patients based on known habits or conditions, for each individual patient the dates were shifted into the future by a random offset in a consistent manner.
 
@@ -71,23 +75,21 @@ Below you can find an image that describes the deintification process with an ex
 
 [[./artifacts/deidentification.png]]
 
-# This deeply influenced the structure of our work because
-Since the creation of a model of the interactions between a user and a system revolves around the analysis of the timing of such interactions, the deidentification procedure applied on MIMIC-III deeply influenced the structure of our work:
-An analysis of the exchange of data between the patients as a whole and the hospital system was in factmade basically impossible and, for this reason, we decided to focus on modelling the interactions of the patients singularly.
+Since the focus of the model lies in the emulation of the timing of the reference source, the deidentification procedure applied on MIMIC-III deeply influenced the structure of our work: An analysis of the exchange of data between the patients as a whole and the hospital system was in fact made basically impossible and, for this reason, we decided to focus on modelling the interactions of the patients singularly.
 
 ** A two step work
-In order to fulfill the objectives listed in the /introductory section/, our work was split into two main steps:
+In order to fulfill the objectives listed in the introductory section, our work was split into two main steps:
 1. The analysis of the MIMIC-III dataset, which was necessary to gather informations about the interactions between the patients of the hospital and the hospital system and to understand which kinds of data was exchanged during those interactions.
-2. The development of the model itself, from its design to its possible use cases.
+2. The development of the model itself, starting from its architectural design.
 
-The outputs of the first step, defined in terms of distributions fitted, found relations etc. are the foundation behind the architectural choices of the model, which are the main topic of the second step.
+The outputs of the first step, defined in terms of distributions fitted, patterns found etc. are the foundation behind the architectural choices of the model, which are the main topic of the second step.
 
 Because of this requirement, the two steps were performed in succession, with minor additional analyses performed during the development of the model.
 
 # Possibile immagine: una pipeline (tipo fabbrica) dove l'output dell'analisi è dato in pasto development del modello, che senza non può funzionare. Magari aggiungi come canale secondario gli obiettivi del modello (estensibilità, reusabilità). Potrebbe anche contenere info che andrai a spiegare nelle due sez successive e avere una caption del tipo "Questa sarà la struttura generale del discorso"
 
 ** [?] First step: the analysis
-As previously explained, the analysis of the available data is the foundamental step towards the creation of the model.
+The analysis of the available data was the foundamental step towards the creation of the model.
 
 The research performed on MIMIC-III is comprised of multiple and various analyses, but they can ultimately be split into three main kinds:
 
