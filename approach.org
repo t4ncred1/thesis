@@ -25,7 +25,8 @@ The reference data source chosen for the model is MIMIC-III, a freely-available 
 The focus of the model will be on emulating the timings of the reference set of data; A possible extension to also include realistic values associated with each event (which in turn would make for a nice tool to evaluate the performance of real systems) is discussed in the /Future Works section/.
 
 The expected output of the model is therefore a trace of events similar to those described in /section x/, with the columns containing health related values stripped away.
-
+The only exception to this rule are Waveforms, which will be better presented in chapter []
+# %#TODO: capitolo/sezione waveforms
 # introduce mimic here
 
 * Design decisions
@@ -78,8 +79,8 @@ Below you can find an image that describes the deintification process with an ex
 Since the focus of the model lies in the emulation of the timing of the reference source, the deidentification procedure applied on MIMIC-III deeply influenced the structure of our work: An analysis of the exchange of data between the patients as a whole and the hospital system was in fact made basically impossible and, for this reason, we decided to focus on modelling the interactions of the patients singularly.
 
 ** A two step work
-In order to fulfill the objectives listed in the introductory section, our work was split into two main steps:
-1. The analysis of the MIMIC-III dataset, which was necessary to gather informations about the interactions between the patients of the hospital and the hospital system and to understand which kinds of data was exchanged during those interactions.
+In order to fulfill the objectives previously listed, our work was split into two main stages:
+1. The analysis of the MIMIC-III dataset, which was necessary to gather informations about the behavior of the patients of the hospital towards the hospital system and to understand which kinds of data was exchanged during those interactions.
 2. The development of the model itself, starting from its architectural design.
 
 The outputs of the first step, defined in terms of distributions fitted, patterns found etc. are the foundation behind the architectural choices of the model, which are the main topic of the second step.
@@ -91,14 +92,17 @@ Because of this requirement, the two steps were performed in succession, with mi
 ** [?] First step: the analysis
 The analysis of the available data was the foundamental step towards the creation of the model.
 
-The research performed on MIMIC-III is comprised of multiple and various analyses, but they can ultimately be split into three main kinds:
+The research performed on MIMIC-III is comprised of multiple and various analyses, but they can ultimately be split into three main steps:
 
-1. Analyses focused on discovering the interactions between the patient and the hospital system.
+- Firstly, we looked for common behavioral patterns in the interactions between the patients and the hospital system.
+  Siamo partiti da un modello semplice, derivato dalla struttura delle tabelle di MIMIC, a cui abbiamo aggiunto alcune caratteristiche estratte dalle analisi effettuate.
+# 1. Analyses focused on discovering the interactions between the patient and the hospital system.
 
-2. Analyses focused on choosing the possible categories to split the data into.
-   The decision to split the data into categories was taken to fit better the various distributions and, in turn, make a more precise and realistic model.
+-
+# 2. Analyses focused on choosing the possible categories to split the data into.
+#    The decision to split the data into categories was taken to fit better the various distributions and, in turn, make a more precise and realistic model.
 
-3. Analyses focused on fitting and testing the distributions of the various times considered.
+# 3. Analyses focused on fitting and testing the distributions of the various times considered.
 
 # The research performed on MIMIC is comprised of multiple and various analyses.
 

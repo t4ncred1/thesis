@@ -7,26 +7,27 @@
 ** Why?
 # Volendo modellare e riprodurre il flusso di dati tra il paziente e il sistema ospedaliero di cui mimic ci fornisce uno squarcio, è utilie, come prima cosa, cercare di individuare il pattern di interazione tra utenti e ospedale.
 
-Since we wanted to model and reproduce the stream of information between the patient and the hospital system of which Mimic gives us a glimpse, it is useful, as a first step, to try and understand the behavior of the users registered in the hospital system.
+Since we wanted to model and reproduce the stream of information between the patient and the hospital system of which MIMIC gives us a glimpse, it is useful, as a first step, to try and understand the behavior of the users registered in the hospital system.
 
 ** Default interactions :traduzione:
-As introduced in section X, MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
+As introduced in section [], MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
+# %#TODO: sez in cui introduco mimic.
 
 # Oltre a contenere le informazioni sulle permanenze in ICU dei pazienti (quali ad esempio data e ora di inizio e fine della icy stay) ha anche informazioni riguardati la loro intera permanenza ospedaliera fuori dai reparti di terapia intensiva.
 
-Other than informations about the ICU stays of the patients, like date and time of start and finish of the ICU stay, MIMIC also contains informations about their entire hospital stay, spanning their time outside the intensive care units.
+Other than informations about the ICU stays of the patients, like date and time of start and finish of the ICU stay, MIMIC also contains informations about their entire hospital stay, covering also their time outside the intensive care units.
 
 # Alcune tipologie di eventi sono collegate a (e avvengono durante) una permanenza in ICU, mentre altre sono invece associate all'intera permanenza ospedaliera.
 # Per questo motivo, è importante definire i periodi in cui ciascuna di queste tipologie di eventi viene generata.
 
-Some kind of events are associated to (and happen during) an ICU stay, while others are associated to the entire hospital stay.
+Some kinds of events are associated to (and happen during) an ICU stay, while others are associated to the entire hospital stay.
 
 # Utilizzando i termini di MIMIC, diremo che il paziente è associato a una Admission dal momento in cui viene generato l'evento che segnala l'inizio della permanenza ospedaliera a quando viene segnata la fine della permanenza, mentre diremo che il paziente è associato a una ICU stay quando viene generato l'evento che segnala l'inizio della permanenza in ICU.
 # TODO: capitolo MIMIC
 
-Using some MIMIC terminology, we will say an event is "associated to an admission (or an hospital stay)" when it has the "hadm_id" attribute, that is to say that is was registered during the time when the hospital stay took place, while we will say that the event is "associated to an icustay" when it possesses the attribute "icustay_id", that is to say it was registered during the time when the patient was in an ICU.
-As one can guess, every event is associated to an hadm_id, since all registered events happened during an hospital stay, but only some categories of events have an icustay_id associated.
-For additional information about the structure of MIMIC, please refer to link
+Using some MIMIC terminology, we will say an event is "associated to an admission (or an hospital stay)" when the table it is registered in has the "hadm_id" attribute, that is to say that is was registered during the time when the hospital stay took place, while we will say that the event is "associated to an icustay" when its table possesses the attribute "icustay_id", that is to say it was registered during the time when the patient was in an ICU.
+As one can guess, every event is associated to an hadm_id, since all registered events happened during an hospital stay, but not every category of events have an `icustay_id` associated.
+# For additional information about the structure of MIMIC, please refer to [].
 
 # %#TODO: capitolo mimic
 
@@ -41,16 +42,16 @@ For additional information about the structure of MIMIC, please refer to link
 
 # Le interazioni appena descritte sono formalizzate nel seguente UML activity diagram (gli elementi formali degli activity diagram sono descritti in link )
 
-A first approximation of the behavior of the patients inside the system could be the following:
+Based on this information, we can make a first approximation of the behavior of the patients inside the system:
 
 - After the hospital stay has started, there's a time period before the start of the ICU stay of the patient in which she is associated to an hospital stay but not to an ICU stay.
 - The patient then gets admitted into an intensive care unit, where her ICU stay starts. During the period inside the ICU, the events associated to the ICU stay are generated.
 - The patient then exits the intensive care unit.
 - After a period of time outside the ICU, her admission terminates.
 
-During this whole time, the patients continues to generate events associated to her admission.
+During this whole time, the patients continues to generate events associated to her hospital stay.
 
-The behavior described above can be formalized in the following UML activity diagram (the specification for UML activity diagrams can be found at link)
+The behavior described above can be formalized in the following UML activity diagram (the specification for UML activity diagrams can be found at [])
 
 # %#TODO: insert link to UML activity diagram sprcification
 
@@ -89,8 +90,16 @@ As you can see, between successive ICU stays a time interval is considered, labe
 This time period could be considered in conjunction with the period after the ICU stay shown in the previous version of the model, but we decided to consider them separately in the event that they have a different time distribution.
 
 
-*** HOLD ICU stays that start immediately
+*** HOLD ICU stays that start immediately :traduzione:
 Non le abbiamo considerate alla fine, ma possiamo mostrare che alcune partono dopo pochissimo tempo.
+
+Mentre proseguivamo le nostre analisi su mimic, abbiamo avuto modo di notare che alcune permanenze ospedaliere cominciano immediatamente con una permanenza in ICU.
+
+Abbiamo cercato quindi di analizzare le permanenze ospedaliere per capire se questo comportamento particolare fosse frutto di una caratteristica dell'intero dataset o se si trattasse di semplici outliers da non considerare.
+
+Per questo motivo abbiamo cercato di raccogliere le permanenze in ICU che cominciassero a un breve .
+
+
 
 *** Hospitalizations that end immediately after discharge from ICU
 # Analizzando MIMIC alla ricerca di comportamenti fuori dallo standard abbiamo notato che un numero importante di permanenze ICU finisce dopo la permanenza ospedaliera a cui sono collegati (12762 permanenze in ICU su 61532).
@@ -141,7 +150,7 @@ The activity updated activity diagram is shown in the figure below.
 
 # %#TODO: activity diagram
 
-*** Conclusion
+*** Conclusion :traduzione:
 In the model whose development was shown in this section we identified a total of 5 time intervals:
 - The time in ICU, in which the events associated with the ICU are created.
 - The time waiting before an admission and the first ICU stay
@@ -149,9 +158,83 @@ In the model whose development was shown in this section we identified a total o
 - The time between the end of the last ICU stay and the end of the entire hospital stay.
 - The total time in the hospital, which shall be considered as the sum of the times listed above.
 
-The next step in our analysis is to find the distributions that correctly fit each of these time intervals (except the last one, which can be derived from the others).
+# The next step in our analysis is to find the distributions that correctly fit each of these time intervals (except the last one, which can be derived from the others).
+# Il prossimo passo verso la creazione di un modello in grado di generare delle tracce di eventi comparabili a quelle descritte nel MIMIC-III dataset sarebbe to find the distributions that
+
+The next step towards the creation of a model capable of generating event traces comparable to the ones present in the MIMIC-III dataset would be to find the distributions that correctly fit each of these time intervals (except the last one, which can be derived from the others)
+
+Tuttavia, prima di introdurre quella sezione del lavoro è utilile parlare della classificazione che abbiamo deciso di applicare nel nostro modello e dei motivi che ci hanno portato a tale scelta.
+
+However, before we introduce that section of the work, it's useful to present the classification that we have decided to apply in our model and the reasons that led us to those choices.
+
+** Classification :traduzione:
+
+# %#WHY
+# Prima di concentrarci sulle distribuzioni che possono essere fit per modellare le interazioni identificate nella precedente sezione, abbiamo discusso la possibilità di effettuare una categorizzazione sui dati che avevamo a disposizione.
+
+Before focusing on the distributions that can be fit to model the interactions identified in the previous section, we discussed the possibility of categorizing the data we had available.
+
+# Dovendo scegliere delle distribuzioni che seguissero l'andamento di una grande mole di dati, abbiamo reputato utile introdurre questa possibilità.
+# La decisione di dividere i dati in categorie è stata presa per fare in modo che le interazioni trovate e le distribuzioni scelte potessero essere meglio adattate l'un l'altra.
+# Dividendo il dataset in categorie, possiamo infatti sperare di raggruppare le interazioni e gli eventi con distribuzioni simili così da rendere il modello più fedele alla realtà.
+# Anche nel caso in cui le classi scelte non ottengano l'effetto desiderato, introdurre questa possibilità nel nostro modello ne giova la versatilità e apre potenzialmente le porte a classificazioni più sofisticate e più performanti.
+
+The decision to divide the data into categories was made to make sure that the interactions found and the distributions chosen could be better adapted to each other.
+By dividing the dataset into categories, we can in fact hope to group interactions and events with similar distributions so as to make the model more faithful to reality.
+Even if the chosen classes do not achieve the desired effect, introducing this possibility in our model benefits its versatility and potentially opens the door to more sophisticated and more performing classifications.
+
+The chosen line of work is to base our classes on easily observable features common to all data in order to maintain the grouping process simple.
+
+The chosen features, although easily obtainable, shall be:
+- relevant to the medical field, meaning that they are prone to vary the diseases they might cover or the procedures followed by the hospital staff.
+- distinctive enough to split the set of data in comparable portions.
+
+*** WAIT Choosing the classes :traduzione:
+Per quanto esistano metodi di classificazione più interessanti (quali ad esempio tutte le [tecniche di clustering], basati generalmente su misurazioni pratiche dei dati) discusse tra i possibili Future Works, abbiamo deciso di basare la nostra classificazione su caratteristiche facilmente osservabili e comuni a tutti i dati, per semplificare il processo di raggruppamento.
+
+# %#TODO: link a pagina wikipedia/paper sulle tecniche di clustering?
+# %#TODO: includere link future works?
+
+#Nella sezione [] sono discussi i risultati di questa classificazione.
+# %#TODO: classification evaluation.
+
+**** TODO Patient-based classification
+# Il primo step di classificazione effettuato è incentrato sui pazienti del Beth Israel Institute.
+# Raccogliendo i dati da diverse tabelle contenti informazioni riguardo loro (in particolare le tabelle 'patients' e 'admissions') le features immediatamente disponibili sono:
+
+The first classification step carried out is centered around the patients of the Beth Israel Institute.
+If we collect data from different tables containing information about them (in particular the 'patients' and 'admissions' tables) the immediately available features to use for a classification are:
+- Their ethnicity
+- Their gender
+- Their marital status
+- Their language
+
+# Di questi abbiamo considerato soltanto il genere e l'etnia del paziente in quanto sono le uniche tra le features proposte che abbiamo ritenuto potessero essere rilevanti in ambito medico.
+
+Of these, we only considered the gender and ethnicity of the patient as they are the only features proposed that we felt could be relevant in the medical field.
+
+# Il legame tra l'etnia e la malattia è da tempo documentato e studiato [si veda [[https://www.ethndis.org/edonline/index.php/ethndis][link]] ] ed è quindi ben nota la sua rilevanza per l'ambito medico.
+# Osservando tuttavia le varie categorie disponibili e la distribuzione (mostrata in figura []), risulta evidente che una suddivisione basata sull'etnia risulterebbe errata; Ci sono infatti un numero troppo alto di categorie (aspetto che potrebbe essere sorvolato avendo la possibilità raggruppare ulteriormente le categorie in 'macro-etnie') e uno squilibrio eccessivo nella distribuzione dei pazienti tra le varie categorie (solo la categoria "white" rappresenta circa il 70% della popolazione totale).
+
+The link between ethnicity and disease has been documented and studied for a long time [see [[https://www.ethndis.org/edonline/index.php/ethndisreste][link]]] and therefore its relevance for the medical field.
+However, observing the various categories available and the distribution (shown in figure []), it is clear that a subdivision based on ethnicity would be inconclusive; There is in fact a too high number of categories (an aspect that could be overlooked having the possibility to further group the categories into 'macro-ethnic' groups) and an excessive imbalance in the distribution of patients among the various categories (only the "white" category represents approximately 70% of the total population).
+
+# %#TODO: figura ethnicity
+
+# Anche il genere è una caratteristica rilevante in ambito medico: l'incidenza e la gravità con cui si manifestano le malattie varia tra i generi, con alcune (some of them being) sex-specific.
+
+Gender, as previously highlighted, is also a relevant feature in the medical field: the incidence and severity with which diseases occur varies between genders, with some of them being sex-specific.
+
+# Le categorie disponibili in questo caso sono solo due (maschi e femmine) e la distribuzione dei pazienti tra esse è mostrata in figura [].
+# Come possiamo vedere, i pazienti sono ben distribuiti tra le due categorie, con il 56% dei pazienti identificati come maschi e il 44% identificate come femmine.
+
+The categories available in this case are only two (male and female) and the distribution of patients among them is shown in figure [].
+As we can see, the patients are well distributed between the two categories, with 56% of patients identified as male and 44% identified as female.
+
+# %#TODO: figura genders
 
 ** Fitting the interactions
 Once the behavior of the patients of the Beth Israel Institute were explored and the model shown in section [1] has been developed, the next step is to find the distributions of each of the time intervals identified.
+
 
 # %#TODO: sezione precedente sul diagramma delle interazioni

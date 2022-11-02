@@ -1,6 +1,6 @@
 # -*- eval: (flyspell-mode 0) -*-
 #+title: Scaletta
-* TODO Intro
+* TODO Introduzione
 * TODO Stato dell'arte
 * TODO Contributions
 ** Background
@@ -22,7 +22,7 @@ What is kept
 **** Discrepancies found
 **** Mimic III vs Mimic IV
 ***** Why did we chose Mimic III
-**** Mimic tables
+**** Mimic tables (Entity-relationship diagram?)
 **** How did we retrieve data
 ***** MIMIC (demo + corso)
 ***** Postgres Container
@@ -91,15 +91,6 @@ reusability and extensibility
 ****** immediate finish after icu (no posticu) :graph:
 ****** noicu :graph:
 
-**** which distributions did we use to model the duration of each interaction
-***** Why phase type
-versatile
-****** Needed tools (hyperstar)
-****** Limitations of hyperstar
-Needs user input
-***** How did they perform? :graph:
-some example, not all of them? Appendix probably.
-**** Analysis of the data exchange
 *** Classification
 **** Analysis of the patients
 ***** Marital status :graph:
@@ -116,16 +107,25 @@ Every one of the chosen classes has a relevant presence in the dataset
 The classifications made "make sense" (medical relevance, probabilistic relevance (weekday))
 Ethnicity would have been another relevant
 *** Distribution fitting
+**** which distributions did we use to model the duration of each interaction
+***** Why phase type
+versatile
+****** Needed tools (hyperstar)
+****** Limitations of hyperstar
+Needs user input
+***** How did they perform? :graph:
+some example, not all of them? Appendix probably.
 **** Distribution fitting for interaction times
 **** Distribution fitting for events exchange
-
+*** Evaluation of the classification made
 ** TODO Model development
 
 * [?] Implementation
-
 * TODO Evaluation
 ** Design of evaluation
 ** Metrics
 ** Results
 * TODO Future Work
 ** Include values other than timings
+** Clustering
+[[file:analysis.org::*Choosing the classes][Choosing the classes]]
