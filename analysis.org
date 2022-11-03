@@ -51,7 +51,9 @@ Based on this information, we can make a first approximation of the behavior of 
 
 During this whole time, the patients continues to generate events associated to her hospital stay.
 
-The behavior described above can be formalized in the following UML activity diagram (the specification for UML activity diagrams can be found at [])
+The behavior described above can be formalized in the following UML activity diagram (the specification for UML activity diagrams can be found at []).
+
+Since the focus of this work is on the interactions between the patient and the hospital system, the internal behavior of the hospital data system was deeply simplified.
 
 # %#TODO: insert link to UML activity diagram sprcification
 
@@ -198,7 +200,7 @@ Per quanto esistano metodi di classificazione più interessanti (quali ad esempi
 #Nella sezione [] sono discussi i risultati di questa classificazione.
 # %#TODO: classification evaluation.
 
-**** TODO Patient-based classification
+*** Patient-based classification
 # Il primo step di classificazione effettuato è incentrato sui pazienti del Beth Israel Institute.
 # Raccogliendo i dati da diverse tabelle contenti informazioni riguardo loro (in particolare le tabelle 'patients' e 'admissions') le features immediatamente disponibili sono:
 
@@ -233,43 +235,77 @@ As we can see, the patients are well distributed between the two categories, wit
 
 # %#TODO: figura genders
 
-***** Non-immediate patients features :traduzione:
-Avendo a disposizione la data di nascita dei pazienti (attributo della tabella `PATIENTS`, come può essere visto []), un'altra feature con una forte rilevanza medica ma non immediatamente disponibile che abbiamo ricavato è l'età del paziente.
-
+**** Non-immediate patients features :traduzione:
+# Avendo a disposizione la data di nascita dei pazienti (attributo della tabella `PATIENTS`, come può essere visto []), un'altra feature con una forte rilevanza medica ma non immediatamente disponibile che abbiamo ricavato è l'età del paziente.
+Having available the patients' date of birth (an attribute of the `PATIENTS` table, as can be seen []), another feature with strong medical relevance but not readily available that we derived is the patient's age.
 # %#TODO: capitolo mimic, sezione tabelle
 
-La data scelta come riferimento per il calcolo dell'età del paziente (impossibile da considerare in modo assoluto a causa del processo di deidentificazione applicato su MIMIC-III già descritto nel capitolo []) è la data d'inizio della prima permanenza ospedaliera.
+# La data scelta come riferimento per il calcolo dell'età del paziente (impossibile da considerare in modo assoluto a causa del processo di deidentificazione applicato su MIMIC-III già descritto nel capitolo []) è la data d'inizio della prima permanenza ospedaliera.
+The date chosen as the reference for calculating the patient's age (impossible to consider absolutely because of the de-identification process applied on MIMIC-III already described in chapter []) is the date of the beginning of the first hospital stay.
 # %#TODO: capitolo design decisions, sezione deidentification
 
-Seguendo questa considerazione, possiamo vedere in figura [] come i pazienti sono distribuiti nelle varie fasce d'età.
-
+Following this consideration, we can see in figure [] how the patients are distributed in the various age groups.
 # %#TODO: Immagine età pazienti (non binned)
 
-Possiamo vedere che l'età dei pazienti segue una distribuzione pressochè normale centrata sui 70 anni, con un picco considerevole nella fascia d'età tra i 75 e gli 80.
+# Possiamo vedere che l'età dei pazienti segue una distribuzione pressochè normale centrata sui 70 anni, con un picco considerevole nella fascia d'età tra i 75 e gli 80.
 
-Durante il processo di deidentificazione applicato su MIMIC sono state contraffatte le informazioni sull'età dei pazienti con 90 anni o più (in quanto categorie relativamente piccole), assegnandogli una data di nascita che risulta in un'età oltre i 300 anni.
-Questi pazienti sono considerati nella fascia d'età '>100', dando una motivazione al picco.
+# Durante il processo di deidentificazione applicato su MIMIC sono state contraffatte le informazioni sull'età dei pazienti con 90 anni o più (in quanto categorie relativamente piccole), assegnandogli una data di nascita che risulta in un'età oltre i 300 anni.
+# Questi pazienti sono considerati nella fascia d'età '>100', dando una motivazione al picco.
 
-Prima di poterla considerare come una valida feature di classificazione, è necessario tuttavia ridurre il numero di bin in cui le età sono suddivise (un numero eccessivo di classi porterebbe infatti a insiemi troppo piccoli per essere fit correttamente).
+# Prima di poterla considerare come una valida feature di classificazione, è necessario tuttavia ridurre il numero di bin in cui le età sono suddivise (un numero eccessivo di classi porterebbe infatti a insiemi troppo piccoli per essere fit correttamente).
 
-La suddivisione alternativa scelta copre 5 fasce d'età:
+We can see that the age of the patients follows an almost normal distribution centered on 70 years, with a considerable peak in the age range of 75 to 80.
+
+During the de-identification process applied on MIMIC, the age information of patients 90 years or older was de-identified, assigning them a birth date that results in an age over 300 years.
+These patients are considered to be in the '>100' age group, giving a rationale for the spike.
+
+Before it can be considered as a valid classification feature, however, it is necessary to reduce the number of bins into which the ages are divided (too many classes would in fact lead to sets that are too small to be fit correctly).
+
+# La suddivisione alternativa scelta copre 5 fasce d'età:
+The chosen alternative subdivision covers 5 age groups:
 - Up to age 45
 - between 45 and 65
 - between 65 and 75
 - between 75 and 100
 - over 100
-e risulta nella distribuzione dei pazienti mostrata in figura [].
+
+and results in the distribution shown in Figure [].
+
 # %#TODO: immagine età pazienti (binned)
 
-I gruppi scelti non sono perfettamente suddivisi, ma hanno rilevanza medica in quanto rappresentano fasce d'età con malattie e disturbi differenti.
-Il gruppo 'over 100' in particolare è stato lasciato in quanto rappresenta un'insieme di pazienti con un rischio più alto di decesso ospedaliero.
+# I gruppi scelti non sono perfettamente suddivisi, ma hanno rilevanza medica in quanto rappresentano fasce d'età con malattie e disturbi differenti.
+# Il gruppo 'over 100' in particolare non è stato aggregato con altri pazienti in quanto rappresenta un'insieme di pazienti con un rischio più alto di decesso ospedaliero.
+
+The groups chosen are not perfectly divided, but they have medical relevance as they represent age groups with different diseases and disorders.
+The 'over 100' group in particular was not aggregated with other patients because it represents a group of patients with a higher risk of hospital death.
 
 # %#TODO: non mi convince questa frase.
 
-**** Admission-based classification
+*** Admission-based classification
+
+The second and last classification step performed is centered around the hospital stays of the Beth Israel Institute.
+
+# Avendo a disposizione a loro riguardo solo le informazioni sulle tempistiche d'inizio e di fine, le uniche features che possiamo estrarre sono quelle non toccate dal processo di deidentificazione, ovvero:
+# - il giorno della settimana in cui comincia/finisce la permanenza ospedaliera.
+# - l'orario in cui la permanenza ospedaliera inizia/finisce.
+# - la stagione approssimativa della permanenza ospedaliera.
+
+# Di queste, abbiamo scelto come feature per la classificazione il giorno della settimana in cui la permanenza ospedaliera ha avuto inizio.
+
+# Osservando la figura [], che rappresenta il numero di admissions registrate per ogni giorno della settimana, si può notare che le admissions sono ben distribuite tra tutti i giorni della settimana, con un repentino abbassamento durante il week end.
+
+Having only information about the start and end times available to them, the only features we can extract are those not touched by the de-identification process, viz:
+- the day of the week when the hospital stay begins/ends.
+- the time at which the hospital stay begins/ends.
+- the approximate season of the hospital stay.
+
+Of these, we chose as a feature for classification the day of the week when the hospital stay began.
+
+Looking at Figure [], which represents the number of admissions recorded for each day of the week, we can see that admissions are well distributed among all days of the week, with a sudden drop during the weekend.
+
+# %#TODO: figura numero di admissions per weekday
 
 ** Fitting the interactions
 Once the behavior of the patients of the Beth Israel Institute were explored and the model shown in section [1] has been developed, the next step is to find the distributions of each of the time intervals identified.
-
 
 # %#TODO: sezione precedente sul diagramma delle interazioni
