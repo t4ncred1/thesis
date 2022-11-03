@@ -233,6 +233,41 @@ As we can see, the patients are well distributed between the two categories, wit
 
 # %#TODO: figura genders
 
+***** Non-immediate patients features :traduzione:
+Avendo a disposizione la data di nascita dei pazienti (attributo della tabella `PATIENTS`, come può essere visto []), un'altra feature con una forte rilevanza medica ma non immediatamente disponibile che abbiamo ricavato è l'età del paziente.
+
+# %#TODO: capitolo mimic, sezione tabelle
+
+La data scelta come riferimento per il calcolo dell'età del paziente (impossibile da considerare in modo assoluto a causa del processo di deidentificazione applicato su MIMIC-III già descritto nel capitolo []) è la data d'inizio della prima permanenza ospedaliera.
+# %#TODO: capitolo design decisions, sezione deidentification
+
+Seguendo questa considerazione, possiamo vedere in figura [] come i pazienti sono distribuiti nelle varie fasce d'età.
+
+# %#TODO: Immagine età pazienti (non binned)
+
+Possiamo vedere che l'età dei pazienti segue una distribuzione pressochè normale centrata sui 70 anni, con un picco considerevole nella fascia d'età tra i 75 e gli 80.
+
+Durante il processo di deidentificazione applicato su MIMIC sono state contraffatte le informazioni sull'età dei pazienti con 90 anni o più (in quanto categorie relativamente piccole), assegnandogli una data di nascita che risulta in un'età oltre i 300 anni.
+Questi pazienti sono considerati nella fascia d'età '>100', dando una motivazione al picco.
+
+Prima di poterla considerare come una valida feature di classificazione, è necessario tuttavia ridurre il numero di bin in cui le età sono suddivise (un numero eccessivo di classi porterebbe infatti a insiemi troppo piccoli per essere fit correttamente).
+
+La suddivisione alternativa scelta copre 5 fasce d'età:
+- Up to age 45
+- between 45 and 65
+- between 65 and 75
+- between 75 and 100
+- over 100
+e risulta nella distribuzione dei pazienti mostrata in figura [].
+# %#TODO: immagine età pazienti (binned)
+
+I gruppi scelti non sono perfettamente suddivisi, ma hanno rilevanza medica in quanto rappresentano fasce d'età con malattie e disturbi differenti.
+Il gruppo 'over 100' in particolare è stato lasciato in quanto rappresenta un'insieme di pazienti con un rischio più alto di decesso ospedaliero.
+
+# %#TODO: non mi convince questa frase.
+
+**** Admission-based classification
+
 ** Fitting the interactions
 Once the behavior of the patients of the Beth Israel Institute were explored and the model shown in section [1] has been developed, the next step is to find the distributions of each of the time intervals identified.
 
