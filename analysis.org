@@ -344,4 +344,88 @@ All classifications, as preannounced, are based on rather obvious features.
 The model, as we will see in section [], will also be developed to work with classifications based on more complex methods (e.g., clustering) that exploit more hidden features of the model.
 # %#TODO: implementation: parlare di come funziona la classificazione e come può essere fatta a livelli diversi.
 
+** Distribution Fitting the identified behaviors :traduzione:
+Once the behavior of the patients of the Beth Israel Institute were explored and the model shown in section [1] has been developed the next step is to find the time distributions of each of the behaviors identified.
+
 # %#TODO: sezione precedente sul diagramma delle interazioni
+
+# Le classi indicate nella sezione [] che partizionano l'insieme dei pazienti e delle permanenze ospedaliere sono considerate nel fitting delle tempistiche precedentemente identificate, ma non in tutte: le attività identificate nell'activity diagram [] che indicano casi limite, a causa della scarsità di sample a dispozione, non possono essere suddivise in classi.
+The classes shown in section [] that partition the set of patients and hospital stays are considered in fitting the previously identified timings, but not in all of them: the activities identified in the activity diagram [] that indicate borderline cases, due to the scarcity of available samples, cannot be partitioned into classes.
+# %#TODO: link action diagram
+
+# L'unico caso limite non affetto da questa regola è l'intertempo tra le permanenze ospedaliere, che pur rappresentando una casistica diminuita (la maggior parte dei pazienti effettua una singola permanenza ospedaliera come si può vedere in figura []), abbiamo deciso di applicare su di esso solo la classificazione basata sui pazienti (non essendo collegato a una sola permanenza ospedaliera).
+The only borderline case that is not affected by this rule is the time between hospital stays, which although it represents a decreased caseload (most patients make a single hospital stay as can be seen in figure []), we decided to apply just the patient-based classification on it (as it is not related to a single hospital stay).
+# %#TODO: figura admissions per paziente
+
+# Per riassumere, la tabella [] mostra quali classi sono state considerate per ciascuna attività.
+To summarize, Table [] shows which classes were considered for each of the previously identified activities.
+# %#TODO: tabella attività/classi, con 2 colonne (attività, tipo classi considerate, totale classi considerate)
+
+*** Metodologia
+# Per effettuare il fitting degli intervalli di tempo identificati, abbiamo utilizzato delle distribuzioni di tipo Phase Type, utilizzando in particolare distribuzioni Hyper-erlang (see []).
+To perform the fitting of the identified time intervals, we used Phase Type distributions, specifically Hyper-erlang distributions (see []).
+# %#TODO: link background phase type
+
+# Queste sono comunemente utilizzate nell'ambito della simulazione in quanto dotate della desiderabile caratteristica di poter approssimare qualsiasi distribuzione con precisione arbitraria [].
+These are commonly used in simulation as they have the desirable characteristic of being able to approximate any distribution with arbitrary precision [].
+# %#TODO: cit versatilità
+
+# Lo strumento utilizzato per il fitting di queste distribuzioni è stato HyperStar, a tool for fitting phase-type distributions to data sets designed with user-friendliness and simplicity in mind.
+The tool used for fitting these distributions was HyperStar, a tool for fitting phase-type distributions to data sets, designed with simplicity and ease of use in mind.
+
+# Come spiegato in precedenza nella sezione [], HyperStar non è un tool automatizzato: richiede infatti una fase di interazione con l'utente per permettere una corretta approssimaizione della data trace fornita.
+As explained earlier in section [], HyperStar is not an automated tool: in fact, it requires a user interaction step to allow a correct approximation of the provided data trace.
+# %#TODO: sezione hyperstar
+
+# Avendo identificato 4 tipologie di comportamento su cui applicare la classificazione e avendo introdotto un numero considerevole di classi in cui ogni comportamento è suddiviso, il tempo richiesto per il fitting sarebbe stato eccessivo.
+Having identified 4 types of behavior on which to apply the classification and having introduced a considerable number of classes into which each behavior is divided, the time required for fitting would have been excessive.
+# %#TODO: sezione conlcusioni classificazione e sezione conclusioni di analisi delle interazioni
+
+# Per ovviare a questo inconveniente, abbiamo scelto di raggruppare le classi di ogni comportamento che appartengono alla stessa distribuzione, così da poter ridurre il numero di distribuzioni da fittare attraverso HyperStar.
+To overcome this drawback, we chose to group the classes of each behavior that belong to the same distribution, so that we could reduce the number of distributions to fit through HyperStar.
+
+# Questa scelta risulta ancora più sensata se si considera che le classi trovate, come detto in precedenza, sono basate su feature evidenti dei pazienti e delle permanenze ospedaliere e non precludono quindi la possibilità che alcune di esse seguano la stessa distribuzione tra una classe e l'altra.
+This choice makes sense if we consider that the classes found, as mentioned earlier, are based on obvious features of patients and hospital stays and thus do not preclude the possibility of some of them following the same distribution between classes.
+
+**** Raggruppamento delle classi
+# Per confrontare tracce di dati empirici e decidere se provengono dalla stessa distribuzione abbiamo utilizzato il test Kolmogorov-Smirnov per 2 samples.
+To compare empirical data traces and decide whether they are sampled from the same distribution, we used the Kolmogorov-Smirnov 2-samples test, described fully in section [].
+# Questo test, descritto più a fondo nella sezione [], ci fornisce la probabilità minima che due tracce di dati provengano dalla medesima (anche se sconosciuta) distribuzione.
+This test, described more completely in section [], returns the minimum probability that two data traces come from the same (although unknown) distribution.
+
+
+# si occupa di verificare l'ipotesi statistica che i dati provengano dalla stessa distribuzione.
+# %#TODO: 2-sample test kolmogorov-smirnov. Vedi tesi clau per un riferimento a come descriverlo.
+
+# La libreria utilizzata per effettuare il test tra le distribuzioni disponibili è la libreria python scipy, che nel suo modulo
+
+# Essendo il metodo limitato a due samples, l'abbiamo applicato a tutte le possibili coppie di classi
+
+# Posto un limite minimo \alpha oltre la quale il test è considerato avere esito positivo e applicandolo a tutte le possibili coppie di classi, siamo in grado di identificare quali di queste risultano avere una CDF (cumulative density function) simile, ottenendo quindi la possibilità di raggrupparle per farne il fitting come un'unica distribuzione.
+Once a lower probability limit \alpha beyond which the test is considered to be successful is set and after it is applied to all possible pairs of classes, we are able to identify which of them have a similar empirical cumulative density function, thus enabling to group them to be fit as a single distribution.
+
+# Tuttavia, è necessario tenere a mente che i risultati del test non sono transitivi: se la classe 'A' supera la soglia \alpha quando confrontata con la classe 'B' e la classe 'B' supera la soglia quando confrontata con la classe 'C', ciò non implica che il risultato del test applicato tra la classe 'A' e la classe 'C' superi la stessa soglia \alpha.
+However, it should be kept in mind that the test results are not transitive: if class 'A' exceeds the threshold \alpha when compared with class 'B' (marking them as having the same distribution) and class 'B' exceeds the threshold when compared with class 'C,' it does not imply that the test result applied between class 'A' and class 'C' exceeds the same threshold \alpha.
+
+# Per questo motivo, abbiamo deciso di considerare un'unica distribuzione solo per gli insiemi di classi in cui il test di Kolmogorov-Smirnov superasse la soglia \alpha per ogni coppia di classi all'interno.
+For this reason, we decided to group into a single distribution only sets of classes in which the Kolmogorov-Smirnov test exceeded the threshold \alpha for each pair of classes within.
+
+# Se rappresentiamo le classi disponibili come nodi di un grafo non direzionato e colleghiamo con degli archi solo le coppie che hanno superato il test, possiamo identificare gli insieme sopracitati come le
+
+# Per ottenere gli insiemi sopracitati, abbiamo utilizzato il seguente metodo, che sfrutta i concetti della teoria dei grafi:
+To obtain the aforementioned sets, we used the following method, which exploits the concept of maximal complete subgraph in graph theory:
+# - Rappresentiamo le classi disponibili come nodi di un grafo non direzionato (fig []).
+# - Colleghiamo con archi solo le coppie che hanno superato la soglia \alpha nel test Kolmogorov-Smirnov (fig []).
+# - Identifichiamo i sottografi completi massimali all'interno del grafo (fig []).
+#   # tramite la libreria networkx ?
+# - Nel caso in cui uno o più dei nodi considerati appartengano a più sottografi completi massimali contemporaneamente, non volendoli considerare in più distribuzioni distrinte, assegnamoli solo al sottografo completo massimale con il maggior numero di nodi (fig []). Grazie alla loro completezza, gli altri sottografi completi rimarranno tali (o, al più, vuoti) anche dopo la rimozione del nodo incriminato.
+1. Represent the available classes as nodes of an undirected graph (fig []).
+2. Connect with arcs only those pairs that exceeded the \alpha threshold in the Kolmogorov-Smirnov test (fig []).
+3. Identify the maximal complete subgraphs within the graph (fig []).
+4. In the case where one or more of the nodes considered belong to several maximal complete subgraphs at the same time, since they cannot be considered in multiple distinct distributions, assign them only to the maximal complete subgraph with the largest number of nodes (fig []). Due to their completeness, the other complete subgraphs will remain as such (or, at most, empty) even after removal of the offending node.
+# %#TODO: figure preparate
+# L'algoritmo appena mostrato non copre tutti i casi limiti (come il caso in cui i vari )
+
+# Raggruppando i
+# In Table [] sono mostrati i risultati del raggruppamento consideranto un limite alpha di 0.05 per ogni tipo di comportamento su cui il raggruppamento è stato applicato, mostrando in particolare la riduzione del numero di classi da considerare.
+Table [] shows the results of the grouping method described above considering an alpha limit of 0.05 applied on each kind of behavior on which a grouping was meant to be applied, showing in particular the reduction in the number of classes to be considered for the fitting through HyperStar.
