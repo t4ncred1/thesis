@@ -10,12 +10,12 @@ Nonetheless, I hope it will be useful to anybody working in the performance eval
 #+end_comment
 
 This work revolves around the analysis of a dataset comprising heterogeneous health related data about the patients of a hospital with two main objectives:
-1. The creation of a model capable of mimicking the stream of data between the patients and the hospital data system.
+1. The creation of a model of the information exchange between the patients and the hospital data system to be used for the generation of realistic copies of that stream of data.
 2. Making such model reusable and extensible, so that it could be easily adapted to different settings and different data sources.
 
 # As previously noted in /chapter x/, the term heterogeneous is used in this context to indicate a set of structured and unstructured data.
 
-This work was developed as part of a wider project aimed at the creation of a benchmark for architectures intended for the deployment of Data Lakes (see chapter [] for a term explanation) in a health-centered environment.
+It was developed as part of a wider project aimed at the creation of a benchmark for architectures intended for the deployment of Data Lakes (see chapter [] for a term explanation) in a health-centered environment.
 
 In this context, a model capable of generating data similar to the reference source would enable the workload characterization of a number of health-related systems and, as such, would make it possible to define the architecture necessary to support the aforementioned workload with a chosen performance degree.
 
@@ -25,7 +25,7 @@ The reference data source chosen for the model is MIMIC-III, a freely-available 
 The focus of the model will be on emulating the timings of the reference set of data; A possible extension to also include realistic values associated with each event (which in turn would make for a nice tool to evaluate the performance of real systems) is discussed in the /Future Works section/.
 
 The expected output of the model is therefore a trace of events similar to those described in /section x/, with the columns containing health related values stripped away.
-The only exception to this rule are Waveforms, which will be better presented in chapter []
+The only exception to this rule are Waveforms, which are better presented in chapter []
 # %#TODO: capitolo/sezione waveforms
 # introduce mimic here
 

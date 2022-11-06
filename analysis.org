@@ -2,15 +2,15 @@
 
 * TODO Introduzione
 
-* Analisys of the interactions
+* Analisys of the behavior
 
 ** Why?
 # Volendo modellare e riprodurre il flusso di dati tra il paziente e il sistema ospedaliero di cui mimic ci fornisce uno squarcio, è utilie, come prima cosa, cercare di individuare il pattern di interazione tra utenti e ospedale.
 
 Since we wanted to model and reproduce the stream of information between the patient and the hospital system of which MIMIC gives us a glimpse, it is useful, as a first step, to try and understand the behavior of the users registered in the hospital system.
 
-** Default interactions :traduzione:
-As introduced in section [], MIMIC-III focuses on the interactions of the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center.
+** Default behavior :traduzione:
+As introduced in section [], MIMIC-III focuses on the data exchange between the patients who stayed in _critical care units_ of the Beth Israel Deaconess Medical Center and the data system of the hospital.
 # %#TODO: sez in cui introduco mimic.
 
 # Oltre a contenere le informazioni sulle permanenze in ICU dei pazienti (quali ad esempio data e ora di inizio e fine della icy stay) ha anche informazioni riguardati la loro intera permanenza ospedaliera fuori dai reparti di terapia intensiva.
@@ -49,19 +49,19 @@ Based on this information, we can make a first approximation of the behavior of 
 - The patient then exits the intensive care unit.
 - After a period of time outside the ICU, her admission terminates.
 
-During this whole time, the patients continues to generate events associated to her hospital stay.
+During this whole time, the patient continues to generate events associated to her hospital stay.
 
 The behavior described above can be formalized in the following UML activity diagram (the specification for UML activity diagrams can be found at []).
 
-Since the focus of this work is on the interactions between the patient and the hospital system, the internal behavior of the hospital data system was deeply simplified.
+Since the focus of this work is on the interactions between the patient and the hospital system, the internal behavior of the hospital data system was vastly simplified.
 
 # %#TODO: insert link to UML activity diagram sprcification
 
 # %#TODO: UML activity diagram base
 
-** Refinements on the interaction model
+** Refinements on the behavioral model
 # Il modello appena visto può essere migliorato facendo alcune considerazioni riguardanti MIMIC e confrontandole con i dati contenuti in esso.
-The model just seen can be improved by making some hypotheses regarding MIMIC and comparing them with the data contained in it.
+The model just seen can be improved by making some hypotheses regarding MIMIC and validating them by looking at the data in it.
 
 *** Multiple hospitalizations and multiple ICU stays
 
@@ -91,6 +91,8 @@ The activity diagram shown below shows the new model, that consdiers the possibi
 As you can see, between successive ICU stays a time interval is considered, labeled in the diagram as "wait time between ICU stays".
 This time period could be considered in conjunction with the period after the ICU stay shown in the previous version of the model, but we decided to consider them separately in the event that they have a different time distribution.
 
+A similar time period is considered between successive hospital stays and labeled in the diagram as "wait time between hospital stays".
+During this time period, the patient is not considered in the hospital premise and, as such, does not generate any sort of data to be stored in the hospital data system.
 
 *** HOLD ICU stays that start immediately :traduzione:
 Non le abbiamo considerate alla fine, ma possiamo mostrare che alcune partono dopo pochissimo tempo.
@@ -152,12 +154,13 @@ The activity updated activity diagram is shown in the figure below.
 
 # %#TODO: activity diagram
 
-*** Conclusion :traduzione:
-In the model whose development was shown in this section we identified a total of 5 time intervals:
+*** Conclusion
+In the model whose development was shown in this section we identified a total of 6 time intervals:
 - The time in ICU, in which the events associated with the ICU are created.
 - The time waiting before an admission and the first ICU stay
 - The time between two consecutive ICU stays.
 - The time between the end of the last ICU stay and the end of the entire hospital stay.
+- The time between the end of an hospital stay and the beginning of the next one.
 - The total time in the hospital, which shall be considered as the sum of the times listed above.
 
 # The next step in our analysis is to find the distributions that correctly fit each of these time intervals (except the last one, which can be derived from the others).
@@ -167,22 +170,22 @@ The next step towards the creation of a model capable of generating event traces
 
 Tuttavia, prima di introdurre quella sezione del lavoro è utilile parlare della classificazione che abbiamo deciso di applicare nel nostro modello e dei motivi che ci hanno portato a tale scelta.
 
-However, before we introduce that section of the work, it's useful to present the classification that we have decided to apply in our model and the reasons that led us to those choices.
+However, before we introduce that part of the work, it's useful to present the classification that we have decided to apply in our model and the reasons that led us to those choices.
 
 ** Classification :traduzione:
 
 # %#WHY
 # Prima di concentrarci sulle distribuzioni che possono essere fit per modellare le interazioni identificate nella precedente sezione, abbiamo discusso la possibilità di effettuare una categorizzazione sui dati che avevamo a disposizione.
 
-Before focusing on the distributions that can be fit to model the interactions identified in the previous section, we discussed the possibility of categorizing the data we had available.
+Before focusing on the distributions that can be fit to model the behaviors identified in the previous section, we discussed the possibility of categorizing the behaviors and events we had available.
 
 # Dovendo scegliere delle distribuzioni che seguissero l'andamento di una grande mole di dati, abbiamo reputato utile introdurre questa possibilità.
 # La decisione di dividere i dati in categorie è stata presa per fare in modo che le interazioni trovate e le distribuzioni scelte potessero essere meglio adattate l'un l'altra.
 # Dividendo il dataset in categorie, possiamo infatti sperare di raggruppare le interazioni e gli eventi con distribuzioni simili così da rendere il modello più fedele alla realtà.
 # Anche nel caso in cui le classi scelte non ottengano l'effetto desiderato, introdurre questa possibilità nel nostro modello ne giova la versatilità e apre potenzialmente le porte a classificazioni più sofisticate e più performanti.
 
-The decision to divide the data into categories was made to make sure that the interactions found and the distributions chosen could be better adapted to each other.
-By dividing the dataset into categories, we can in fact hope to group interactions and events with similar distributions so as to make the model more faithful to reality.
+The decision to divide the data into categories was made to make sure that the behaviors found and the distributions chosen could be better adapted to each other.
+By dividing the dataset into categories, we can in fact hope to group behaviors and events with similar distributions so as to make the model more faithful to reality.
 Even if the chosen classes do not achieve the desired effect, introducing this possibility in our model benefits its versatility and potentially opens the door to more sophisticated and more performing classifications.
 
 The chosen line of work is to base our classes on easily observable features common to all data in order to maintain the grouping process simple.
@@ -197,7 +200,7 @@ Per quanto esistano metodi di classificazione più interessanti (quali ad esempi
 # %#TODO: link a pagina wikipedia/paper sulle tecniche di clustering?
 # %#TODO: includere link future works?
 
-#Nella sezione [] sono discussi i risultati di questa classificazione.
+# Nella sezione [] sono discussi i risultati di questa classificazione.
 # %#TODO: classification evaluation.
 
 *** Patient-based classification
@@ -301,11 +304,44 @@ Having only information about the start and end times available to them, the onl
 
 Of these, we chose as a feature for classification the day of the week when the hospital stay began.
 
-Looking at Figure [], which represents the number of admissions recorded for each day of the week, we can see that admissions are well distributed among all days of the week, with a sudden drop during the weekend.
+Looking at Figure [], which represents the number of hospital stays recorded for each day of the week, we can see that hospital stays are well distributed among all days of the week, with a sudden drop during the weekend.
 
 # %#TODO: figura numero di admissions per weekday
 
-** Fitting the interactions
-Once the behavior of the patients of the Beth Israel Institute were explored and the model shown in section [1] has been developed, the next step is to find the distributions of each of the time intervals identified.
+*** Conclusions
+# Ricapitolando, abbiamo deciso di attuare le nostre classificazioni sui pazienti e sulle permanenze ospedaliere, mantenendo il focus sul considerare delle suddivisioni eque e collegate alla salute.
+
+To recapitulate, we decided to implement our classifications on patients and hospital stays, keeping the focus on considering fairly split and health-related subdivisions.
+
+# Le features che abbiamo scelto sono state:
+# - il giorno della settimana in cui comincia o finisce la permanenza ospedaliera.
+# - il genere del paziente.
+# - l'età del paziente.
+
+The features we chose were:
+- the gender of the patient.
+- the age of the patient.
+- the day of the week when the hospital stay begins or ends.
+
+# Queste e altre features considerate sono mostrate in tabella [], con indicate le motivazini per cui sono state scelte o meno.
+
+# These and other features considered are shown in table [], with reasons given as to why they were chosen or not.
+
+# %#TODO: Tabella feature-health related-equally splits the dataset
+
+# I risultati delle classificazioni scelte sono mostrati nella tabella [], che mostra il numero di pazienti racchiusi nelle classi identificate a partire dalla classificazione fatta sui pazienti, e nella figura [], la quale mostra la distribuzione delle permanenze ospedaliere tra le varie classi.
+
+The results of the chosen classifications are shown in Table [], which shows the number of patients enclosed in the classes identified from the classification made on the patients, and Figure [], which shows the distribution of hospital stays among the various classes.
+# %#TODO: Tabella dati e immagine weekday per classe
+
+# Come possiamo notare, tutti i gruppi hanno pressoché lo stesso numero di elementi, tranne i gruppi relativi alle classi di età '> 100' che come sottolineato in precedenza contengono meno elementi a causa della classe d'età poco popolata.
+
+As we can see, all the groups have a comparable number of items, except for the groups related to the '> 100' age groups, which as pointed out earlier contains fewer items due to the sparsely populated age group
+
+# Tutte le classificazioni, come preannunciato, sono basate su features piuttosto evidenti. Il modello, come vedremo nella sezione [], sarà sviluppato per funzionare anche con classificazioni basate su metodi più complessi (e.g. clustering) che sfruttano caratteristiche più nascoste del modello.
+
+All classifications, as preannounced, are based on rather obvious features.
+The model, as we will see in section [], will also be developed to work with classifications based on more complex methods (e.g., clustering) that exploit more hidden features of the model.
+# %#TODO: implementation: parlare di come funziona la classificazione e come può essere fatta a livelli diversi.
 
 # %#TODO: sezione precedente sul diagramma delle interazioni
