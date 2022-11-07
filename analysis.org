@@ -491,3 +491,15 @@ Invece, alcuni eventi hanno a disposizione il `charttime`, ovvero l'istante temp
 Nelle sezioni seguenti, analizzeremo caso per caso ciascuno degli eventi che siamo interessati a simulare, mostrando quali attributi dell'evento abbiamo considerato per ricavarne le tempistiche e soffermandoci sui casi particolari che hanno richiesto studi più approfonditi.
 Per un riferimento più completo, una lista delle tabelle contenute in MIMIC-III e degli eventi ad esse collegati può essere trovata nella sezione [].
 # %#TODO: sezione MIMIC
+
+#+BEGIN_COMMENT
+- ottengo gli eventi
+- li suddivido per classi
+- ne calcolo l'intertempo basandomi sull'attributo in grado di darmi un'indicazione temporale precisa
+- trovo la media del sample raccolto
+- utilizzo la media trovata per stimare il parametro lambda di un'esponenziale tramite il metodo dei momenti visto in precedenza.
+
+Quello che ottengo è, per ogni tipologia d'evento, un'esponenziale associato ad ogni classe.
+Per buona parte degli eventi considerati dobbiamo applicare questa metodologia.
+Quando possibile, è stato preferito utilizzare l'attributo "storetime" anziché "charttime" in quanto indicativo dell'effettiva interazione con il sistema ospedaliero.
+#+END_COMMENT
