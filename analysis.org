@@ -444,3 +444,50 @@ For each group identified, we collected time interval samples for all classes be
 # Un esempio del risultato della procedura di raggruppamento è mostrato in figura [] dove possiamo vedere che, considerando il tempo di permanenza in ICU, tre classi sono state raggruppate e fittate in un'unica distribuzione (mostrata in figura con una linea tratteggiata).
 An example of the result of the grouping procedure is shown in figure [] where we can see that, considering the time spent in the ICU, three classes were clustered and fitted into a single distribution (shown in figure with a dashed line).
 # %#TODO: figura grouping example.
+
+** Distribution Fitting the events
+Come accennato in precedenza nella sezione [], durante ciascuno degli intervalli di tempo individuati sono generati eventi appartenenti a due possibili categorie:
+- eventi collegati ad una permanenza ospedaliera
+- eventi collegati ad una permanenza in ICU
+# %#TODO: sezione default behavior
+
+Come per il caso dei comportamenti dei pazienti, anche questi eventi richiedono di essere fittati a delle distribuzioni per poter essere simulati.
+
+# Le classi individuate nella sezione [] sono applicate anche in questo caso per effettuare il fitting della distribuzione degli eventi identificati.
+
+*** The chosen distribution
+
+A causa dei processi di deidentificazione applicati su MIMIC-III presentati in [], siamo costretti a considerare per il fitting i tempi di inter-arrivo tra due eventi successivi.
+# %#TODO: sezione deidentificazione mimic
+
+La distribuzione scelta per modellarli è la distribuzione esponenziale.
+Essa è stata scelta in quanto comunemente utilizzata per rappresentare il tempo di inter-arrivo in un processo di Poisson omogeneo, a sua volta comunemente usato per rappresentare processi randomici che occorrono nella vita di tutti i giorni [cit].
+# %#TODO: citazione "Simulating the Poisson Process", P.Mcquighan
+
+Avremmo potuto utilizzare delle distribuzioni di tipo phase-type come visto in sezione [], ma il numero elevato di eventi su cui il fitting doveva essere effettuato e il numero di classi prese in considerazione, combinato al tempo utente necessario per effettuare il fitting tramite HyperStar presentato in precedenza nella sezione [], avrebbero richiesto un tempo eccessivo.
+# %#TODO: sezione fitting behavior
+# %#TODO: problema hyperstar
+
+# L'aderenza alla realtà, per quanto una caratteristica desiderabile, non è il focus principale del lavoro, come invece lo è l'estensibilità.
+# La possibilità di utilizzare distribuzioni differenti e
+
+D'altro canto, per effettuare il fitting attraverso delle distribuzioni esponenziali, l'unica necessità
+Il fitting di distribuzioni esponenziali può essere effettuato tramite diversi metodi (least squares method, maximum likelihood, moments method); Dato che nella letteratura [] i fitting evidenziati come più imparziali sono il metodo dei momenti e il maximum likelihood method, abbiamo deciso di applicare il metodo dei momenti per effettuare il fitting.
+
+# %#TODO: Fitting an Exponential Distribution (ROBERTO FRAILE AND EDUARDO GARCÍA-ORTEGA)
+
+Il metodo dei momenti consiste nello stimare i parametri della distribuzione da fittare confrontando ciascun momento empirico registrato dai samples con il momento della distribuzione.
+
+Nel caso dell'intertempo tra gli eventi di un processo di Poisson, espresso secondo la formula [], l'unico parametro da stimare è $\lambda$ e, per tanto, basta utilizzare il primo momento empirico dei samples considerati per ricavarlo.
+# %#TODO: funzione esponenziale
+
+Essendo il primo momento di un esponenziale [], è sufficiente ricavare l'inverso la media (a.k.a. primo momento) della traccia di dati considerata per stimare il parametro da utilizzare e, di conseguenza, ottenere la distribuzione fit.
+# %#TODO: primo momento esponenziale
+Questo processo, come evidente, è facilmente automatizzabile una volta ottenuti gli inter-tempi dell'evento preso in considerazione.
+
+Tuttavia, non essendo il focus di MIMIC sulla valutazione temporale delle interazioni tra i pazienti e il sistema ospedaliero, non esiste un'indicazione comune a tutti gli eventi dell'istante temporale in cui l'evento è accaduto.
+Invece, alcuni eventi hanno a disposizione il `charttime`, ovvero l'istante temporale in cui l'evento è accaduto; altri hanno a disposizione uno `storetime`, ovvero l'istante temporale in cui l'evento è stato introdotto nel sistema ospedaliero; Altri ancora hanno altre indicazioni temporali, e vanno considerati separatamente.
+
+Nelle sezioni seguenti, analizzeremo caso per caso ciascuno degli eventi che siamo interessati a simulare, mostrando quali attributi dell'evento abbiamo considerato per ricavarne le tempistiche e soffermandoci sui casi particolari che hanno richiesto studi più approfonditi.
+Per un riferimento più completo, una lista delle tabelle contenute in MIMIC-III e degli eventi ad esse collegati può essere trovata nella sezione [].
+# %#TODO: sezione MIMIC
