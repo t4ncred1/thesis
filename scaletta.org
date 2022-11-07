@@ -7,6 +7,12 @@
 *** Mimic Description
 **** Origins
 Beth Israel, time period
+**** What the dataset was designed to do
+not performance analysis
+**** Mimic deidentification
+What is kept
+**** Mimic III vs Mimic IV
+***** Why did we chose Mimic III
 **** What it contains
 Events mostly (also talk about dictionary tables etc)
 ***** What do we mean when we say "events"
@@ -15,14 +21,8 @@ Describe how tuples are formed:
 - a reference to the admission id
 - eventually a reference to the icustay id
 - eventually a timing value (we will mostly focus on events that have this attribute)
-**** What the dataset was designed to do
-not performance analysis
-**** Mimic deidentification
-What is kept
-**** Discrepancies found
-**** Mimic III vs Mimic IV
-***** Why did we chose Mimic III
 **** Mimic tables (Entity-relationship diagram?)
+**** [?] Discrepancies found
 **** How did we retrieve data
 ***** MIMIC (demo + corso)
 ***** Postgres Container
@@ -109,15 +109,21 @@ Ethnicity would have been another relevant
 ***** Age :graph:
 ***** Number of admissions :graph:
 **** Analysis of the admissions
-*** Distribution fitting the interactions
+*** DONE Distribution fitting the interactions
 **** Quale distribuzione abbiamo scelto
 *** Distribution fitting the events
+**** Intro
+- classi
+- procedura standard (con esponenziale)
+**** Analisi per tipologia d'evento
+***** Confronto con l'esponenziale
+***** Procedura scelta
 *** NO Evaluation of the classification made
 
 * Model development
 ** Objectives and focus of the generator
 ** Librerie usate
-- quella per generare le distribuzioni phase type
+- quella per generare le distribuzioni phase type (ciw)
 ** Architettura del generatore
 *** Moduli
 *** In che modo è inteso l'uso da parte dell'utente

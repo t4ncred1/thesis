@@ -10,7 +10,7 @@ Nonetheless, I hope it will be useful to anybody working in the performance eval
 #+end_comment
 
 This work revolves around the analysis of a dataset comprising heterogeneous health related data about the patients of a hospital with two main objectives:
-1. The creation of a model of the information exchange between the patients and the hospital data system to be used for the generation of realistic copies of that stream of data.
+1. The creation of a model of the information exchange between the patients and the hospital data system to be used for the generation of similar streams of data.
 2. Making such model reusable and extensible, so that it could be easily adapted to different settings and different data sources.
 
 # As previously noted in /chapter x/, the term heterogeneous is used in this context to indicate a set of structured and unstructured data.
