@@ -428,4 +428,19 @@ To obtain the aforementioned sets, we used the following method, which exploits 
 
 # Raggruppando i
 # In Table [] sono mostrati i risultati del raggruppamento consideranto un limite alpha di 0.05 per ogni tipo di comportamento su cui il raggruppamento è stato applicato, mostrando in particolare la riduzione del numero di classi da considerare.
-Table [] shows the results of the grouping method described above considering an alpha limit of 0.05 applied on each kind of behavior on which a grouping was meant to be applied, showing in particular the reduction in the number of classes to be considered for the fitting through HyperStar.
+Table [] shows the results of the grouping method described above considering an alpha limit of 0.05 applied on each kind of behavior on which a grouping was meant to be applied, showing in particular the reduction in the number of classes to be considered.
+# %#TODO: tabella con il numero di classi identificate per ogni gruppo
+| time intervals                    | classi prima del raggruppamento | gruppi formati |
+|-----------------------------------+---------------------------------+----------------|
+| time after the last icu has ended |                              70 |             21 |
+| time before the icu starts        |                              70 |             27 |
+| time in ICU                       |                              70 |             22 |
+|-----------------------------------+---------------------------------+----------------|
+| TOTAL                             |                             210 |             70 |
+
+# Per ogni gruppo individuato abbiamo raccolto i samples dei time interval per tutte le classi appartenenti al gruppo, utilizzandoli per fittare una distribuzione tramite HyperStar; Il mapping tra la classe e il gruppo d'appartenenza è stato salvato in un file csv.
+For each group identified, we collected time interval samples for all classes belonging to the group and used them to fit a distribution using HyperStar; The mapping between the class and the group to which it belongs was saved in a csv file.
+
+# Un esempio del risultato della procedura di raggruppamento è mostrato in figura [] dove possiamo vedere che, considerando il tempo di permanenza in ICU, tre classi sono state raggruppate e fittate in un'unica distribuzione (mostrata in figura con una linea tratteggiata).
+An example of the result of the grouping procedure is shown in figure [] where we can see that, considering the time spent in the ICU, three classes were clustered and fitted into a single distribution (shown in figure with a dashed line).
+# %#TODO: figura grouping example.
