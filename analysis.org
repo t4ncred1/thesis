@@ -446,60 +446,169 @@ An example of the result of the grouping procedure is shown in figure [] where w
 # %#TODO: figura grouping example.
 
 ** Distribution Fitting the events
-Come accennato in precedenza nella sezione [], durante ciascuno degli intervalli di tempo individuati sono generati eventi appartenenti a due possibili categorie:
-- eventi collegati ad una permanenza ospedaliera
-- eventi collegati ad una permanenza in ICU
+# Come accennato in precedenza nella sezione [], durante ciascuno degli intervalli di tempo individuati sono generati eventi appartenenti a due possibili categorie:
+As mentioned earlier in section [], events belonging to two possible categories are generated during each of the identified time intervals:
+# - eventi collegati ad una permanenza ospedaliera
+# - eventi collegati ad una permanenza in ICU
+- events related to a hospital stay
+- events related to an ICU stay
 # %#TODO: sezione default behavior
 
-Come per il caso dei comportamenti dei pazienti, anche questi eventi richiedono di essere fittati a delle distribuzioni per poter essere simulati.
+# Come per il caso dei comportamenti dei pazienti, anche questi eventi richiedono di essere fittati a delle distribuzioni per poter essere simulati.
+As with the case of the behaviors of the patients, these events also require to be fit to distributions in order to be simulated.
 
 # Le classi individuate nella sezione [] sono applicate anche in questo caso per effettuare il fitting della distribuzione degli eventi identificati.
 
 *** The chosen distribution
 
-A causa dei processi di deidentificazione applicati su MIMIC-III presentati in [], siamo costretti a considerare per il fitting i tempi di inter-arrivo tra due eventi successivi.
+# A causa dei processi di deidentificazione applicati su MIMIC-III presentati in [], siamo costretti a considerare per il fitting i tempi di inter-arrivo tra due eventi successivi.
+Due to the de-identification processes applied on MIMIC-III presented in [], we are forced to consider for our fitting purposes the inter-arrival times between two successive events.
 # %#TODO: sezione deidentificazione mimic
 
-La distribuzione scelta per modellarli è la distribuzione esponenziale.
-Essa è stata scelta in quanto comunemente utilizzata per rappresentare il tempo di inter-arrivo in un processo di Poisson omogeneo, a sua volta comunemente usato per rappresentare processi randomici che occorrono nella vita di tutti i giorni [cit].
+# La distribuzione scelta per modellarli è la distribuzione esponenziale.
+# Essa è stata scelta in quanto comunemente utilizzata per rappresentare il tempo di inter-arrivo in un processo di Poisson omogeneo, a sua volta comunemente usato per rappresentare processi randomici che occorrono nella vita di tutti i giorni [cit].
+The distribution chosen to model them is the exponential distribution.
+It was chosen because it is commonly used to represent the inter-arrival time in a homogeneous Poisson process, which in turn is commonly used to represent random processes that occur in everyday life [cit].
 # %#TODO: citazione "Simulating the Poisson Process", P.Mcquighan
 
-Avremmo potuto utilizzare delle distribuzioni di tipo phase-type come visto in sezione [], ma il numero elevato di eventi su cui il fitting doveva essere effettuato e il numero di classi prese in considerazione, combinato al tempo utente necessario per effettuare il fitting tramite HyperStar presentato in precedenza nella sezione [], avrebbero richiesto un tempo eccessivo.
+# Avremmo potuto utilizzare delle distribuzioni di tipo phase-type come visto in sezione [], ma il numero elevato di eventi su cui il fitting doveva essere effettuato e il numero di classi prese in considerazione, combinato al tempo utente necessario per effettuare il fitting tramite HyperStar presentato in precedenza nella sezione [], avrebbero richiesto un tempo eccessivo.
+We could have used phase-type distributions as seen in section [], but the large number of events on which the fitting had to be performed and the number of classes considered, combined with the time required to perform the fitting via HyperStar presented earlier in section [], would have taken an excessive amount of time.
 # %#TODO: sezione fitting behavior
 # %#TODO: problema hyperstar
 
 # L'aderenza alla realtà, per quanto una caratteristica desiderabile, non è il focus principale del lavoro, come invece lo è l'estensibilità.
 # La possibilità di utilizzare distribuzioni differenti e
 
-D'altro canto, per effettuare il fitting attraverso delle distribuzioni esponenziali, l'unica necessità
-Il fitting di distribuzioni esponenziali può essere effettuato tramite diversi metodi (least squares method, maximum likelihood, moments method); Dato che nella letteratura [] i fitting evidenziati come più imparziali sono il metodo dei momenti e il maximum likelihood method, abbiamo deciso di applicare il metodo dei momenti per effettuare il fitting.
+# D'altro canto, per effettuare il fitting attraverso delle distribuzioni esponenziali, l'unica necessità
+On the other hand, most of the methods commonly used to perform the fitting of an exponential distribution can be easily automated and don't require excessive computational power to be performed.
 
+# Il fitting di distribuzioni esponenziali può essere effettuato tramite diversi metodi (least squares method, maximum likelihood, moments method); Dato che nella letteratura [] i fitting evidenziati come più imparziali sono il metodo dei momenti e il maximum likelihood method, abbiamo deciso di applicare il metodo dei momenti per effettuare il fitting.
+Indeed, the fitting of exponential distributions can be carried out with several methods (least squares method, maximum likelihood, moments method); Since in the literature [] the fittings highlighted as most unbiased are the method of moments and the maximum likelihood method, we decided to apply the method of moments to carry out the fitting.
 # %#TODO: Fitting an Exponential Distribution (ROBERTO FRAILE AND EDUARDO GARCÍA-ORTEGA)
 
-Il metodo dei momenti consiste nello stimare i parametri della distribuzione da fittare confrontando ciascun momento empirico registrato dai samples con il momento della distribuzione.
+# Il metodo dei momenti consiste nello stimare i parametri della distribuzione da fittare confrontando ciascun momento empirico registrato dai samples con il momento della distribuzione.
+The method of moments consists in the estimation of the parameters of the distribution to be fit by comparing each empirical moment recorded from the samples with the analytical moment of the distribution.
 
-Nel caso dell'intertempo tra gli eventi di un processo di Poisson, espresso secondo la formula [], l'unico parametro da stimare è $\lambda$ e, per tanto, basta utilizzare il primo momento empirico dei samples considerati per ricavarlo.
+# Nel caso dell'intertempo tra gli eventi di un processo di Poisson, espresso secondo la formula [], l'unico parametro da stimare è $\lambda$ e, per tanto, basta utilizzare il primo momento empirico dei samples considerati per ricavarlo.
+In the case of the intertime between events of a Poisson process, expressed according to the formula [], the only parameter to be estimated is $\lambda$ and, therefore, it is sufficient to use the first empirical moment of the considered samples to derive it.
 # %#TODO: funzione esponenziale
 
-Essendo il primo momento di un esponenziale [], è sufficiente ricavare l'inverso la media (a.k.a. primo momento) della traccia di dati considerata per stimare il parametro da utilizzare e, di conseguenza, ottenere la distribuzione fit.
+# Essendo il primo momento di un esponenziale [], è sufficiente ricavare l'inverso la media (a.k.a. primo momento) della traccia di dati considerata per stimare il parametro da utilizzare e, di conseguenza, ottenere la distribuzione fit.
+Since the first moment of an exponential is [], it is sufficient to derive the inverse of the mean (a.k.a. first moment) of the considered data trace to estimate the parameter to be used and, consequently, obtain the fit distribution.
 # %#TODO: primo momento esponenziale
-Questo processo, come evidente, è facilmente automatizzabile una volta ottenuti gli inter-tempi dell'evento preso in considerazione.
 
-Tuttavia, non essendo il focus di MIMIC sulla valutazione temporale delle interazioni tra i pazienti e il sistema ospedaliero, non esiste un'indicazione comune a tutti gli eventi dell'istante temporale in cui l'evento è accaduto.
-Invece, alcuni eventi hanno a disposizione il `charttime`, ovvero l'istante temporale in cui l'evento è accaduto; altri hanno a disposizione uno `storetime`, ovvero l'istante temporale in cui l'evento è stato introdotto nel sistema ospedaliero; Altri ancora hanno altre indicazioni temporali, e vanno considerati separatamente.
+# Questo processo, come evidente, è facilmente automatizzabile una volta ottenuti gli inter-tempi dell'evento preso in considerazione.
+This process can clearly be easily automated once the inter-arrival times of the event under consideration are obtained.
 
-Nelle sezioni seguenti, analizzeremo caso per caso ciascuno degli eventi che siamo interessati a simulare, mostrando quali attributi dell'evento abbiamo considerato per ricavarne le tempistiche e soffermandoci sui casi particolari che hanno richiesto studi più approfonditi.
-Per un riferimento più completo, una lista delle tabelle contenute in MIMIC-III e degli eventi ad esse collegati può essere trovata nella sezione [].
+# Tuttavia, non essendo il focus di MIMIC sulla valutazione temporale delle interazioni tra i pazienti e il sistema ospedaliero, non esiste un'indicazione comune a tutti gli eventi dell'istante temporale in cui l'evento è accaduto.
+Nonetheless, since the focus of MIMIC is not on the temporal assessment of interactions between patients and the hospital system, there is no common indication for all events of the time instant at which the event occurred.
+# Invece, alcuni eventi hanno a disposizione il `charttime`, ovvero l'istante temporale in cui l'evento è stato osservato; altri hanno a disposizione uno `storetime`, ovvero l'istante temporale in cui l'evento è stato introdotto nel sistema ospedaliero; Altri ancora hanno altre indicazioni temporali, e vanno considerati separatamente.
+Instead, some events have a `CHARTTIME` available, which is the time instant at which the event was observed; others have a `STORETIME` available, which is the time instant at which the event was introduced into the hospital system; Others again have other time indications, and should be considered separately.
+
+# Nelle sezioni seguenti, analizzeremo caso per caso ciascuno degli eventi che siamo interessati a simulare, mostrando quali attributi dell'evento abbiamo considerato per ricavarne le tempistiche e soffermandoci sui casi particolari che hanno richiesto studi più approfonditi.
+# Per un riferimento più completo, una lista delle tabelle contenute in MIMIC-III e degli eventi ad esse collegati può essere trovata nella sezione [].
 # %#TODO: sezione MIMIC
 
-#+BEGIN_COMMENT
-- ottengo gli eventi
-- li suddivido per classi
-- ne calcolo l'intertempo basandomi sull'attributo in grado di darmi un'indicazione temporale precisa
-- trovo la media del sample raccolto
-- utilizzo la media trovata per stimare il parametro lambda di un'esponenziale tramite il metodo dei momenti visto in precedenza.
+*** Methodology
 
-Quello che ottengo è, per ogni tipologia d'evento, un'esponenziale associato ad ogni classe.
-Per buona parte degli eventi considerati dobbiamo applicare questa metodologia.
-Quando possibile, è stato preferito utilizzare l'attributo "storetime" anziché "charttime" in quanto indicativo dell'effettiva interazione con il sistema ospedaliero.
-#+END_COMMENT
+# La procedura standard applicata per il fitting di un'esponenziale a ciascuna tipologia di evento è la seguente:
+The standard procedure applied for fitting an exponential to each type of event is as follows:
+# - ottengo gli eventi di quella categoria
+# - li suddivido per classi
+# - ne calcolo l'intertempo basandomi sull'attributo in grado di darmi l'indicazione temporale più precisa
+# - trovo la media del sample raccolto
+# - utilizzo la media trovata per stimare il parametro lambda di un'esponenziale tramite il metodo dei momenti visto in precedenza.
+- I get the events in that category
+- I split them by the classes identified in section []
+- I compute their intertime based on the attribute that can give me the most accurate time stamp
+- I find the average of the collected samples
+- I use the average found to estimate the lambda parameter of an exponential via the method of moments described earlier.
+# %#TODO: sezione classification
+
+# Quello che ottengo è, per ogni tipologia d'evento, un'esponenziale fitted ad ogni classe.
+# Per buona parte degli eventi considerati, la metodologia indicata sopra è sufficiente, e in tabella [] sono indicati gli attributi utilizzati per effettuare il fitting.
+# Come si può notare, quando possibile è stato prediletto l'uso dell'attributo 'storetime' rispetto ad altri attributi disponibili, in quanto indicativo dell'effettiva interazione con il sistema ospedaliero e quindi più specifico per il caso d'uso proposto.
+What I obtain is, for each kind of event, a fitted exponential to each class.
+For most of the events considered, the methodology given above is sufficient, and Table [] shows the attributes used to perform the fitting.
+As can be seen, when available the attribute 'storetime' was preferred over other available attributes, as it is indicative of the actual interaction with the hospital system and therefore more specific to the proposed use case.
+# %#TODO: table evento-attributo
+
+# I casi non coperti dalla procedura appena vista sono presentati nelle seguenti sezioni.
+Cases not covered by the procedure just seen are presented in the following sections.
+
+**** CPT Events and Prescription Events
+The CPTEVENTS table contains a list of which current procedural terminology codes were billed for which patients.
+As shown in section [], these events may happen at any time during the hospital stay.
+# L'unica informazione temporale disponibile su questi eventi è fornita dall'attributo `CHARTDATE` il quale (come il nome lascia intendere) fornisce una data ma non un'indicazione temporale precisa.
+The only temporal information available about these events is provided by the `CHARTDATE` attribute, which (as the name implies) provides a date but not a precise time stamp.
+
+# La stessa situazione vale per gli eventi segnati nella tabella `PRESCRIPTION` i quali, pur avendo a disposizione gli attributi `STARTDATE` e `ENDDATE` ad indicare la data di inizio e fine della prescrizione medica non hanno a disposizione indicazioni più precise riguardanti l'istante temporale in cui sono stati registrati.
+The same situation applies to events marked in the `PRESCRIPTION` table which, although they have the attributes `STARTDATE` and `ENDDATE` available to indicate the start and end date of the prescription, do not have more precise indications regarding the time instant at which they were recorded.
+
+**** Callout Events
+The `CALLOUT` table provides information about ICU discharge planning. When a patient is deemed ready to leave the ICU, they are “called out”. This process involves:
+- a care provider registering that the patient is ready to leave the ICU and detailing any specialized precautions required
+- a coordinator acknowledging the patient requires a bed outside the ward a variable period of time in order to coordinate the transfer
+- an outcome: either the patient is called out (discharged) or the call out event is canceled
+
+Each of the steps listed above involves an interaction with the hospital system at different times, recorded in the `CALLOUTS` table through the following attributes:
+- `createtime` provides the time at which the registration of the callout request was performed.
+- `acknowledgetime` is the time at which the coordinator acknowledged the callout.
+- `updatetime` provides the last time at which the callout event was updated.
+- `outcometime` is the time at which the outcome of the callout was registered.
+
+The only attributes that are ensured to be registered for each outcome are `createtime` and `outcometime` and, as such, they are the only ones we considered during this analysis.
+
+We opted to model the outcome and the creation of the callout as two distinct events, but related to eachother.
+
+In fact, while the cration of the callout was modeled with the same standard procedure explained previously, where the time between callout creations was taken as the interval to model, the outcome of the callout was modeled using the time between the creation of the callout and the outcome of the same callout;
+This way, during the generation procedure that will be shown in section [], when the generation of the callout event is performed, we can generate the associated outcome event.
+# %#TODO: implementation section
+
+**** Input Events
+# Le tabelle INPUTEVENTS_MV e INPUTEVENTS_CV tengono traccia dei fluidi somministrati ai pazienti durante ciascuna loro permanenza in ICU. Le due tabelle rappresentano i dati raccolti da due critical care information systems distinti, namely CareVue e Metavision.
+Tables `INPUTEVENTS_MV` and `INPUTEVENTS_CV` track the fluids administered to patients during each of their ICU stays. The two tables represent data collected from two separate critical care information systems, namely CareVue and Metavision.
+# A causa di discrepanze nella modalità di storage dei dati, le due tabelle could not be integrated. Essendo tuttavia il nostro lavoro incentrato sullo studio delle tempistiche delle interazioni con il sistema ospedaliero e possedendo entambe le tabelle l'attributo `storetime` contenente la tempistica della registrazione nel sistema ospedaliero dell'evento, le due tabelle sono state considerate assieme.
+Due to discrepancies in the way the data from the two tables was stored, they could not be integrated.
+However, since our work is focused on studying the timing of interactions with the hospital system and since both tables possess the `STORETIME` attribute containing the time stamp of the recording in the hospital system of the event, the two tables were considered together during fitting.
+# Il metodo poi seguito per il fitting degli eventi raccolti è stato lo stesso visto nella procedura standard presentata in precedenza.
+The method then followed for fitting the collected events was the same as seen in the standard procedure presented earlier.
+
+**** Transfer Events
+The `TRANSFERS` table monitors the location of the patients throughout their hospital stay. The ICUSTAYS table is derived from this table, but multiple transfer events might happen during the same stay in ICU.
+
+Each transfer event is associated with an `INTIME` and an `OUTTIME` that represent the amount of time the patient stayed in the  considered ICU ward.
+Due to the way the table is constructed, there's no time interval between the outtime of a transfer and the intime of the next transfer during the same ICU stay.
+
+We opted to model the transfer events with a single time reference that represents the time at which the transfer happened during the single ICU stay.
+The time interval used to model the transfer events is the interval between the intime and the outtime of the transfer during the same ICU stay.
+During the generation of the events, the generated time interval was corrected to avoid transfers for a certain ICU stay happening outside of the time dedicated to the ICU stay.
+
+**** Note Events
+The `NOTEEVENTS` table contains all notes written by the medical staff of the medical institute for their patients. This kind of events, due to their natural language constitution, represents a first important example of heterogeneous data stored in the hospital system of the Beth Israel Medical Institute and recorded by MIMIC.
+
+# Nonostante non sono fornite informazioni riguardo il loro processing all'interno del sistema ospedaliero, possiamo facilmente ipotizzare che subiscano un trattamento di rilievo all'interno del sistema ospedaliero. Per questo motivo, abbiamo trovato di particolare importanza modellarli correttamente.
+As many other tables, NOTEEVENTS has available both a `CHARTTIME` attribute and a `STORETIME` attribute.
+Although in these cases we usually prefer to consider the `STORETIME` attribute as more reliable, MIMIC-III's documentation clearly states that certain kinds of medical notes (namely discharge summaries, ECG notes, radiology notes, and echo notes) don't have a `STORETIME` associated but only a `CHARTTIME`[cit].
+# %#TODO: citation required: mimic documentation
+For this reason, we opted to consider the `STORETIME` attribute when available as a valid time indication and, otherwise, to use the `CHARTTIME` attribute.
+
+The way Note events are fit does not otherwise change over the standard procedure previously presented.
+
+*** Fitting the waveforms
+Although not events registered in MIMIC-III, Waveforms pose another important source of data.
+Due to their structure fundamentally different than the rest of the data set, they had to be preprocessed as shown in section [] to make a correct time model about them.
+# %#TODO: Waveforms preprocessing section
+
+The results of the preprocessing procedure are in the form of a table that captures the duration of each trasmission slot, the number of transmissisons performed during the slot, the signals recorded in the system for each transmission and the length of the pauses between each transmission slot.
+
+The objective distribution we wanted to fit were:
+- The duration of the pauses
+- The duration of the transmission slots.
+
+Both of these distributions were split into the classes found in section [] and fit with an exponential distribution through the method of moments (as the case with all the events presented in section []) described previously.
+# %#TODO: sezione classificaziont + sezione precedente con tutti gli eventi.
+
+In order to make our simulator richer and more featureful, we also leveraged the information gathered during the preprocessing phase to include in each generated transmission the signals it would have registered in the data system.
+
+In this regard, the probability of each transmission to carry a certain signal was computed by checking the number of transmissions carrying that signal in the considered group against the total number of transmission in the group.
