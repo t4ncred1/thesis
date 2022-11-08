@@ -2,41 +2,40 @@
 #+title: Scaletta
 * TODO Introduzione
 * TODO Stato dell'arte
-* TODO Contributions
-** Background
-*** Mimic Description
-**** Origins
+* Background
+** Mimic
+*** Origins
 Beth Israel, time period
-**** What the dataset was designed to do
+*** Demo + corso
+*** What the dataset was designed to do
 not performance analysis
-**** Mimic deidentification
+*** Mimic deidentification
 What is kept
-**** Mimic III vs Mimic IV
-***** Why did we chose Mimic III
-**** What it contains
+*** Mimic III vs Mimic IV
+**** Why did we chose Mimic III
+*** What it contains
 Events mostly (also talk about dictionary tables etc)
-***** What do we mean when we say "events"
+**** What do we mean when we say "events"
 Describe how tuples are formed:
 - row id
 - a reference to the admission id
 - eventually a reference to the icustay id
 - eventually a timing value (we will mostly focus on events that have this attribute)
-**** Mimic tables (Entity-relationship diagram?)
-**** [?] Discrepancies found
-**** How did we retrieve data
-***** MIMIC (demo + corso)
-***** Postgres Container
-***** Waveform (struttura del codice per ottenere i dati)
-*** Phase type distributions
-**** versatilità
+*** Mimic tables (Entity-relationship diagram?)
+*** [?] Discrepancies found
+*** How did we retrieve data
+**** Postgres Container
+**** Waveform (struttura del codice per ottenere i dati)
+** Phase type distributions
+*** versatilità
 [cite:@bladtReviewPhasetypeDistributions2005]
-*** Hyperstar
-**** Come funziona e quale parte richiede l'interazione utente
-*** Kolm-Smir test
-**** Funzione che testa
-**** Parametro di threshold
+** Hyperstar
+*** Come funziona e quale parte richiede l'interazione utente
+** Kolm-Smir test
+*** Funzione che testa
+*** Parametro di threshold
 
-*** JMT
+** JMT
 
 * STRT Approach
 ** WAIT Intro
@@ -117,7 +116,9 @@ Ethnicity would have been another relevant
 - procedura standard (con esponenziale)
 **** Analisi per tipologia d'evento
 ***** Confronto con l'esponenziale
-***** Procedura scelta
+***** Metodologia
+metodologia standard + tabella
+****** Casi particolari
 *** NO Evaluation of the classification made
 
 * Model development
