@@ -1,0 +1,18 @@
+#+title: Simulator_development
+Una volta che l'analisi su MIMIC è stata effettuata e che
+* Functional Architecture
+
+** Modules
+- Generators
+-
+** Expected usage
+
+* Implementation
+** Libraries
+** Implemented architecture
+*** Notes about reusability
+
+* Use case
+** Reference example
+** Code structure
+** Results
