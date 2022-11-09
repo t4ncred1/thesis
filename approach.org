@@ -22,9 +22,9 @@ In this context, a model capable of generating data similar to the reference sou
 The reference data source chosen for the model is MIMIC-III, a freely-available database comprising deidentified health-related data associated with over forty thousand patients who stayed in critical care units of the Beth Israel Deaconess Medical Center of Boston between 2001 and 2012. A thorough description of the dataset can be found in chapter [].
 # %#TODO: capitolo mimic
 
-The focus of the model will be on emulating the timings of the reference set of data; A possible extension to also include realistic values associated with each event (which in turn would make for a nice tool to evaluate the performance of real systems) is discussed in the /Future Works section/.
+The focus of the model will be on emulating the timings of the reference set of data; A possible extension to also include realistic values associated with each data point (which in turn would make for a nice tool to evaluate the performance of real systems) is discussed in the /Future Works section/.
 
-The expected output of the model is therefore a trace of events similar to those described in /section x/, with the columns containing health related values stripped away.
+The expected output of the model is therefore a trace of data points related to time (from now on called *events*, adopting MIMIC's terminology) similar to those described in /section x/, with the columns containing health related values stripped away.
 The only exception to this rule are Waveforms, which are better presented in chapter []
 # %#TODO: capitolo/sezione waveforms
 # introduce mimic here
