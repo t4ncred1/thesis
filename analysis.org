@@ -204,11 +204,9 @@ In the model whose development was shown in this section we identified a total o
 
 # The next step in our analysis is to find the distributions that correctly fit each of these time intervals (except the last one, which can be derived from the others).
 # Il prossimo passo verso la creazione di un modello in grado di generare delle tracce di eventi comparabili a quelle descritte nel MIMIC-III dataset sarebbe to find the distributions that
-
 The next step towards the creation of a model capable of generating event traces comparable to the ones present in the MIMIC-III dataset would be to find the distributions that correctly fit each of these time intervals (except the last one, which can be derived from the others)
 
-Tuttavia, prima di introdurre quella sezione del lavoro è utilile parlare della classificazione che abbiamo deciso di applicare nel nostro modello e dei motivi che ci hanno portato a tale scelta.
-
+# Tuttavia, prima di introdurre quella sezione del lavoro è utilile parlare della classificazione che abbiamo deciso di applicare nel nostro modello e dei motivi che ci hanno portato a tale scelta.
 However, before we introduce that part of the work, it's useful to present the classification that we have decided to apply in our model and the reasons that led us to those choices.
 
 ** Classification :traduzione:
@@ -295,7 +293,6 @@ Following this consideration, we can see in figure [] how the patients are distr
 # Questi pazienti sono considerati nella fascia d'età '>100', dando una motivazione al picco.
 
 # Prima di poterla considerare come una valida feature di classificazione, è necessario tuttavia ridurre il numero di bin in cui le età sono suddivise (un numero eccessivo di classi porterebbe infatti a insiemi troppo piccoli per essere fit correttamente).
-
 We can see that the age of the patients follows an almost normal distribution centered on 70 years, with a considerable peak in the age range of 75 to 80.
 
 During the de-identification process applied on MIMIC, the age information of patients 90 years or older was de-identified, assigning them a birth date that results in an age over 300 years.
@@ -639,7 +636,7 @@ For this reason, we opted to consider the `STORETIME` attribute when available a
 
 The way Note events are fit does not otherwise change over the standard procedure previously presented.
 
-*** Fitting the waveforms
+** Distribution Fitting the waveforms
 Although not events registered in MIMIC-III, Waveforms pose another important source of data.
 Due to their structure fundamentally different than the rest of the data set, they had to be preprocessed as shown in section [] to make a correct time model about them.
 # %#TODO: Waveforms preprocessing section
