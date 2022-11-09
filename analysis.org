@@ -497,6 +497,9 @@ As mentioned earlier in section [], events belonging to two possible categories 
 As with the case of the behaviors of the patients, these events also require to be fit to distributions in order to be simulated.
 
 # Le classi individuate nella sezione [] sono applicate anche in questo caso per effettuare il fitting della distribuzione degli eventi identificati.
+The classes identified in section [] are considered to split the dataset and perform the fitting of the distribution of identified events.
+# Diversamente dalla procedura vista per il distribution fitting del comportamento dei pazienti, tutte le classi sono state considerate per ogni tipologia d'evento.
+Unlike the procedure seen for the distribution fitting of the patients' behaviors, all classes were considered during the partitioning of the samples for the distribution fitting of each event kind.
 
 *** The chosen distribution
 
