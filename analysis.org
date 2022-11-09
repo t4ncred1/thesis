@@ -559,10 +559,12 @@ Each of the steps listed above involves an interaction with the hospital system 
 
 The only attributes that are ensured to be registered for each outcome are `createtime` and `outcometime` and, as such, they are the only ones we considered during this analysis.
 
-We opted to model the outcome and the creation of the callout as two distinct events, but related to eachother.
+We opted to model the outcome and the creation of the callout as two distinct events, but related to one another.
 
-In fact, while the cration of the callout was modeled with the same standard procedure explained previously, where the time between callout creations was taken as the interval to model, the outcome of the callout was modeled using the time between the creation of the callout and the outcome of the same callout;
+In fact, while the creation of the callout was modeled with the same standard procedure explained previously, where the time between callout creations was taken as the interval to model, the outcome of the callout was modeled using the time between the creation of the callout and the outcome of the same callout;
 This way, during the generation procedure that will be shown in section [], when the generation of the callout event is performed, we can generate the associated outcome event.
+
+Figure [] summarises what time intervals are considered for fitting both outcome and creation events.
 # %#TODO: implementation section
 
 **** Input Events
