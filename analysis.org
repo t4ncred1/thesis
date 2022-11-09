@@ -2,8 +2,47 @@
 
 * TODO Introduzione
 
-* Analisys of the behavior
+* Tools and preliminary steps
+# Prima di introdurre le procedure applicate per raccogliere insights riguardo MIMIC-III, per permettere di riprodurre le analisi effettuate in modo corretto è utile elencare gli strumenti utilizzati e gli step preparatori effettuati.
+Before introducing the procedures applied to gather insights regarding MIMIC-III, to enable the analyses performed to be reproduced properly, it is useful to list the tools used and the preparatory steps taken.
 
+# Come spiegato nella sezione [], per ottenere accesso a MIMIC-III è stato necessario completare un corso obbligatorio di formazione sulla protezione di dati con rilevanza medica di terzi.
+As explained in section [], in order to obtain access to MIMIC-III, it was necessary to complete a mandatory training course on the protection of data with third-party medical relevance.
+# Una volta ottenuto accesso al dataset, abbiamo considerato le varie opportunità a nostra disposizione per effettuare query sui dati messi a disposizione; Tra le varie opzioni abbiamo scelto il self hosting, utilizzando PostgreSQL come database system in quanto più familiare.
+Once we obtained access to the dataset, we considered the various opportunities available to us for querying the data made available; Of the various options, we chose self-hosting, using PostgreSQL as the database system since it was more familiar.
+# Per evitare conflitti con altri applicativi di sistema e rendere il programma predicibile, è stato scelto di utilizzare docker per contain the dbms.
+To avoid conflicts with other system applications and to make the program predictable, we chose to use docker to contain the database.
+
+# Il tool scelto per lo sviluppo delle analisi è stato JupyterLab, un web-based development enviroment, scegliendo python come linguaggio di programmazione.
+The tool chosen for analysis development was JupyterLab, a web-based development enviroment, choosing python as the programming language.
+# La libreria utilizzata per l'interazione con PostgreSQL nell'ambiente di sviluppo JupyterLab è Psycopg2, a PostgresQL adapter for the python language.
+To interact with the PostgreSQL database in the JupyterLab development environment we leveraged Psycopg2, a PostgresQL adapter for the python language.
+
+** Pre-processing of the waveforms
+# Per poter effettuare un'analisi delle waveform con l'obiettivo di simularne la distribuzione temporale, è risultato necessario elaborarle per estrarre le informazioni necessarie riguardanti le tempistiche.
+In order to carry out an analysis of the waveforms with the aim of simulating their temporal distribution, it was necessary to process them to extract the necessary information concerning timing.
+
+# Come presentato nella sezione [], each recording is split into multiple files, also called /segments/. Each segment is associated to its own header file.
+As presented in section [], each record is divided into several files, also called /segments/. Each segment is associated with its own header file.
+
+In the matched waveform subset, each recording is associated to a /master header file/, which provides the subject_id of the patients as well as the surrogate time and date of the recording and the segments that comprise such recording;
+Such master header file (of which an example is shown in figure []) was used to gather most of the necessary informations about the waveform recordings.
+
+Moreover, a /layout file/ (of which a sample is shown in figure []) is associated to each recording and shows which signals are registered with each sample during the duration of the recording.
+
+The informations of interest in the header file are:
+- The subject_id of the patient of which the recording was performed
+- The sampling frequency of the recording (amount of samples transmitted per second), highlighted in figure [] in _
+- The total amount of samples transmitted during the recording, highlighted in figure [] in _
+- The timestamp of the recording, highlighted in figure [] in _
+- The layout file associated with the recording.
+- The pauses between transmissions, labeled by a \~ at the start of the line, and their duration (in terms of 'untrasmitted samples', or sample frequency units), highlighted in _
+- For each segment, the amount of samples covered by it, highlighted in _
+
+To facilitate the analysis, we gathered all these informations into a single table, which was then stored in the same database system containing mimic.
+To reduce the amount of tuples, subsequent transmissions in the same recording were grouped together, as shown in figure [], and assigned to the signals derived by its layout file.
+
+* Analysis of the behavior
 ** Why?
 # Volendo modellare e riprodurre il flusso di dati tra il paziente e il sistema ospedaliero di cui mimic ci fornisce uno squarcio, è utilie, come prima cosa, cercare di individuare il pattern di interazione tra utenti e ospedale.
 
