@@ -2,17 +2,17 @@
 #+title: Scaletta
 * TODO Introduzione
 * TODO Stato dell'arte
-* Background
+* TODO Background
 ** Mimic
 *** Origins
 Beth Israel, time period
-*** Demo + corso
 *** What the dataset was designed to do
 not performance analysis
 *** Mimic deidentification
 What is kept
 *** Mimic III vs Mimic IV
 **** Why did we chose Mimic III
+*** Demo + corso
 *** What it contains
 Events mostly (also talk about dictionary tables etc)
 **** What do we mean when we say "events"
@@ -21,8 +21,8 @@ Describe how tuples are formed:
 - a reference to the admission id
 - eventually a reference to the icustay id
 - eventually a timing value (we will mostly focus on events that have this attribute)
-*** Mimic tables (Entity-relationship diagram?)
-*** [?] Discrepancies found
+**** List Mimic tables (Entity-relationship diagram?)
+*** NO Discrepancies found
 *** How did we retrieve data
 **** Postgres Container
 **** Waveform (struttura del codice per ottenere i dati)
@@ -34,7 +34,6 @@ Describe how tuples are formed:
 ** Kolm-Smir test
 *** Funzione che testa
 *** Parametro di threshold
-
 ** JMT
 
 * STRT Approach
@@ -83,57 +82,90 @@ reusability and extensibility
   An example usage will be showcased ...
 **** Impossibilità di utilizzare valori reali
 
-** Analysis
-*** DONE Analysis of the interactions
-**** Found interactions
-***** default interactions (single icustay, single admission)
-***** which are the special cases found for the interactions
-****** Multiple icu stays & multiple admissions :graph:
-****** immediate finish after icu :graph:
-****** immediate finish after icu (no posticu) :graph:
-****** noicu :graph:
+* Analysis
+** DONE Analysis of the interactions
+*** Found interactions
+**** default interactions (single icustay, single admission)
+**** which are the special cases found for the interactions
+***** Multiple icu stays & multiple admissions :graph:
+***** immediate finish after icu :graph:
+***** immediate finish after icu (no posticu) :graph:
+***** noicu :graph:
 
-*** DONE Classification
-**** Why these classes
-***** Valid
+** DONE Classification
+*** Why these classes
+**** Valid
 Every one of the chosen classes has a relevant presence in the dataset
-***** Relevant
+**** Relevant
 The classifications made "make sense" (medical relevance, probabilistic relevance (weekday))
 Ethnicity would have been another relevant
-**** Analysis of the patients
-***** NO Marital status :graph:
-***** NO Language :graph:
-***** Ethnicity :graph:
-***** Gender :graph:
-***** Age :graph:
-***** Number of admissions :graph:
-**** Analysis of the admissions
-*** DONE Distribution fitting the interactions
-**** Quale distribuzione abbiamo scelto
-*** Distribution fitting the events
-**** Intro
+*** Analysis of the patients
+**** NO Marital status :graph:
+**** NO Language :graph:
+**** Ethnicity :graph:
+**** Gender :graph:
+**** Age :graph:
+**** Number of admissions :graph:
+*** Analysis of the admissions
+** DONE Distribution fitting the interactions
+*** Quale distribuzione abbiamo scelto
+** Distribution fitting the events
+*** Intro
 - classi
 - procedura standard (con esponenziale)
-**** Analisi per tipologia d'evento
-***** Confronto con l'esponenziale
-***** Metodologia
+*** Analisi per tipologia d'evento
+**** Confronto con l'esponenziale
+**** Metodologia
 metodologia standard + tabella
-****** Casi particolari
-*** NO Evaluation of the classification made
+***** Casi particolari
+** Distribution fitting the Waveforms
+** NO Evaluation of the classification made
 
-* Model development
-** Objectives and focus of the generator
-** Librerie usate
-- quella per generare le distribuzioni phase type (ciw)
-** Architettura del generatore
+* Symulator development
+** Intro/Objectives of the simulator
+
+** Architettura funzionale
+
 *** Moduli
-*** In che modo è inteso l'uso da parte dell'utente
-Come libreria.
-**** Motivazioni
-vedi obiettivi del lavoro: malleabilità e riuso
+- Classi e tipi
+  "una soluzione che permetta una facile sostituzione"
+- Layered Structure
+- Manager di configurazione
 
-** [?] Come è incorporata la classificazione e come funziona a livelli diversi
-Il livello effettivo a cui la classificazione è fatta non è importante, perché è sempre portata al livello del singolo evento.
+Perché un manager
+Perché una struttura a livelli (utilizzo previsto)
+
+**** Diagramma UML ad alto livello
+Classi principali + classificazione
+
+*** Utilizzo previsto
+come libreria
+
+** Implementazione
+
+*** Librerie usate
+- quella per generare le distribuzioni phase type (ciw)
+- quella per generare le distribuzioni esponenziali (numpy)
+
+*** Architettura specifica
+
+**** Diagramma UML a basso livello
+tutte le classi + metodi usati.
+Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lettura dei file di configurazione e la generazione degli eventi
+
+**** Sequence diagram
+
+**** Note sulla riusabilità
+
+** Caso d'uso
+- JMT
+
+*** Architettura di riferimento utilizzata
+Valori scelti
+
+*** Struttura del codice che usa il generatore
+
+*** Risultati ottenuti
 
 * TODO Future Work
 ** Include values other than timings
