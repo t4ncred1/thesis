@@ -1,10 +1,55 @@
 #+title: Simulator_development
-Una volta che l'analisi su MIMIC è stata effettuata e che
-* Functional Architecture
 
-** Modules
-- Generators
--
+* Intro
+Dopo aver completato l'analisi di MIMIC e aver modellato le observations registrate nel sistema, è venuto il momento di uncover il processo di development del simulatore.
+
+Come evidenziato in sezione [], le caratteristiche obiettivo del simulatore sono la fine-tunability e l'adattabilità.
+# %#TODO: reference sezione approach. Richiamare in quella sezione il fatto che gli obiettivi verranno ripresi meglio in seguito e spiegarli brevemente.
+
+La *fine-tunability* è intesa come la possibilità da parte dell'utente di adattare il modello ai propri risultati ottenuti con le procedure mostrate nel capitolo [analysis] e di avere il controllo sull'output ottenuto dal simulatore.
+# %#TODO: procedure capitolo analysis
+
+La *adaptability* è intesa invece con il senso più ampio di avere la possibilità di riutilizzare il simulatore per mostrare i risultati di procedure differenti (come ad esempio classificazioni effettuate con metodologie diverse) o addirittura dataset differenti con una struttura simile a quella di MIMIC-III.
+
+Nelle seguenti sezioni descriveremo ...
+
+
+* Functional Architecture
+In questa sezione presentiamo l'architettura funzionale del simulatore.
+Questa, come l'aggettivo funzionale lascia intendere, non corrisponde esattamente all'architettura software del simulatore, ma pone rilievo sulle funzionalità desiderate e sulle idee e scelte strutturali che ne hanno guidato il development.
+
+** Functional design choices
+# La scelta strutturale che maggiormente ha influenzato il development del simulatore è quella di utilizzare un'architettura a layers, con i diversi layers esposti all'utente.
+# Il motivo di questa decisione, poi evidenziato e contestualizzato meglio nella sezione [expected usage], è di permettere all'utente di utilizzare ciascuno dei livelli intercambiabilmente, ottenendo la granularità descritta in precedenza come una delle caratteristiche goal del simulatore.
+
+# Oltre a questo, l'architettura è stata pensata con la configurabilità in mente, e si è quindi cercato ove possibile di rendere ogni parametro del simulatore modificabile in modo relativamente semplice dall'utente.
+Le principali scelte di design dettate dagli obiettivi mostrati sopra e che hanno influenzato maggiormente il development del simulatore sono state:
+- utilizzare un'architettura layered per la generazione degli eventi
+- introdurre la possibilità di cambiare le classi utilizzate
+  # la struttura delle interazioni sarebbe stata più difficile da rendere sostituibile
+  # non realizzata completamente: le classi devono essere per admission e per user
+- introdurre un metodo di configurazione che permetta all'utente di utilizzare i propri risultati riprodotti delle analisi viste in precedenza.
+
+
+
+Il diagramma rappresentato in figura [] mostra un'architettura ad alto livello frutto delle scelte strutturali appena elencate.
+
+*** Layered architecture
+Volendo controllare la generazione degli eventi a diversi livelli di granularità, risulterebbe utile poter
+
+Il modo in cui MIMIC e l'analisi sono state strutturate si prestano all'idea di suddividere la generazione degli eventi in molteplici stati; Possiamo infatti dividere la generazione di una traccia di eventi nei seguenti livelli:
+- L'ospedale riceve molteplici pazienti
+- Ogni paziente ha molteplici permanenze ospedaliere
+- Ogni permanenza ospedaliera corrisponde a una o più /interazioni/ tra l'utente e il sistema ospedaliero (equivalenti ai behaviors individuati nella sezione [])
+- Durante ogni /interazione/ sono registrati molteplici eventi
+
+Possiamo individuare nell'ospedale, nei pazienti, nelle permanenze ospedaliere e nelle interazioni le entità in grado di generare gli eventi, e sviluppando il modello seguendo una struttura a strati si dà la possibilità all'utente di fine tune l'ouput secondo la granularità desiderata.
+
+# ?
+Con una struttura simile, l'utente otterrebbe la possibilità di simulare e.g. le tracce di eventi registrate durante l'admission di un utente maschio, tra i 45 e i 65 anni di età (una delle classi scelte per suddividere i pazienti nella sezione []) cominciata venerdì (una delle classi scelte per suddividere le admission nella sezione []) durante il suo periodo di permanenza ospedaliera prima della sua prima permanenza in ICU (uno dei behaviors del paziente individuati nella sezione []).
+
+*** Introdurre la possibilità di cambiare le classi utilizzate
+
 ** Expected usage
 
 * Implementation
