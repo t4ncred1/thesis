@@ -6,8 +6,9 @@
 ** Mimic
 *** Origins
 Beth Israel, time period
-*** What the dataset was designed to do
+*** What the dataset was designed to do/consists in
 not performance analysis
+Definizione *Event*
 *** Mimic deidentification
 What is kept
 *** Mimic III vs Mimic IV
@@ -22,6 +23,9 @@ Describe how tuples are formed:
 - eventually a reference to the icustay id
 - eventually a timing value (we will mostly focus on events that have this attribute)
 **** List Mimic tables (Entity-relationship diagram?)
+**** Waveforms
+headers vs data
+matched subset
 *** NO Discrepancies found
 *** How did we retrieve data
 **** Postgres Container
@@ -121,11 +125,10 @@ metodologia standard + tabella
 ** Distribution fitting the Waveforms
 ** NO Evaluation of the classification made
 
-* Symulator development
+
+* Simulator development
 ** Intro/Objectives of the simulator
-
 ** Architettura funzionale
-
 *** Moduli
 - Classi e tipi
   "una soluzione che permetta una facile sostituzione"
@@ -157,15 +160,13 @@ Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lett
 
 **** Note sulla riusabilità
 
-** Caso d'uso
+** Use case
 - JMT
-
-*** Architettura di riferimento utilizzata
+*** Reference example
 Valori scelti
+*** Code structure
+*** Results
 
-*** Struttura del codice che usa il generatore
-
-*** Risultati ottenuti
 
 * TODO Future Work
 ** Include values other than timings
