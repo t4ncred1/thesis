@@ -653,3 +653,36 @@ Both of these distributions were split into the classes found in section [] and 
 In order to make our simulator richer and more featureful, we also leveraged the information gathered during the preprocessing phase to include in each generated transmission the signals it would have registered in the data system.
 
 In this regard, the probability of each transmission to carry a certain signal was computed by checking the number of transmissions carrying that signal in the considered group against the total number of transmission in the group.
+
+** Outputs of the analysis
+
+# Per riassumere, le analisi effettuate in questa sezione ci hanno permesso di ottenere:
+# - Le distribuzioni (fit usando le Phase-Type distribution) della durata di ogni attività dei i pazienti all'interno dell'ospedale.
+# - Le distribuzioni (fit usando le exponential distributions) dell'intertempo che trascorre tra eventi successivi di una data tipologia.
+To summarize, the analyses performed in this section allowed us to obtain:
+- The distributions (fit using Phase-Type distributions) of the duration of each activity of the i patients within the hospital.
+- The distributions (fit using exponential distributions) of the inter-time elapsing between successive events of a given.
+
+# Entrambe le categorie di distribuzioni sono state suddivise in classi. Nel caso delle distribuzioni che fit le attività dei pazienti, a causa del lungo tempo richiesto per effettuare il fit, alcune di esse sono state confrontate e raggruppate per similarità, così da poter ridurre il numero di fitting da effettuare (si veda la tabella~[]); Altre, a causa dello scarso numero di attività del genere registrate all'interno di MIMIC, non sono state suddivise in classi o hanno subito una suddivisione parziale (si veda la tabella~[])
+Both categories of distributions were divided into classes. In the case of distributions that fit patients' activities, because of the long time required to perform the fit, some of them were compared and grouped by similarity so that the number of fittings to be performed could be reduced (see table~[]); Others, because of the small number of such activities recorded within MIMIC, were not divided into classes or underwent partial division (see table~[])
+
+# Gli ouput delle analisi effettuate sono:
+# - Per tutte le distribuzioni riguardanti le attività suddivise in classi che hanno richiesto un raggruppamento, un file output di HyperStar per ogni gruppo (vedi sezione [] per la specifica dell'output di hyperstar) e un file di mapping che tenga traccia dell'associazione tra il gruppo e le classi.
+The ouputs of the analyses performed are:
+- For all distributions concerning activities that have undergone a grouping procedure, an HyperStar output file was created for each group (see [] for specification of the hyperstar output) and one mapping file to track the association between the group and the classes.
+# - Un file output di HyperStar per ogni classe per tutte le distribuzioni riguardanti le attività che hanno subito una classificazione parziale.
+- A HyperStar output file for each class for all distributions regarding activities that have undergone partial classification.
+# - Un singolo file output di Hyperstar per le attività che non hanno subito una classificazione
+- A single Hyperstar output file for activities that have not undergone classification.
+# - Per ogni distribuzione esponenziale used to fit gli eventi presenti in MIMIC, un file recante i parametri lambda stimati per ogni classe.
+- For each exponential distribution used to fit the events in MIMIC, a file bearing the estimated lambda parameters for each class.
+# - Per le distribuzioni esponenziali utilizzate per fit le waveform, un file recante i parametri lambda stimati per ogni classe
+- For exponential distributions used to fit waveforms, a file bearing the estimated lambda parameters for each class.
+# - Per ciascuna delle due classificazioni effettuate (patient based e admission based, viste in sezione []) un file contenente la probability per un paziente o un admission di appartenere a una o all'altra classe.
+- For each of the two classifications made (patient based and admission based, seen in section []) a file containing the probability for a patient or admission to belong to one or the other class.
+# - Per ogni decision node presente nell'activity diagram dei pazienti presentato in figura [], un file contenente le probability (per ogni classe di patiente e di hospital stay) di prendere una decisione piuttosto che l'altra
+- For each decision node in the patient activity diagram presented in Figure [], a file containing the probabilities (for each patient class and admission class) of takinf one decision branch rather than the other.
+# - Un singolo file contenente, per ciascun possibile segnale registrato dalle waveform, la probabilità per ogni classe che quel segnale sia trasmesso
+- A single file containing, for each possible signal recorded by the waveforms, the probability for each class that such signal is transmitted.
+
+# These outputs will be the input parameters for the simulator described in section [].
