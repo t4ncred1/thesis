@@ -125,30 +125,42 @@ metodologia standard + tabella
 ** Distribution fitting the Waveforms
 ** NO Evaluation of the classification made
 
-
 * Simulator development
-** Intro/Objectives of the simulator
-** Architettura funzionale
-*** Moduli
-- Classi e tipi
-  "una soluzione che permetta una facile sostituzione"
-- Layered Structure
-- Manager di configurazione
+- ripeti obiettivi:
+  - granularità
+  - adaptability
 
-Perché un manager
-Perché una struttura a livelli (utilizzo previsto)
+** Architettura funzionale
+
+*** Scelte strutturali
+- Layered Structure
+- Classi e distribuzioni intercambiabili
+  - Avere quanti meno hard requirements sulle classi e sulle distribuzioni
+  - "una soluzione che permetta una facile sostituzione delle classi"
+- Manager di configurazione
 
 **** Diagramma UML ad alto livello
 Classi principali + classificazione
 
 *** Utilizzo previsto
-come libreria
+- Override (in linea con adaptability)
+- Uso su vari livelli per adattare (in linea con granularity)
 
 ** Implementazione
 
-*** Librerie usate
+*** Software design choices
+
+**** Librerie usate
 - quella per generare le distribuzioni phase type (ciw)
 - quella per generare le distribuzioni esponenziali (numpy)
+
+**** Uso come libreria
+Copre bene gli utilizzi previsti
+In linea con un linguaggio interpretato e interattivo come python
+
+**** [?] File structure (va qui?)
+file csv assegnati ad ogni classe
+per interazioni
 
 *** Architettura specifica
 
@@ -158,7 +170,9 @@ Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lett
 
 **** Sequence diagram
 
-**** Note sulla riusabilità
+**** Requirements
+- che le classi nei file siano le stesse descritte dalle enum
+
 
 ** Use case
 - JMT
@@ -172,3 +186,4 @@ Valori scelti
 ** Include values other than timings
 ** Clustering
 [[file:analysis.org::*Choosing the classes][Choosing the classes]]
+C'è da modificare anche le classi nel generatore (LIMITAZIONE). Potremmo passare una sola classe per livello (anziché admissionclass+userclass)?
