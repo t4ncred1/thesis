@@ -23,41 +23,116 @@ Questa, come l'aggettivo funzionale lascia intendere, non corrisponde esattament
 # Il motivo di questa decisione, poi evidenziato e contestualizzato meglio nella sezione [expected usage], è di permettere all'utente di utilizzare ciascuno dei livelli intercambiabilmente, ottenendo la granularità descritta in precedenza come una delle caratteristiche goal del simulatore.
 
 # Oltre a questo, l'architettura è stata pensata con la configurabilità in mente, e si è quindi cercato ove possibile di rendere ogni parametro del simulatore modificabile in modo relativamente semplice dall'utente.
-Le principali scelte di design dettate dagli obiettivi mostrati sopra e che hanno influenzato maggiormente il development del simulatore sono state:
+Le principali scelte di design dettate dagli obiettivi elencati in precedenza e che hanno influenzato maggiormente il development del simulatore sono state:
 - utilizzare un'architettura layered per la generazione degli eventi
-- introdurre la possibilità di cambiare le classi utilizzate
+- introdurre la possibilità di cambiare le classi e le distribuzioni utilizzate
   # la struttura delle interazioni sarebbe stata più difficile da rendere sostituibile
-  # non realizzata completamente: le classi devono essere per admission e per user
-- introdurre un metodo di configurazione che permetta all'utente di utilizzare i propri risultati riprodotti delle analisi viste in precedenza.
+  # non realizzata completamente: le classi devono essere per admission e per user - introdurre un metodo di configurazione che permetta all'utente di utilizzare i propri risultati riprodotti delle analisi viste in precedenza.
 
+# ###
 
-
-Il diagramma rappresentato in figura [] mostra un'architettura ad alto livello frutto delle scelte strutturali appena elencate.
+Il diagramma rappresentato in figura [] mostra un'architettura ad alto livello frutto delle scelte strutturali appena elencate; La struttura a strati, come anticipato, è il fulcro del simulatore e può essere vista nel modulo /Generation/: Ogni livello è frutto dell'aggregazione di elementi del livello inferiore, fino alle /interazioni/ che si occupano invece di generare gli eventi veri e propri.
+# Le classificazioni, idealmente, possono essere facilmente sostituite implementando l'interfaccia /Class/ indicata nel modulo e effettuando l'override.
 
 *** Layered architecture
 # Volendo controllare la generazione degli eventi a diversi livelli di granularità, risulterebbe utile poter
 
-Il modo in cui MIMIC e l'analisi sono stati strutturati si prestano all'idea di suddividere la generazione degli eventi in molteplici strati; Possiamo infatti dividere la generazione di una traccia di eventi nei seguenti livelli:
+La struttura di MIMIC e il modo in cui la sua analisi è stata effettuata si prestano all'idea di suddividere la generazione degli eventi in molteplici strati; Possiamo infatti dividere la generazione di una traccia di eventi nei seguenti livelli:
 - L'ospedale riceve molteplici pazienti
 - Ogni paziente ha molteplici permanenze ospedaliere
 - Ogni permanenza ospedaliera corrisponde a una o più /interazioni/ tra l'utente e il sistema ospedaliero (equivalenti ai behaviors individuati nella sezione [])
-- Durante ogni /interazione/ sono registrati molteplici eventi
+- Durante ogni interazione sono registrati molteplici eventi
 
-Possiamo individuare nell'ospedale, nei pazienti, nelle permanenze ospedaliere e nelle interazioni le entità in grado di generare gli eventi, e dando all'utente la possibilità di utilizzare uno qualsiasi di questi livelli per la generazione dell'output gli si permette di fine tune l'ouput secondo la granularità desiderata.
+Possiamo individuare nell'ospedale, nei pazienti, nelle permanenze ospedaliere e nelle interazioni le entità in grado di generare gli eventi e sviluppando il modello seguendo una struttura a strati e fornendo all'utente le interfacce necessarie per accedervi gli si dà la possibilità di fine tune l'ouput secondo la granularità desiderata.
 
-# ?
-Con una struttura simile, l'utente otterrebbe infatti la possibilità di simulare e.g. le tracce di eventi registrate durante l'admission di un utente maschio, tra i 45 e i 65 anni di età (una delle classi scelte per suddividere i pazienti nella sezione []) cominciata venerdì (una delle classi scelte per suddividere le admission nella sezione []) durante il suo periodo di permanenza ospedaliera prima della sua prima permanenza in ICU (uno dei behaviors del paziente individuati nella sezione []).
+Con una struttura simile, l'utente otterrebbe infatti la possibilità di simulare tracce d'eventi pertinenti casi specifici, come e.g. una traccia di eventi registrati durante l'admission di un utente maschio, tra i 45 e i 65 anni di età (una delle classi scelte per suddividere i pazienti nella sezione []) cominciata venerdì (una delle classi scelte per suddividere le admission nella sezione []) durante il suo periodo di permanenza ospedaliera prima della sua prima permanenza in ICU (uno dei behaviors del paziente individuati nella sezione []).
 
 *** Introdurre la possibilità di cambiare le classi utilizzate
+Come visto nella sezione [], le classi scelte durante l'analisi per suddividere in gruppi l'insieme degli eventi e dei behaviors dei pazienti sono basate su features evidenti dei pazienti e delle permanenze ospedaliere.
 
-** Expected usage
+In linea con la caratteristica obiettivo dell'adaptability evidenziata ad inizio capitolo, una delle scelte strutturali preliminari prese all'inizio dello sviluppo del simulatore è stata quella di rendere queste classificazioni sostituibili con altre basate su features differenti.
 
-* Implementation
-** Libraries
-** Implemented architecture
-*** Notes about reusability
+*** Centralized configuration
+Per semplificare la personalizzazione e l'utilizzo dei risultati delle proprie analisi da parte dell'utente, abbiamo scelto di centralizzare la lettura dei file di output delle analisi elencati in sezione [] e la loro distribuzione alle altre classi.
 
-* Use case
+** NO Expected Usage
+Il diagramma dei casi d'uso da parte dell'utente è presentato in figura []
+
+* TODO Implementation
+ L'architettura software del simulatore è stata suddivisa in 3 moduli comunicanti:
+ - Classes, contente le classi
+ - Generator, contenente
+ - Configuration, contenente
+
+*** Configuration module
+Il modudulo Configuration contiene le classi necessarie per la lettura dei file di output dell'analisi e per renderli accessibili al resto del simulatore.
+
+È composto da due parti principali:
+- La classe Manager, responsabile per fornire alle classi degli altri moduli gli artefatti ottenuti dall'output dell'analisi, quali ad esempio i generatori delle varie distribuzioni.
+- The configuration itself, containing the file paths where to find the outputs of the analysis.
+
+Dato che, come visto nella sezione [], il simulatore è inteso come una libreria da utilizzare nell'ambito di script python o notebook interattivi, abbiamo scelto di salvare la configurazione come un dizionario multilivello, in cui sono salvati e catalogati i percorsi dei file da cui sono letti i vari parametri del simulatore.
+# %#TODO: sezione classi
+
+I file indicati da questo dizionario di configurazione sono poi letti dalla classe Manager, la quale funge da riferimento per le altre classi a tutte le informazioni contenute negli output dell'analisi effettuata su MIMIC, già descritti nella sezione [].
+# %#TODO: sezione output analisi mimic.
+La lista dei metodi resi disponibili dal Manager con una breve descrizione è mostrata in tabella [].
+
+Per evitare l'uso di stringhe hardcoded in the other modules of the simulator, sono state anche introdotte delle enumerazioni che racchiudessero e raggruppassero le chiavi di suddetto dizionario.
+Queste enumerazioni sono utilizzate nella comunicazione tra le altri classi del simulatore e il Manager per indicare l'output dell'analisi a cui la classe è iteressata.
+# venendo dalle altre classi del simulatore per richiedere al Manager le informazioni di cui hanno bisogno. Anche queste sono contenute nel modulo di configurazione.
+
+Queste enumerazioni con i relativi risultati dell'analisi a cui fanno riferimento sono elencate nella tabella [].
+
+Un altro vantaggio delle enumerazioni elencate è che fungono da astrazione per gli eventi e le interazioni considerati: se ad esempio si volesse, nell'ambito di uno studio sulla workload characterization, voler considerare i noteevents come eventi specificatamente correlati alle permanenze in ICU (e non alle generiche permanenze ospedaliere), basterebbe spostarla dall'enumerazione `AdmissionEventType` alla enumerazione `ICUEventType`.
+
+Il diagrama UML del modulo è mostrato in figura~[]
+
+*** Classification module
+The classification module contiene le classi individuate nella sezione [], suddivise per tipologia (patient classification, identificate rispettivamente dalle classi `UserClass` e `AdmissionClass`).
+Come vedremo nella sezione [], queste classi sono associate alla maggior parte delle classi generative e sono utilizzate nell'ambito di un'interazione tra queste ultime e il Manager per specificare la classe di cui interessa ottenere la distribuzione.
+
+Con esse è introdotta anche una funzione (nominata `get_class_rep`) utilizzata per ottenere, dalle classi appena elencate, the standardized class name used while storing the outputs of the analysis (described better in section~\[])
+
+Nel caso in cui si decida di effettuare classificazioni basate su features differenti, basterà modificare le classi contenute in questo modulo per adattare il simulatore alla nuova classificazione.
+
+Il diagramma uml che descrive questo modulo è mostrato in figura~[].
+
+*** Generation module
+Il modulo di generazione contiene the body of the simulator. In esso vengono gestiti il calcolo delle tempistiche di interazione tra il paziente e il sistema ospedaliero e la generazione degli eventi associati a tali interazioni.
+Le classi che compongono il modulo possono essere divise in 2 categorie principali:
+- the events, gli oggetti che si ha interesse a generare.
+- the EventsGenerator, le classi introdotte per la generazione degli eventi.
+
+**** TODO EventsGenerators Classes
+Le classi riguardanti la generazione degli eventi sono il corpo principale del simulatore, e quelle che utilizzano maggiormente i risultati delle analisi effettuate in precedenza.
+
+Come già evidenziato nella sezione~[], per
+
+Tutte le classi introdotte in questa sezione implementano l'interfaccia `EventGenerator`, la quale rappresenta la principale interfaccia d'accesso per la generazione di tracce di eventi.
+
+
+
+**** Event Classes
+Per rappresentare gli eventi all'interno del simulatore si è scelto di raccoglierli all'interno di un'unica classe `Event`, e di specificare la precisa tipologia di evento da considerare tramite gli elementi delle enumerazioni evidenziate nella sezione [].
+
+In questo modo, a ciascuna classe che estende l'interfaccia `Interazione` (presentata nella sezione precedente) può essere specificato quali tipologie di eventi generare basandosi solamente sulle enumerazioni mostrate in sezione [].
+
+L'unico metodo degno di nota nella classe `Event` è il metodo `get_event_dictionary`, che può utilizzato per ottenre le informazioni d'interesse sull'evento, quali l'istante di tempo in cui è stato simulato, la classe d'appartenenza, la tipologia d'evento, l'id dell'utente simulato (ottenuto dalla classe `User`) e l'id della permanenza ospedaliera (ottenuto dalla classe `Admission`).
+
+La registrazione delle waveform è coperta da un'estensione della classe Events, denominata `WaveformsEvents`.
+Le waveform sono simulate nella loro forma già processata presentata in sezione [] e, per questo motivo, possono essere considerate rassomiglianti a degli eventi.
+L'unica differenza con la classe `Events` appena descritta è, infatti, nel metodo `get_event_dictionary`, di cui è stato fatto l'override rispetto al metodo della classe padre per includere anche le informazioni riguardanti i segnali generati durante la trasmissione.
+
+**** Librerie scelte
+
+**** Classi
+
+*** Expected Use
+use as a library, where classes and types can be overridden to adapt to the data source.
+shown in section [use case]
+
+* Use case example
 ** Reference example
 ** Code structure
 ** Results
