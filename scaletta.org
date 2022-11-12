@@ -130,23 +130,34 @@ metodologia standard + tabella
   - granularità
   - adaptability
 
-** Architettura funzionale
-
-*** Scelte strutturali
+** Scelte strutturali
 - Layered Structure
 - Classi e distribuzioni intercambiabili
-  - Avere quanti meno hard requirements sulle classi e sulle distribuzioni
+  - Avere quanti meno hard requirements sulle classi e sulle distribuzioni possibili
   - "una soluzione che permetta una facile sostituzione delle classi"
 - Manager di configurazione
+Centralize the configuration
 
-**** Diagramma UML ad alto livello
+*** Diagramma UML ad alto livello
 Classi principali + classificazione
 
-*** Utilizzo previsto
+*** [?] Utilizzo previsto
 - Override (in linea con adaptability)
 - Uso su vari livelli per adattare (in linea con granularity)
 
 ** Implementazione
+
+*** Architettura specifica
+
+**** Diagramma UML a basso livello
+tutte le classi + metodi usati.
+Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lettura dei file di configurazione e la generazione degli eventi
+
+**** Sequence diagram
+
+**** Requirements
+- che le classi nei file siano le stesse descritte dalle enum
+
 
 *** Software design choices
 
@@ -161,18 +172,6 @@ In linea con un linguaggio interpretato e interattivo come python
 **** [?] File structure (va qui?)
 file csv assegnati ad ogni classe
 per interazioni
-
-*** Architettura specifica
-
-**** Diagramma UML a basso livello
-tutte le classi + metodi usati.
-Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lettura dei file di configurazione e la generazione degli eventi
-
-**** Sequence diagram
-
-**** Requirements
-- che le classi nei file siano le stesse descritte dalle enum
-
 
 ** Use case
 - JMT
