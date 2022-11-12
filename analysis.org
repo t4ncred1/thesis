@@ -669,20 +669,25 @@ Both categories of distributions were divided into classes. In the case of distr
 # Gli ouput delle analisi effettuate sono:
 # - Per tutte le distribuzioni riguardanti le attività suddivise in classi che hanno richiesto un raggruppamento, un file output di HyperStar per ogni gruppo (vedi sezione [] per la specifica dell'output di hyperstar) e un file di mapping che tenga traccia dell'associazione tra il gruppo e le classi.
 The ouputs of the analyses performed are:
-- For all distributions concerning activities that have undergone a grouping procedure, an HyperStar output file was created for each group (see [] for specification of the hyperstar output) and one mapping file to track the association between the group and the classes.
+1. For all distributions concerning activities that have undergone a grouping procedure, an HyperStar output file was created for each group (see [] for specification of the hyperstar output) and one mapping file to track the association between the group and the classes.
 # - Un file output di HyperStar per ogni classe per tutte le distribuzioni riguardanti le attività che hanno subito una classificazione parziale.
-- A HyperStar output file for each class for all distributions regarding activities that have undergone partial classification.
+2. A HyperStar output file for each class for all distributions regarding activities that have undergone partial classification.
 # - Un singolo file output di Hyperstar per le attività che non hanno subito una classificazione
-- A single Hyperstar output file for activities that have not undergone classification.
+3. A single Hyperstar output file for activities that have not undergone classification.
 # - Per ogni distribuzione esponenziale used to fit gli eventi presenti in MIMIC, un file recante i parametri lambda stimati per ogni classe.
-- For each exponential distribution used to fit the events in MIMIC, a file bearing the estimated lambda parameters for each class.
+4. For each exponential distribution used to fit the events in MIMIC, a file bearing the estimated lambda parameters for each class.
 # - Per le distribuzioni esponenziali utilizzate per fit le waveform, un file recante i parametri lambda stimati per ogni classe
-- For exponential distributions used to fit waveforms, a file bearing the estimated lambda parameters for each class.
+5. For exponential distributions used to fit waveforms, a file bearing the estimated lambda parameters for each class.
 # - Per ciascuna delle due classificazioni effettuate (patient based e admission based, viste in sezione []) un file contenente la probability per un paziente o un admission di appartenere a una o all'altra classe.
-- For each of the two classifications made (patient based and admission based, seen in section []) a file containing the probability for a patient or admission to belong to one or the other class.
+6. For each of the two classifications made (patient based and admission based, seen in section []) a file containing the probability for a patient or admission to belong to one or the other class.
 # - Per ogni decision node presente nell'activity diagram dei pazienti presentato in figura [], un file contenente le probability (per ogni classe di patiente e di hospital stay) di prendere una decisione piuttosto che l'altra
-- For each decision node in the patient activity diagram presented in Figure [], a file containing the probabilities (for each patient class and admission class) of takinf one decision branch rather than the other.
+7. For each decision node in the patient activity diagram presented in Figure [], a file containing the probabilities (for each patient class and admission class) of taking one decision branch rather than the other.
 # - Un singolo file contenente, per ciascun possibile segnale registrato dalle waveform, la probabilità per ogni classe che quel segnale sia trasmesso
-- A single file containing, for each possible signal recorded by the waveforms, the probability for each class that such signal is transmitted.
+8. A single file containing, for each possible signal recorded by the waveforms, the probability for each class that such signal is transmitted.
 
 # These outputs will be the input parameters for the simulator described in section [].
+
+The association between the class and the output of the analysis is shown, when in a single file, by writing the class name (written as e.g. "M_tue_0-45" for the class comprising male patients between age 0-45 and who started their first admission on a tuesday) with the considered output.
+In figure [] is shown an example of such behavior, where the probability of not having any ICU stays with the class the samples were drawn from by prepending the class name to the estimated parameter, with a comma as the separator.
+
+Clearly, to make the outputs of the analysis easily readable by the simulator, the chosen class names have to be standardized. The proposed standard, as shown in figure~[], is "patientGender_firstStayWeekDay_ageGroup", but any standard (possibly based on the classification features chosen) can be adopted.
