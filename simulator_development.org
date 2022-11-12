@@ -16,7 +16,7 @@ Nelle seguenti sezioni descriveremo ...
 
 * Functional Architecture
 In questa sezione presentiamo l'architettura funzionale del simulatore.
-Questa, come l'aggettivo funzionale lascia intendere, non corrisponde esattamente all'architettura software del simulatore, ma pone rilievo sulle funzionalità desiderate e sulle idee e scelte strutturali che ne hanno guidato il development.
+Questa, come l'aggettivo funzionale lascia intendere, non corrisponde esattamente all'architettura software del simulatore, ma pone rilievo sulle funzionalità desiderate e sulle idee e scelte di design ad alto livello che ne hanno guidato il development.
 
 ** Functional design choices
 # La scelta strutturale che maggiormente ha influenzato il development del simulatore è quella di utilizzare un'architettura a layers, con i diversi layers esposti all'utente.
@@ -35,18 +35,18 @@ Le principali scelte di design dettate dagli obiettivi mostrati sopra e che hann
 Il diagramma rappresentato in figura [] mostra un'architettura ad alto livello frutto delle scelte strutturali appena elencate.
 
 *** Layered architecture
-Volendo controllare la generazione degli eventi a diversi livelli di granularità, risulterebbe utile poter
+# Volendo controllare la generazione degli eventi a diversi livelli di granularità, risulterebbe utile poter
 
-Il modo in cui MIMIC e l'analisi sono state strutturate si prestano all'idea di suddividere la generazione degli eventi in molteplici stati; Possiamo infatti dividere la generazione di una traccia di eventi nei seguenti livelli:
+Il modo in cui MIMIC e l'analisi sono stati strutturati si prestano all'idea di suddividere la generazione degli eventi in molteplici strati; Possiamo infatti dividere la generazione di una traccia di eventi nei seguenti livelli:
 - L'ospedale riceve molteplici pazienti
 - Ogni paziente ha molteplici permanenze ospedaliere
 - Ogni permanenza ospedaliera corrisponde a una o più /interazioni/ tra l'utente e il sistema ospedaliero (equivalenti ai behaviors individuati nella sezione [])
 - Durante ogni /interazione/ sono registrati molteplici eventi
 
-Possiamo individuare nell'ospedale, nei pazienti, nelle permanenze ospedaliere e nelle interazioni le entità in grado di generare gli eventi, e sviluppando il modello seguendo una struttura a strati si dà la possibilità all'utente di fine tune l'ouput secondo la granularità desiderata.
+Possiamo individuare nell'ospedale, nei pazienti, nelle permanenze ospedaliere e nelle interazioni le entità in grado di generare gli eventi, e dando all'utente la possibilità di utilizzare uno qualsiasi di questi livelli per la generazione dell'output gli si permette di fine tune l'ouput secondo la granularità desiderata.
 
 # ?
-Con una struttura simile, l'utente otterrebbe la possibilità di simulare e.g. le tracce di eventi registrate durante l'admission di un utente maschio, tra i 45 e i 65 anni di età (una delle classi scelte per suddividere i pazienti nella sezione []) cominciata venerdì (una delle classi scelte per suddividere le admission nella sezione []) durante il suo periodo di permanenza ospedaliera prima della sua prima permanenza in ICU (uno dei behaviors del paziente individuati nella sezione []).
+Con una struttura simile, l'utente otterrebbe infatti la possibilità di simulare e.g. le tracce di eventi registrate durante l'admission di un utente maschio, tra i 45 e i 65 anni di età (una delle classi scelte per suddividere i pazienti nella sezione []) cominciata venerdì (una delle classi scelte per suddividere le admission nella sezione []) durante il suo periodo di permanenza ospedaliera prima della sua prima permanenza in ICU (uno dei behaviors del paziente individuati nella sezione []).
 
 *** Introdurre la possibilità di cambiare le classi utilizzate
 
