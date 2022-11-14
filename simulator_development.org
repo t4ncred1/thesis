@@ -2,8 +2,10 @@
 
 * Intro
 Dopo aver completato l'analisi di MIMIC e aver modellato le observations registrate nel sistema, è venuto il momento di uncover il processo di development del simulatore.
+# %#TODO: write obiettivo: generare tracce di dati
+# %#TODO: persone obiettivo
 
-Come evidenziato in sezione [], le caratteristiche obiettivo del simulatore sono la fine-tunability e l'adattabilità.
+Come evidenziato in Sezione~[], le caratteristiche obiettivo del simulatore sono la fine-tunability e l'adattabilità.
 # %#TODO: reference sezione approach. Richiamare in quella sezione il fatto che gli obiettivi verranno ripresi meglio in seguito e spiegarli brevemente.
 
 La *fine-tunability* è intesa come la possibilità da parte dell'utente di adattare il modello ai propri risultati ottenuti con le procedure mostrate nel capitolo [analysis] e di avere il controllo sull'output ottenuto dal simulatore.
@@ -11,31 +13,46 @@ La *fine-tunability* è intesa come la possibilità da parte dell'utente di adat
 
 La *adaptability* è intesa invece con il senso più ampio di avere la possibilità di riutilizzare il simulatore per mostrare i risultati di procedure differenti (come ad esempio classificazioni effettuate con metodologie diverse) o addirittura dataset differenti con una struttura simile a quella di MIMIC-III.
 
-Nelle seguenti sezioni descriveremo ...
+Nelle seguenti sezioni descriveremo le scelte implementative e architetturali del simulatore creato, ponendo in rilievo le motivazioni di tali scelte, per poi mostrarne un caso d'uso esemplificativo.
 
-
-* Functional Architecture
+* NO Functional Architecture
 In questa sezione presentiamo l'architettura funzionale del simulatore.
-Questa, come l'aggettivo funzionale lascia intendere, non corrisponde esattamente all'architettura software del simulatore, ma pone rilievo sulle funzionalità desiderate e sulle idee e scelte di design ad alto livello che ne hanno guidato il development.
+Questa, come l'aggettivo funzionale lascia intendere, pone rilievo sulle funzionalità desiderate dal simulatore e sulle idee e scelte di design ad alto livello che ne hanno guidato il development.
+** NO Functional design choices
+# rimuovi intestazione?
 
-** Functional design choices
 # La scelta strutturale che maggiormente ha influenzato il development del simulatore è quella di utilizzare un'architettura a layers, con i diversi layers esposti all'utente.
 # Il motivo di questa decisione, poi evidenziato e contestualizzato meglio nella sezione [expected usage], è di permettere all'utente di utilizzare ciascuno dei livelli intercambiabilmente, ottenendo la granularità descritta in precedenza come una delle caratteristiche goal del simulatore.
 
 # Oltre a questo, l'architettura è stata pensata con la configurabilità in mente, e si è quindi cercato ove possibile di rendere ogni parametro del simulatore modificabile in modo relativamente semplice dall'utente.
-Le principali scelte di design dettate dagli obiettivi elencati in precedenza e che hanno influenzato maggiormente il development del simulatore sono state:
-- utilizzare un'architettura layered per la generazione degli eventi
-- introdurre la possibilità di cambiare le classi e le distribuzioni utilizzate
-  # la struttura delle interazioni sarebbe stata più difficile da rendere sostituibile
-  # non realizzata completamente: le classi devono essere per admission e per user - introdurre un metodo di configurazione che permetta all'utente di utilizzare i propri risultati riprodotti delle analisi viste in precedenza.
+# Le principali scelte di design dettate dagli obiettivi elencati in precedenza e che hanno influenzato maggiormente il development del simulatore sono state three:
+# - Introdurre un metodo di configurazione che permetta all'utente di utilizzare i propri risultati riprodotti dalle analisi viste in precedenza
+# - introdurre la possibilità di cambiare le features scelte per la classificazione
+#   # la struttura delle interazioni sarebbe stata più difficile da rendere sostituibile
+#   # non realizzata completamente: le classi devono essere per admission e per user - introdurre un metodo di configurazione che permetta all'utente di utilizzare i propri risultati riprodotti delle analisi viste in precedenza.
+# - utilizzare un'architettura layered per la generazione degli eventi
 
+*Semplificare la personalizzazione delle configurazioni*
+Per semplificare la personalizzazione e l'utilizzo dei risultati delle proprie analisi da parte dello user, abbiamo scelto di centralizzare la lettura dei file di output delle analisi elencati in sezione [] e la distribuzione delle informazioni che esse trasportano.
+
+*Possibilità cambiare il metodo di classificazione*
+Come visto nella sezione [], le classi scelte durante l'analisi per suddividere in gruppi l'insieme degli eventi e dei behaviors dei pazienti sono basate su features evidenti dei pazienti e delle permanenze ospedaliere.
+
+In linea con la caratteristica obiettivo dell'adaptability evidenziata ad inizio capitolo, una delle scelte strutturali preliminari prese all'inizio dello sviluppo del simulatore è stata quella di rendere queste classificazioni sostituibili con altre basate su features differenti.
+
+*Introduce more granularity on the output*
+Per rendere
 # ###
 
-Il diagramma rappresentato in figura [] mostra un'architettura ad alto livello frutto delle scelte strutturali appena elencate; La struttura a strati, come anticipato, è il fulcro del simulatore e può essere vista nel modulo /Generation/: Ogni livello è frutto dell'aggregazione di elementi del livello inferiore, fino alle /interazioni/ che si occupano invece di generare gli eventi veri e propri.
+# Le scelte elencate in questa sezione hanno
+# Il diagramma rappresentato in figura [] mostra un'architettura ad alto livello frutto delle scelte di design presentate in questa sezione;
+
+# La struttura a strati, come anticipato, è il fulcro del simulatore e può essere vista nel modulo /Generation/: Ogni livello è frutto dell'aggregazione di elementi del livello inferiore, fino alle /interazioni/ che si occupano invece di generare gli eventi veri e propri.
 # Le classificazioni, idealmente, possono essere facilmente sostituite implementando l'interfaccia /Class/ indicata nel modulo e effettuando l'override.
 
-*** Layered architecture
+*** NO Adopt a layered architecture
 # Volendo controllare la generazione degli eventi a diversi livelli di granularità, risulterebbe utile poter
+È utile specificare in modo più preciso cosa si intende con il termine "layered architecture".
 
 La struttura di MIMIC e il modo in cui la sua analisi è stata effettuata si prestano all'idea di suddividere la generazione degli eventi in molteplici strati; Possiamo infatti dividere la generazione di una traccia di eventi nei seguenti livelli:
 - L'ospedale riceve molteplici pazienti
@@ -43,96 +60,220 @@ La struttura di MIMIC e il modo in cui la sua analisi è stata effettuata si pre
 - Ogni permanenza ospedaliera corrisponde a una o più /interazioni/ tra l'utente e il sistema ospedaliero (equivalenti ai behaviors individuati nella sezione [])
 - Durante ogni interazione sono registrati molteplici eventi
 
-Possiamo individuare nell'ospedale, nei pazienti, nelle permanenze ospedaliere e nelle interazioni le entità in grado di generare gli eventi e sviluppando il modello seguendo una struttura a strati e fornendo all'utente le interfacce necessarie per accedervi gli si dà la possibilità di fine tune l'ouput secondo la granularità desiderata.
+Possiamo individuare nell'ospedale, nei pazienti, nelle permanenze ospedaliere e nelle interazioni i componenti in grado di generare gli eventi. Fornendo all'utente le interfacce necessarie per accedere a ciascuno di questi componenti, gli si dà la possibilità di fine tune l'ouput secondo la granularità desiderata.
+# Per permettere di visualizzare meglio questa architettura a strati, in Figura~[] sono stati rappresentati i sequence diagram che mostrano le interazioni tra l'utente e il simulatore per ottenere le tracce d'eventi a differenti livelli di granularità.
 
-Con una struttura simile, l'utente otterrebbe infatti la possibilità di simulare tracce d'eventi pertinenti casi specifici, come e.g. una traccia di eventi registrati durante l'admission di un utente maschio, tra i 45 e i 65 anni di età (una delle classi scelte per suddividere i pazienti nella sezione []) cominciata venerdì (una delle classi scelte per suddividere le admission nella sezione []) durante il suo periodo di permanenza ospedaliera prima della sua prima permanenza in ICU (uno dei behaviors del paziente individuati nella sezione []).
+Con una struttura simile, l'utente otterrebbe infatti la possibilità di simulare tracce d'eventi pertinenti casi specifici, come ad esempio una traccia di eventi registrati durante l'admission di un utente maschio, tra i 45 e i 65 anni di età (una delle classi scelte per suddividere i pazienti nella sezione []) cominciata venerdì (una delle classi scelte per suddividere le admission nella sezione []) durante il suo periodo di permanenza ospedaliera prima della sua prima permanenza in ICU (uno dei behaviors del paziente individuati nella sezione []).
 
-*** Introdurre la possibilità di cambiare le classi utilizzate
+*** NO Simplify customization
 Come visto nella sezione [], le classi scelte durante l'analisi per suddividere in gruppi l'insieme degli eventi e dei behaviors dei pazienti sono basate su features evidenti dei pazienti e delle permanenze ospedaliere.
 
 In linea con la caratteristica obiettivo dell'adaptability evidenziata ad inizio capitolo, una delle scelte strutturali preliminari prese all'inizio dello sviluppo del simulatore è stata quella di rendere queste classificazioni sostituibili con altre basate su features differenti.
 
-*** Centralized configuration
-Per semplificare la personalizzazione e l'utilizzo dei risultati delle proprie analisi da parte dell'utente, abbiamo scelto di centralizzare la lettura dei file di output delle analisi elencati in sezione [] e la loro distribuzione alle altre classi.
+Inoltre, per semplificare la personalizzazione e l'utilizzo dei risultati delle proprie analisi da parte dello user, abbiamo scelto di centralizzare la lettura dei file di output delle analisi elencati in sezione [] e la distribuzione delle informazioni che trasportano.
 
-** NO Expected Usage
-Il diagramma dei casi d'uso da parte dell'utente è presentato in figura []
+* Scelte implementative
+# %#TODO: scelta di python, librerie per la generazione delle distribuzioni, struttura a libreria per rendere semplice cambiare i componenti facendone l'override per adattarli al proprio caso d'uso (in linea con python, linguaggio interpretato e debolmente tipizzato per cui è quindi più semplice apportare e vedere gli effetti delle modifiche in modo immediato).
+# %#TODO: non è stata inserita una parte di presentazione: le tracce di eventi (meglio descritte nella sezione generation module)
+Dato il focus del lavoro, possiamo aspettarci che gli utilizzatori principali del simulatore siano ricercatori o, al più, medici o tecnici operanti nell'ambito medico interessati a valutare le performance di un sistema.
+Per rendere il simulatore più versatile, limitarne la complessità e favorire modifiche custom, e considerando che l'utenza appena indicata si presta ad avere le conoscenze per farlo, abbiamo scelto di costruirlo come una libreria, da utilizzare nell'ambito di un programma o uno script.
 
-* TODO Implementation
- L'architettura software del simulatore è stata suddivisa in 3 moduli comunicanti:
- - Classes, contente le classi
- - Generator, contenente
- - Configuration, contenente
+Il linguaggio scelto per lo sviluppo è stato Python in quanto, essendo un linguaggio interpretato e non fortemente tipizzato, rende semplice estendere e riutilizzare librerie esistenti senza dover aggiungere eccessivo codice boilerplate e dando la possibilità di provare in modo immediato le modifiche apportate per verificarne il funzionamento.
+
+# Nonostante Python non abbia a disposizione (senza includere estensioni e librerie esterne) tutti i costrutti sintattici che introdurremo in questa sezione, quali /interfacce/ e /classi astratte/, esse sono da immaginare come costrutti
+
+In quanto pensato come libreria, il simulatore non include una parte di presentazione degli output: è lasciata all'utente la scelta di come mostrare o utilizzare i risultati ottenuti.
+
+La generazione dei samples delle distribuzioni ottenute dall'analisi di MIMIC-III è stata fatta utilizzando la libreria `ciw` per ottenere i samples delle distribuzioni di tipo Phase-type (link []) e `numpy` (link []) per ottenere i samples delle distribuzioni esponenziali.
+# %#TODO: link ciw e numpy
+
+* Architettura
+Il simulatore è suddiviso in 3 moduli, relegati a funzionalità distinte:
+- Modulo di configurazione, il quale contiene i componenti necessari per la lettura e la gestione dei parametri output dell'analisi.
+- Modulo di classificazione, contenente i componenti destinati a modellare la classificazione effettuata in fase d'analisi.
+- Modulo di generazione, il modulo principale, che contiene i componenti necessari alla generazione delle tracce d'eventi.
 
 *** Configuration module
-Il modudulo Configuration contiene le classi necessarie per la lettura dei file di output dell'analisi e per renderli accessibili al resto del simulatore.
+Per semplificare la personalizzazione e l'utilizzo dei risultati delle proprie analisi da parte dello user, abbiamo deciso di centralizzare la gestione delle informazioni ricavate dall'analisi all'interno di un singolo modulo.
+Il modulo Configuration contiene, quindi, le componenti necessarie per la lettura dei file di output dell'analisi presentati in Sezione~[] e per renderli accessibili al resto del simulatore.
 
-È composto da due parti principali:
-- La classe Manager, responsabile per fornire alle classi degli altri moduli gli artefatti ottenuti dall'output dell'analisi, quali ad esempio i generatori delle varie distribuzioni.
+È composto da due componenti principali:
+# - La classe Manager, responsabile per fornire alle classi degli altri moduli gli artefatti ottenuti dall'output dell'analisi, quali ad esempio i parametri delle distribuzioni fittate.
+- La classe Manager, responsabile per fornire alle classi degli altri moduli i risultati ottenuti dall'output dell'analisi
 - The configuration itself, containing the file paths where to find the outputs of the analysis.
 
-Dato che, come visto nella sezione [], il simulatore è inteso come una libreria da utilizzare nell'ambito di script python o notebook interattivi, abbiamo scelto di salvare la configurazione come un dizionario multilivello, in cui sono salvati e catalogati i percorsi dei file da cui sono letti i vari parametri del simulatore.
-# %#TODO: sezione classi
-
-I file indicati da questo dizionario di configurazione sono poi letti dalla classe Manager, la quale funge da riferimento per le altre classi a tutte le informazioni contenute negli output dell'analisi effettuata su MIMIC, già descritti nella sezione [].
+Dato che il simulatore è inteso come una libreria, abbiamo scelto di store la configurazione come un dizionario multilivello, in cui sono salvati e catalogati i percorsi dei file da cui sono letti i vari parametri del simulatore.
+I file indicati da questo dizionario di configurazione sono letti dalla classe `Manager`, la quale funge da riferimento per le altre classi a tutte le informazioni ottenute dall'analisi effettuata su MIMIC.
 # %#TODO: sezione output analisi mimic.
-La lista dei metodi resi disponibili dal Manager con una breve descrizione è mostrata in tabella [].
+# La lista dei metodi resi disponibili dalla classe Manager alle altre componenti (con una breve descrizione) è mostrata in Tabella~[].
+# La lista dei metodi resi disponibili dalla classe Manager alle altre componenti (con una breve descrizione) è mostrata in Tabella~[].
 
-Per evitare l'uso di stringhe hardcoded in the other modules of the simulator, sono state anche introdotte delle enumerazioni che racchiudessero e raggruppassero le chiavi di suddetto dizionario.
-Queste enumerazioni sono utilizzate nella comunicazione tra le altri classi del simulatore e il Manager per indicare l'output dell'analisi a cui la classe è iteressata.
+**** Enumerations
+Per evitare l'uso di stringhe hardcoded in the other components of the simulator, sono state anche introdotte delle enumerazioni che racchiudessero e raggruppassero le chiavi del dizionario precedentemente citato.
 # venendo dalle altre classi del simulatore per richiedere al Manager le informazioni di cui hanno bisogno. Anche queste sono contenute nel modulo di configurazione.
+Esse sono elencate nella Tabella~[] con una breve descrizione dei parametri del simulatore a cui fanno riferimento.
 
-Queste enumerazioni con i relativi risultati dell'analisi a cui fanno riferimento sono elencate nella tabella [].
+| Enumeration     | Element           | Usage                                  |
+|-----------------+-------------------+----------------------------------------|
+| Probabilities   | P_NO_ICU          | prob of each dec node in pat act diag  |
+|                 | P_SUCC_ICU        |                                        |
+|                 | P_SUCC_ADMISSION  |                                        |
+|                 | P_IMM_FINISH      |                                        |
+|                 | P_USER_CLASS      | prob of belong to class                |
+|                 | P_ADMISSION_CLASS |                                        |
+| AdmissionEvents | LAB               | param for ev gen duri a pat's hstay    |
+|                 | MICROBIOLOGY      |                                        |
+|                 | SERVICE           |                                        |
+|                 | NOTEEVENTS        |                                        |
+| CalloutEvents   | CALLOUT_CREATE    | params for cout events                 |
+|                 | CALLOUT_OUTPUT    |                                        |
+| ICUEvents       | DATETIMEEVENTS    | params for ev gen duri a pat's icustay |
+|                 | INPUTEVENTS       |                                        |
+|                 | OUTPUTEVENTS      |                                        |
+|                 | PROCEDUREEVENTS   |                                        |
+|                 | CHARTEVENTS       |                                        |
+| TransferEvents  | TRANSFERS         | param for transfer events              |
+| WaveformEvents  | PAUSE             | params for waveform events             |
+|                 | TRANSMISSION      |                                        |
+| InteractionKind | ICUSTAY           | params for interaction phase type dist |
+|                 | POSTICUSTAY       |                                        |
+|                 | PREICUSTAY        |                                        |
+|                 | INTERTIMEICU      |                                        |
+|                 | NOICU             |                                        |
+|                 | INTERTIMEADM      |                                        |
 
-Un altro vantaggio delle enumerazioni elencate è che fungono da astrazione per gli eventi e le interazioni considerati: se ad esempio si volesse, nell'ambito di uno studio sulla workload characterization, voler considerare i noteevents come eventi specificatamente correlati alle permanenze in ICU (e non alle generiche permanenze ospedaliere), basterebbe spostarla dall'enumerazione `AdmissionEventType` alla enumerazione `ICUEventType`.
+Come si può notare dalla lista di enumerazioni create, alcune tipologie di eventi sono state considerate con enumerazioni separate, mentre altre hanno i propri eventi raggruppati nelle enumerazioni `AdmissionEvents` e `ICUEvents`.
+# Il motivo di questa scelta è approfondito nella Sezione~[], e riguarda principalmente le differenze nelle procedure necessarie per generare le tracce di tali tipologie di eventi.
+# %#TODO: sezione interazione
+Questa distinzione è dovuta al fatto che, mentre per la maggior parte delle tipologie di evento è stato fit con una distribuzione l'intertempo in cui i loro eventi si sono verificati, per le tipologie di evento /Callout/ e /Transfer/ sono state fittati attributi differenti (già spiegate in Sezione~[] e Sezione~[], rispettivamente).
+Non potendo utilizzare la procedura utilizzata per le altre classi per generarne gli eventi, abbiamo deciso di separarle dal resto.
 
-Il diagrama UML del modulo è mostrato in figura~[]
+Le enumerazioni elencate hanno anche il ruolo di modellare gli eventi e le interazioni considerate e, come vedremo nel corso del capitolo, dove possibile sono state utilizzate per rendere noti agli altri componenti del simulatore alcuni aspetti della struttura dell'analisi condotta.
+Il vantaggio che ne si ottiene è quello di poter alterare l'analisi senza applicare eccessive modifiche: se ad esempio si volesse, nell'ambito di uno studio sulla workload characterization, considerare i noteevents come eventi specificatamente correlati alle permanenze in ICU (e non alle generiche permanenze ospedaliere come è stato fatto), basterebbe spostarne il relativo elemento dall'enumerazione `AdmissionEvents` all'enumerazione `ICUEvents`.
+
+# Il diagrama UML del modulo è mostrato in Figura~[]
 
 *** Classification module
-The classification module contiene le classi individuate nella sezione [], suddivise per tipologia (patient classification, identificate rispettivamente dalle classi `UserClass` e `AdmissionClass`).
-Come vedremo nella sezione [], queste classi sono associate alla maggior parte delle classi generative e sono utilizzate nell'ambito di un'interazione tra queste ultime e il Manager per specificare la classe di cui interessa ottenere la distribuzione.
+Come visto nella Sezione~[], le classificazioni effettuate durante l'analisi per suddividere in gruppi l'insieme degli eventi e dei behaviors dei pazienti sono basate su features evidenti dei pazienti e delle permanenze ospedaliere.
+# Come vedremo nella sezione [], queste classi sono associate alla maggior parte delle classi generative e sono utilizzate nell'ambito di un'interazione tra queste ultime e il Manager per specificare la classe di cui interessa ottenere la distribuzione.
+The classification module raccoglie le enumerazioni destinate a modellare i gruppi ottenuti da quelle classificazioni, suddividendole per la tipologia di classificazione applicata (patient-based classifications e admission-based classification, identificate rispettivamente dalle classi `PatientClass` e `AdmissionClass`).
 
-Con esse è introdotta anche una funzione (nominata `get_class_rep`) utilizzata per ottenere, dalle classi appena elencate, the standardized class name used while storing the outputs of the analysis (described better in section~\[])
+Con esse è introdotta anche una funzione (nominata `get_class_rep`) utilizzata per ottenere, d/alle classi appena elencate, the standardized class name used while storing the outputs of the analysis (such standardized class name was previously described in Section~[])
+# %#TODO: sezione outputs analisi
 
-Nel caso in cui si decida di effettuare classificazioni basate su features differenti, basterà modificare le classi contenute in questo modulo per adattare il simulatore alla nuova classificazione.
+In linea con la caratteristica obiettivo dell'adaptability evidenziata ad inizio capitolo, nel caso in cui si decida di effettuare classificazioni basate su features differenti, basterà modificare i componenti appena descritti per adattare il simulatore alla nuova classificazione.
 
-Il diagramma uml che descrive questo modulo è mostrato in figura~[].
+# Nel diagramma di  che descrive questo modulo è mostrato in Figura~[].
 
 *** Generation module
 Il modulo di generazione contiene the body of the simulator. In esso vengono gestiti il calcolo delle tempistiche di interazione tra il paziente e il sistema ospedaliero e la generazione degli eventi associati a tali interazioni.
 Le classi che compongono il modulo possono essere divise in 2 categorie principali:
 - the events, gli oggetti che si ha interesse a generare.
-- the EventsGenerator, le classi introdotte per la generazione degli eventi.
+- the generators, le classi introdotte per la generazione degli eventi.
 
-**** TODO EventsGenerators Classes
+# Il diagramma UML che descrive questo modulo è mostrato in Figura~[]
+
+**** Generator Classes
 Le classi riguardanti la generazione degli eventi sono il corpo principale del simulatore, e quelle che utilizzano maggiormente i risultati delle analisi effettuate in precedenza.
 
-Come già evidenziato nella sezione~[], per
+# Le classi facenti parte di questo modulo rispecchiano i componenti evidenziati nella sezione~[]
+# %#TODO: sezione architettura funzionale
 
-Tutte le classi introdotte in questa sezione implementano l'interfaccia `EventGenerator`, la quale rappresenta la principale interfaccia d'accesso per la generazione di tracce di eventi.
+La struttura di MIMIC e il modo in cui la sua analisi è stata effettuata si prestano all'idea di suddividere la generazione degli eventi in molteplici strati; possiamo infatti dividere la generazione di una traccia di eventi nei seguenti livelli:
+- L'/ospedale/ riceve molteplici /pazienti/
+- Ogni paziente ha nessuna, una o più /permanenze ospedaliere/
+- Ogni permanenza ospedaliera corrisponde a molteplici /interazioni/ tra l'utente e il sistema ospedaliero (equivalenti ai behaviors individuati nella sezione [])
+- Durante ogni interazione sono registrati molteplici /eventi/
 
+# L'ospedale, i pazienti, le permanenze ospedaliere e le interazioni sono rappre, nella nostra architettura, i componenti in grado di generare gli eventi. Fornendo all'utente le interfacce necessarie per accedere a ciascuno di questi componenti, gli si dà la possibilità di fine tune l'ouput secondo la granularità desiderata.
 
+Questa stessa struttura a strati è stata adottata per articolare la generazione degli eventi nel simulatore: ciascuno dei livelli appena elencati corrisponde infatti a un componente differente, e ogni livello si occupa di generare i componenti del livello successivo fino alle interazioni, che generano gli eventi veri e propri.
+
+L'obiettivo di questa struttura a strati è quello di dare all'utente la possibilità di accedere a ciascuno di questi livelli indistintamente, consentendogli di fine tune the output of the generation process (in funzione delle caratteristiche obiettivo ) secondo la granularità desiderata.
+
+# Per quanto non fosse necessario avendo deciso di implementare il simulatore come una libreria (fornendo quindi accesso all'utente a tutte le classi e i moduli), tutti i componenti generativi implementano l'interfaccia `EventGenerator`; tale interfaccia definisce i metodi `get_waveforms` e `get_events`, utilizzati rispettivamente per ottenere gli eventi e le waveforms frutto della generazione.
+
+Le classi destinate alla generazione sono:
+- `Interaction`, una classe astratta estesa dalle classi `StayInteraction` e `ICUStayInteraction`
+  # definite meglio nella sezione []
+- `Admission`, la classe rappresentante la permanenza ospedaliera di un paziente, che si occupa di generare le istanze delle classi implementanti l'interfaccia `Interaction`, seguendo il diagramma dei behavior dei pazienti specificato in Figura~[].
+  A ciascuna istanza è assegnato dalla classe `Manager` un id incrementale che simula l'attributo `hadm_id` contenuto nella tabella `ADMISSIONS` in MIMIC-III (vedi Sezione~[])
+  # %#TODO: sezione background mimic
+- `Patient`, la classe rappresentante l'intero processo d'interazione tra il paziente e l'ospedale nel corso delle molteplici permanenze ospedaliere, che si occupa di generare le istanze della classe `Admission` elencata in precedenza.
+  A ciascuna istanza è assegnato dalla classe `Manager` un id incrementale che simula l'attributo `subject_id` contenuto nella tabella `PATIENTS` in MIMIC-III (vedi Sezione~[]).
+  # %#TODO: sezione background mimic
+- `Hospital`, la classe rappresentante l'intero ospedale, che si occupa di simulare i molteplici pazienti dell'ospedale generando istanze della classe `Patient`.
+  Il numero e la distanza temporale dei pazienti può essere specificata dall'utente.
+
+E ciascuno di essi rappresenta uno degli strati elencati in precedenza.
+Tutti i componenti generativi appena elencati implementano l'interfaccia `EventGenerator`; tale interfaccia definisce i metodi `get_waveforms` e `get_events`, utilizzati rispettivamente per ottenere gli eventi e le waveforms frutto della generazione.
+
+Quando l'utente crea uno qualsiasi di questi strati, sono creati con esso anche tutti gli strati inferiori.
+Quando l'utente richiede allo strato selezionato di generare una traccia di eventi o una traccia di waveforms (tramite i metodi `get_events` e `get_waveforms`), quest'ultimo richiede ai componenti dello strato inferiore di generare una traccia di eventi (tramite gli stessi metodi `get_events` e `get_waveform_events`). Questo passaggio di testimone si ripete fino allo strato delle interazioni, le quali infine generano la traccia di eventi.
+
+La gestione della classe di appartenenza di ogni paziente è gestita dalla classe `Hospital`, mentre la classe di appartenenza della singola permanenza ospedaliera è gestita dalla classe `Patient`.
+Tali classi di appartenenza sono poi passate agli strati inferiori sotto forma delle enumerazioni evidenziate nella Sezione~[] e comunicate alla classe `Manager` (presentata nella Sezione~[]), la quale le utilizza per definire e leggere dai file di configurazione i parametri necessari per descrivere le distribuzioni destinate alla generazione degli eventi e delle durate di ciascuna interazione.
+
+L'intera procedura è riassunta nei sequence diagram mostrati in Figura~[] e Figura~[].
+
+***** Interaction classes
+Abbiamo evidenziato durante l'analisi di MIMIC che alcuni tipi di eventi avvengono durante una permanenza ospedaliera, altri specificatamente durante una permanenza in ICU (vedi Sezione~[]).
+
+Per riflettere questa differenza, la generazione delle interazioni è stata suddivisa nelle classi `StayInteraction` e `ICUStayInteraction`, accumunate dalla classe astratta `Interaction`.
+
+Entrambe le classi condividono il metodo `generic_events`, implementato nella classe astratta `Interaction`.
+Esso si occupa di generare le tipologie d'evento elencate nelle enumerazioni `ICUEvents` e `AdmissionEvents` (già mostrate in Sezione~[]) che, modellando tutte gli intertempi che intercorrono tra gli eventi della propria categoria, possono essere generate allo stesso modo.
+# %#TODO: sezione enumerations
+La classe `ICUStayInteraction` utilizza tale metodo per generare gli eventi elencati nell'enumerazione `ICUEvents`, mentre la classe `StayInteraction` lo utilizza per generare gli eventi elencati nell'enumerazione `AdmissionEvents`.
+
+Ciascuna delle due classi implementa inoltre il metodo `special_events`, utilizzato per la generazione degli eventi che rappresentano casi speciali e che richiedono che la loro generazione sia trattata diversamente (quali gli eventi di tipo `Callout` e `Transfer`, come descritto nella Sezione~[]).
+# %#TODO: sezione enumeration
+
+La generazione delle Waveforms, che in MIMIC sono associate alla permanenza in ICU e non all'intera permanenza ospedaliera, è gestita dalla classe `ICUEvents` tramite il metodo `get_waveforms` (implementato per l'interfaccia `EventGenerator`), il quale si occupa di generare le Waveform e i relativi segnali seguendo le distribuzioni definite nella Sezione~[].
+# %#TODO: sezione distribution fitting the waveforms.
+
+# Come evidenziato nella Sezione~[], per buona parte delle tipologie di eventi analizzati il fitting è stato gestito con una procedura standard. La stessa idea è stata applicata in questo contesto: dato che per la maggior parte degli eventi è stato semplicemente fit with a distribution l'intertempo in cui essi avvengono, questi sono stati raggruppati nelle enumerazioni
+# %#TODO: sezione analisi eventi
 
 **** Event Classes
-Per rappresentare gli eventi all'interno del simulatore si è scelto di raccoglierli all'interno di un'unica classe `Event`, e di specificare la precisa tipologia di evento da considerare tramite gli elementi delle enumerazioni evidenziate nella sezione [].
+Per rappresentare gli eventi all'interno del simulatore si è scelto di raccoglierli all'interno di un'unica classe `Event`, e di specificare la precisa tipologia di evento da considerare tramite gli elementi delle enumerazioni evidenziate nella Sezione~[].
 
-In questo modo, a ciascuna classe che estende l'interfaccia `Interazione` (presentata nella sezione precedente) può essere specificato quali tipologie di eventi generare basandosi solamente sulle enumerazioni mostrate in sezione [].
+Quando il metodo `get_events` dell'interfaccia `EventsGenerator` viene chiamato, esso ritorna una collezione (nella forma di una lista) di istanze della classe `Event`.
 
-L'unico metodo degno di nota nella classe `Event` è il metodo `get_event_dictionary`, che può utilizzato per ottenre le informazioni d'interesse sull'evento, quali l'istante di tempo in cui è stato simulato, la classe d'appartenenza, la tipologia d'evento, l'id dell'utente simulato (ottenuto dalla classe `User`) e l'id della permanenza ospedaliera (ottenuto dalla classe `Admission`).
+# In questo modo, come già approfondito nella Sezione~[], a ciascuna classe che estende la classe astratta `Interaction` (presentata nella sezione precedente) può essere specificato quali tipologie di eventi generare basandosi solamente su tali enumerazioni.
 
-La registrazione delle waveform è coperta da un'estensione della classe Events, denominata `WaveformsEvents`.
-Le waveform sono simulate nella loro forma già processata presentata in sezione [] e, per questo motivo, possono essere considerate rassomiglianti a degli eventi.
+L'unico metodo della classe `Event` è il metodo `get_event_dictionary`, che può essere utilizzato per ottenere le informazioni d'interesse sull'evento, quali l'istante di tempo in cui è stato simulato, la classe d'appartenenza, la tipologia d'evento, l'id dell'utente simulato (ottenuto dalla classe `Patient`) e l'id della permanenza ospedaliera (ottenuto dalla classe `Admission`) sotto forma di un dizionario chiave-valore.
+
+La registrazione delle waveform è coperta da un'estensione della classe Events, denominata `WaveformsEvent`.
 L'unica differenza con la classe `Events` appena descritta è, infatti, nel metodo `get_event_dictionary`, di cui è stato fatto l'override rispetto al metodo della classe padre per includere anche le informazioni riguardanti i segnali generati durante la trasmissione.
+Quando il metodo `get_waveforms` dell'interfaccia `EventsGenerator` viene chiamato, esso ritorna una collezione (nella forma di una lista) di istanze della classe `WaveformEvent`.
 
-**** Librerie scelte
-
-**** Classi
-
-*** Expected Use
-use as a library, where classes and types can be overridden to adapt to the data source.
-shown in section [use case]
+L'architettura del modulo è stata riassunta (mostrandone solo gli elementi principali) nel diagramma UML mostrato in Figura~[].
+# %#TODO: diagramma UML.
 
 * Use case example
-** Reference example
-** Code structure
+Con l'obiettivo di far capire meglio how the simulatore is set-up e di evidenziarne un possibile usage, introduciamo in questa sezione uno use case example.
+** WAIT Reference example
+L'obiettivo di questo caso d'uso è quello di misurare le performance di un piccolo modello rappresentante una possibile architettura data lake utilizzando una traccia di dati fornita dal simulatore descritto nelle sezioni precedenti.
+
+L'analisi delle performance sarà fatta tramite JMT, a free open source suite consisting of six tools for performance evaluation, capacity planning, workload characterization, and modelling of computer and communication systems [cit]
+# %#TODO: cit jmt
+
+Come possiamo vedere in Figura~[], il modello utilizzato è una queuing network formata da due code:
+- una rappresenta il processo di ingestion effettuato dal datalake, in cui i dati gathered from different sources sono portati in una singola unità di storage
+- l'altro rappresenta l'attività di preprocessing effettuata dal datalake, in cui dati (inclusi quelli non strutturati) sono elaborati per fornirgli una struttura comune.
+# %#TODO: figura modello data lake
+
+La maggior parte dei dati presenti in MIMIC-III (e quindi generati dal simulatore) hanno già una forma strutturata, eccezion fatta per due tipologie: le waveforms, che non hanno una struttura, e i noteevents, i quali contengono una parte testuale che, nel nostro caso, vogliamo rendere strutturata.
+Per questo motivo, solo queste due tipologie di dati passano attraverso la coda di preprocessing del modello, mentre tutti i dati contenuti in MIMIC-III passano attraverso la coda di ingestion.
+
+# repeater jmt ?
+
+# uso di jupyter
+Per creare la traccia di dati destinata a JMT abbiamo creato un notebook in JupyterLab che importa ed utilizza la libreria del simulatore.
+
+** Data generation procedure
+La procedura utilizzata per generare i dati
+
 ** Results
+# performance measurements and what-if analysis.

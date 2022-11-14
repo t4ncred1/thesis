@@ -1,0 +1,68 @@
+#title This is a title
+actor "User" as U
+participant "Manager" as M
+participant "Hospital" as H
+participant "Patient" as P
+participant "Admission" as A
+participant "Interaction" as I
+#Alice->Bob:Click and drag to create a request or\ntype it in the source area to the left
+#Alice<--Bob:drag to move
+#note over Bob,Double click to edit text:Click Help menu for **instructions** and **examples**
+#Bob->(3)Double click to edit text:non-instantaneous message
+
+U-->*M:Manager\n(configuration)
+U-->*H:Hospital\n(manager, **patient_arrivals**)
+activate H
+loop for patient in patient_arrivals
+H->M:get_patient_class()
+deactivate H
+activate M
+M-->H:patient_class
+deactivate M
+activate H
+H-->*P:Patient\n(manager,patient_class)
+deactivate H
+activate P
+P->M:get_admission_class()
+deactivate P
+activate M
+M-->P:admission_class
+deactivate M
+activate P
+P-->*A:Admission(manager,\npatient_class,\nadmission_class)
+
+loop for interaction_type in InteractionKind
+activate A
+A->M:get_interaction_generator(patient_class,\nadmission_class, **interaction_type**)
+deactivate A
+activate M
+M-->A:interaction_generator
+deactivate M
+activate A
+opt depending on the interaction being considered
+note over A: check for any decision to be\nmade for the interaction \n**interaction_type**
+A->M:get_probability(patient_class, admission_class, Probability.*)
+deactivate A
+activate M
+M->A: probability
+deactivate M
+activate A
+A->A: check_probability(\nprobability)
+deactivate A
+end 
+activate A
+A->A:obtains duration\nof the interaction
+A->*I:Interaction\n(manager, \npatient_class, \nadmission_class, \nduration)
+deactivate A
+end
+P->M: get_probability(patient_class,\n Probabilities.P_SUCC_ADMISSION)
+deactivate P
+activate M
+M->P: probability_admission
+deactivate M
+activate P
+P->P: check_probability(\nprobability_admission)
+deactivate P
+note over P: if this check results in another admission,\nrepeat the creation process above
+end
+
