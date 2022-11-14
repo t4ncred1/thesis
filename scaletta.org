@@ -38,8 +38,11 @@ matched subset
 ** Kolm-Smir test
 *** Funzione che testa
 *** Parametro di threshold
-** JMT
-
+** JMT e JSimGraph
+*** Queuing network
+*** jobs and job classes
+*** Performance indexes
+*** Replayer
 * STRT Approach
 ** WAIT Intro
 *** DONE Thesis objective
