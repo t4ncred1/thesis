@@ -147,18 +147,6 @@ Classi principali + classificazione
 
 ** Implementazione
 
-*** Architettura specifica
-
-**** Diagramma UML a basso livello
-tutte le classi + metodi usati.
-Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lettura dei file di configurazione e la generazione degli eventi
-
-**** Sequence diagram
-
-**** Requirements
-- che le classi nei file siano le stesse descritte dalle enum
-
-
 *** Software design choices
 
 **** Librerie usate
@@ -168,6 +156,18 @@ Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lett
 **** Uso come libreria
 Copre bene gli utilizzi previsti
 In linea con un linguaggio interpretato e interattivo come python
+Ci si aspetta che l'utente faccia l'override delle classi che vuole modificare.
+
+*** Architettura specifica
+
+**** Diagramma UML
+tutte le classi + metodi usati.
+Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lettura dei file di configurazione e la generazione degli eventi
+
+**** Sequence diagram
+
+**** Requirements
+- che le classi nei file siano le stesse descritte dalle enum
 
 ** Use case
 - JMT
