@@ -271,7 +271,7 @@ Quando il metodo `get_waveforms` dell'interfaccia `EventsGenerator` viene chiama
 Con l'obiettivo di far capire meglio how the simulatore is set-up e di evidenziarne un possibile usage, introduciamo in questa sezione uno use case example.
 
 ** WAIT Reference example
-L'obiettivo di questo caso d'uso è quello di misurare le performance di un piccolo modello rappresentante una possibile architettura data lake utilizzando una traccia di dati fornita dal simulatore descritto nelle sezioni precedenti, con l'obiettivo di considerare possibili downgrades o upgrades dell'architettura.
+L'obiettivo di questo caso d'uso è quello di misurare le performance di un piccolo modello rappresentante una possibile architettura data lake utilizzando i dati generati dal simulatore descritto nelle sezioni precedenti, con l'obiettivo di considerare possibili downgrades o upgrades dell'architettura.
 
 L'analisi delle performance è effettuata tramite JMT, una suite di strumenti per la performance evalutation di sistemi di computer, meglio descritta nel suo funzionamento nella Sezione~[].
 # a free open source suite consisting of six tools for performance evaluation, capacity planning, workload characterization, and modelling of computer and communication systems [cit].
@@ -279,38 +279,38 @@ L'analisi delle performance è effettuata tramite JMT, una suite di strumenti pe
 Il tool utilizzato per questo esempio è JSimGraph, un componente grafico specializzato nella modellazione dei sistemi e valutazione delle performance tramite network queues e in grado di gestire molteplici job classes.
 
 Come possiamo vedere in Figura~[], il modello utilizzato è una queuing network formata da due code:
-- una rappresenta il processo di ingestion effettuato dal datalake, in cui i dati gathered from different sources sono portati in una singola unità di storage.
-- l'altra rappresenta l'attività di preprocessing effettuata dal datalake, in cui dati (inclusi quelli non strutturati) sono elaborati per fornirgli una struttura comune.
+- La coda `Ingestion`, la quale rappresenta il processo di ingestion effettuato dal datalake, in cui i dati gathered from different sources sono portati in una singola unità di storage.
+- La coda `Processing`, la quale rappresenta l'attività di processing effettuata dal datalake, in cui dati sono elaborati per fornirgli una struttura relazionale comune.
 # %#TODO: figura modello data lake
 
-La maggior parte dei dati presenti in MIMIC-III (e quindi generati dal simulatore) hanno già una forma strutturata, eccezion fatta per due tipologie: le waveforms, che non hanno una struttura, e i Note events, i quali contengono una parte testuale che, nel nostro caso, vorremmo rendere strutturata.
-Per questo motivo, solo queste due tipologie di dati passano attraverso la coda di preprocessing del modello, mentre tutti i dati contenuti in MIMIC-III passano attraverso la coda di ingestion.
+La maggior parte dei dati presenti in MIMIC-III hanno già una forma strutturata relazionale, eccezion fatta per due tipologie: le waveforms, le quali sono registrate come segnali, e i Note events, i quali contengono una parte testuale da cui estraiamo delle caratteristiche da salvare in formato strutturato.
+Per questo motivo, solo queste due tipologie di dati passano attraverso la coda `Processing` del modello, mentre tutti i dati contenuti in MIMIC-III passano attraverso la coda `Ingestion`.
 
 Visto il modo in cui i dati sono distribuiti tra le varie code, per modellare le varie tipologie di eventi utilizziamo tre classi di lavoro, che rappresentassero le tre tipologie di dati gestiti dalle code:
-- una classe rappresenta i dati strutturati, ovvero tutti gli eventi registrati in MIMIC-III eccetto i Note events.
-- una classe rappresenta le Waveforms.
-- una classe rappresenta i Note Events.
+- una classe per rappresentare i dati strutturati, ovvero tutti gli eventi registrati nelle tabelle di MIMIC-III, eccetto i Note events.
+- una classe per rappresentare le Waveforms.
+- una classe per rappresentare i Note Events.
 
 L'associazione tra ciascuna classe di lavoro e gli eventi che essa incorpora, oltre ai tempi di servizio di ogni queue per ciascuna classe, sono descritti nella Tabella~[].
 # uso di jupyter
 # Per creare le tracce di eventi e waveforms destinate a JMT abbiamo creato un notebook in JupyterLab che importa ed utilizza la libreria del simulatore descritta nel capitolo precedente.
+I service time considerati sopra sono stati presi da altri studi condotti nell'ambito del gruppo Health Big Data.
 ** Data generation procedure
-La procedura seguita per generare le tracce di eventi segue i sequence diagrams mostrati in Figura~[].
+La procedura seguita per generare gli eventi da fornire a JSimGraph tramite il nostro simulatore segue i sequence diagrams mostrati in Figura~[].
 # %#TODO: sequence diagrams sezione implementation
-Effettuiamo la generazione delle tracce utilizzando la classe `Hospital`, richiedendo la generazione di 250 utenti che cominciano la loro permanenza ospedaliera a 10 secondi di distanza l'uno dall'altro.
-Dopodichè, tramite i metodi `get_events` e `get_waveforms`, possiamo ottenere le tracce richieste.
+Effettuiamo la generazione degli eventi utilizzando la classe `Hospital`, richiedendo in particolare la generazione di eventi per 250 utenti che cominciano la loro permanenza ospedaliera a 10 secondi di distanza l'uno dall'altro.
+Dopodichè, tramite i metodi `get_events` e `get_waveforms`, otteniamo le tracce richieste.
 
-Due estratti delle tracce di eventi e waveform ottenute sono rappresentati in Figura~[] e Figura~[], incapsulati all'interno di un Dataframe -- a two-dimensional, size-mutable, potentially heterogeneous tabular data container, fornito dalla libreria Pandas (link []) -- per facilitarne la visualizzazione.
+Due estratti delle tracce di eventi e waveform ottenute sono rappresentati in Figura~[] e Figura~[], incapsulati all'interno di un Dataframe -- a two-dimensional, size-mutable, potentially heterogeneous tabular data container, fornito dalla libreria Pandas (footnote []) -- per facilitarne la visualizzazione.
 # link pandas
 
 Prima di poter discutere le procedure per la valutazione delle performance, è necessario preparare i dati appena ottenuti affinchè possano essere letti da JSimGraph.
 
 Il tool, infatti, si aspetta un file di input per ciascuna job class. Ciascuno di questi file, inoltre, deve essere composto da valori float separati da virgole, rappresentanti il tempo che intercorre tra un evento e il precedente.
-
 Per questo motivo, gli eventi ottenuti dal simulatore sono processati seguendo i seguenti step:
-- suddividi i risultati ottenuti tra le job classes precedentemente identificate in Tabella~[],
-- da questi seleziona solo le informazioni riguardanti le tempistiche (che, come mostrato in Figura~[] e Figura~[], sono i dati forniti dalla colonna `time`)
-- Dalle tempistiche appena ricavate, ottieni l'intertepo tra i vari eventi.
+- i risultati ottenuti sono suddivisi tra le job classes precedentemente identificate in Tabella~[],
+- da questi sono selezionate solo le informazioni riguardanti le tempistiche (che, come mostrato in Figura~[] e Figura~[], sono i dati forniti dalla colonna `time`)
+- Dalle tempistiche appena ricavate, si ottiene l'intertepo tra ciascun evento.
 Fatto ciò, le tracce processate possono essere scritte su file e date in input al tool.
 
 # Un diagramma che riassume il processo appena specificato è mostrato in Figura~[].
@@ -318,23 +318,24 @@ Fatto ciò, le tracce processate possono essere scritte su file e date in input 
 # performance measurements and what-if analysis.
 # Le procedure effettuate tramite JSimGraph per la valutazione delle performance sono state principalmente due:
 Il primo step per valutare le performance del modello consiste nell'effettuare una simulazione utilizzando le tracce fornite dal nostro simulatore.
-Nel nostro caso, l'indice di performance di maggiore interesse è stata la utilization. Infatti:
+
+Nel nostro caso, l'indice di performance di maggiore interesse è stata la utilization. Dai risultati della simulazione risulta che:
 # I risultati ottenuti per ciascuno di essi sono indicati in Figura~[].
 
 # Il primo risultato ottenuto dalla valutazione delle performance effettuata tramite JMT è una valutazione dei performance indeces (indicati in Sezione~[]) considerando i service times indicati nella Tabella~[].
 - la stazione di processing ha un'utilization molto bassa, intorno a 0.012
 - la stazione di ingestion ha un'utilization piuttosto alta, intorno a 0.89
 
-Ottenuti i risultati del primo step, lo step successivo è verificare se, apportando delle modifiche al sistema, esso può migliorare le sue performance.
+Ottenuti i risultati del primo step, lo step successivo è verificare se, apportando delle modifiche al sistema, le sue performance cambiano.
 
-Vista la bassa utilization della stazione processing, decidiamo di aumentare i service times (simulando quindi un downgrade dell'architettura, dato che richiederebbe più tempo per analizzare ogni tipologia di evento).
+Vista la bassa utilization della stazione processing, decidiamo di aumentarne i service times (simulando quindi un downgrade dell'architettura, dato che richiederebbe più tempo per analizzare ogni evento).
 
-A tal scopo, JSimGraph fornisce un interessante strumento denominato `What-if analysis`, che permette di modificare uno o più parametri di controllo (quali, appunto, i service times) all'interno di un range specificato, con step incrementali.
-Per il nostro obiettivo, effettuiamo una what-if analysis incrementando il service time del 50% in 5 step successivi.
+A tal scopo, JSimGraph fornisce uno strumento denominato `What-if analysis`, che permette di modificare uno o più parametri di controllo all'interno di un range specificato, con step incrementali.
+Per il nostro obiettivo, effettuiamo una what-if analysis incrementando il service time di ogni classe all'interno della queue `Processing` del 50% in 5 step successivi.
 
 I risultati di questa procedura sui vari indici di performance sono mostrati nelle Figure~[].
-Come possiamo notare, l'aumento nel service time ha portato a un aumento della utilization della coda di processing, riflettendosi in un aumento del system response time, senza però portare ad un abbassamento sensibile del throughput del sistema.
 
-Questo ci indica che, riducendo il tempo di servizio della parte del sistema destinata al processing degli eventi, l'impatto sull'intero sistema non risulta essere eccessivo, e che si può quindi prendere in considerazione la possibilità di effettuare un downgrade delle componenti, ottenendo potenzialmente un risparmio energetico ed economico.
+Come possiamo notare, l'aumento nel service time ha portato a un aumento della utilization della coda di processing, riflettendosi in un lieve aumento del system response time, senza però portare ad un abbassamento sensibile del throughput del sistema.
 
+Questo risultato è probabilmente dovuto al ridotto numero di jobs di classe Note Events e Waveforms all'interno del sistema rispetto alla quantità di job di tipo structured events e ci indica che, riducendo il tempo di servizio della parte del sistema destinata al processing dei dati, l'impatto sull'intero sistema non risulta essere eccessivo, e che si può quindi prendere in considerazione la possibilità di effettuare un downgrade delle componenti, ottenendo potenzialmente un risparmio energetico ed economico.
 # La performance evaluation condotta consiste nel simulare l'arrivo di un job ad ogni istante di tempo indicato in ogni file di input dato al tool, fornendoli poi al modello mostrato in Figura~[].
