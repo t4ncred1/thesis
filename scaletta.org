@@ -27,12 +27,12 @@ Describe how tuples are formed:
 headers vs data
 matched subset
 *** NO Discrepancies found
-** Phase type distributions
+** DONE Phase type distributions
 *** versatilità
 [cite:@bladtReviewPhasetypeDistributions2005]
-** Hyperstar
+** DONE Hyperstar
 *** Come funziona e quale parte richiede l'interazione utente
-** Kolm-Smir test
+** DONE Kolm-Smir test
 *** Funzione che testa
 *** Parametro di threshold
 ** JMT e JSimGraph
