@@ -1,0 +1,95 @@
+#+title: Experiments_results
+* DONE Intro
+With the aim of showing the methods of interaction with the simulator presented in the previous chapter in action and highlighting its possible usages, we present in this chapter two illustrative experiments based on two fictitious scenarios.
+
+Entrambi gli scenari riguardano la valutazione delle performance di un'architettura data lake destinata all'utilizzo come componente principale del sistema informatico di un ospedale che registra gli stessi dati presenti in MIMIC-III.
+
+#+begin_src latex
+Nel \textbf{primo scenario}, il Data Lake deve essere utilizzato per la gestione di tutti i dati dei pazienti considerati.
+Nel \textbf{secondo scenario}, il Data Lake è limitato al sistema informatico del settore ICU dell'ospedale, e provvisoriamente si intende utilizzarlo per gestire i soli dati strutturati generati durante le permanenze ospedaliere dei pazienti, con l'intenzione di integrare questi con altri dati non strutturati (quali Note mediche e Waveform) successivamente.
+#+end_src
+
+Il nostro goal, in entrambi gli scenari, è quello di valutare la possibilità di effettuare un downgrade dell'architettura considerata, così da poter ridurre il dispendio economico ed energetico dell'ospedale.
+
+L'analisi delle performance sarà effettuata in entrambi gli scenari utilizzando lo strumento JMT, una tool suite per la valutazione delle performance dei computer systems.
+#+begin_src latex
+In particolare, il tool scelto per valutare queste performance è \textit{JSimGraph}, un componente grafico di JMT che semplifica la modellazione di sistemi utilizzando reti di code e in grado di gestire molteplici job classes.
+#+end_src
+
+Come possiamo vedere in Figura~[], il modello utilizzato per rappresentare il data lake è una queuing network formata da due code:
+- La coda `Ingestion`, la quale rappresenta il processo di ingestion effettuato dal datalake, in cui i dati gathered from different sources sono portati in una singola unità di storage.
+- La coda `Processing`, la quale rappresenta l'attività di processing effettuata dal datalake, in cui dati sono elaborati per fornirgli una struttura relazionale comune.
+
+La maggior parte dei dati presenti in MIMIC-III hanno già una forma strutturata relazionale, eccezion fatta per due tipologie: le waveforms, le quali sono registrate come segnali, e i Note events, i quali contengono una parte testuale da cui estraiamo delle caratteristiche da salvare in formato strutturato.
+Per questo motivo, solo queste due tipologie di dati passano attraverso la coda `Processing` del modello, mentre tutti i dati contenuti in MIMIC-III passano attraverso la coda `Ingestion`.
+
+Visto il modo in cui i dati sono distribuiti tra le varie code, per modellare le varie tipologie di eventi utilizziamo tre classi di lavoro, che rappresentassero le tre tipologie di dati gestiti dalle code:
+- una classe per rappresentare i dati strutturati, ovvero tutti gli eventi registrati nelle tabelle di MIMIC-III, eccetto i Note events.
+- una classe per rappresentare le Waveforms.
+- una classe per rappresentare i Note Events.
+
+Il secondo scenario, il quale non include come detto i dati non strutturati, non utlizza la coda `Processing` del secondo modello (ed in quel caso il modello più corretto per rappresentare il data lake è mostrato in Figura~[]) e, per lo stesso motivo, utilizza solo la job class rappresentante i dati strutturati.
+
+I service times di ogni coda rimangono invariati tra i due scenari e sono mostrati in Tabella~[].
+
+I service time considerati sopra sono il risultato di altri studi condotti nell'ambito del gruppo Health Big Data.
+* Data generation procedure
+La procedura seguita per generare le collezioni di eventi e waveforms da fornire a JSimGraph tramite il nostro simulatore varia in base allo scenario considerato.
+
+Per il primo scenario, essendo il Data Lake destinato alla copertura dei dati generati da tutti i pazienti dell'ospedale, tale procedura segue i sequence diagrams mostrati in Figure~[] e Figure~[].
+
+Per il secondo scenario, dato che il Data Lake è destinato a coprire i soli dati strutturati generati durante le permanenze in ICU dei pazienti, la classe utilizzata per la generazione degli eventi è \texttt{ICUInteraction}, che come evidenziato nel capitolo precedente è utilizzata per la generazione degli eventi pertinenti la permanenza ospedaliera dei pazienti.
+
+In questo caso, la procedura di generazione è effettuata considerando 250 utenti, ciascuno con due admission e ogni admission corrispondente a due permanenze in ICU.
+La durata delle permanenze è scelta randomicamente per ciascuna permanenza tra 1 e 10 ore, e gli utenti cominciano la loro permanenza ospedaliera a 250 secondi l'uno dall'altro.
+
+* Performance analysis
+
+La valutazione delle performance è stata effettuata seguendo la stessa procedura in entrambi gli scenari:
+- Effettiamo una single simulation run tramite JSimGraph per constatare i valori dei performance index del modello con i service time descritti in Tabella~[].
+
+- Dati i risultati di tale run, decidiamo come modificare i service time per simulare un cambiamento dell'architettura e osserviamo i nuovi indici di performance ottenuti.
+
+Per effettuare il secondo step, JSimGraph fornisce uno strumento denominato `What-if analysis`, che permette di modificare uno o più parametri di controllo all'interno di un range specificato, con step incrementali.
+Nel nostro caso, lo strumento ci permetterebbe di calcolare gli indici di performance per molteplici differenti service times, dandoci la possibilità di confrontare facilmente i risultati ottenuti.
+
+Gli indici di performance considerati per ciascuno dei due scenari sono:
+- Il response time del sistema.
+- Nel caso in cui il modello fosse dotato di più code, il response time di ciascuna.
+- Il throughput del sistema.
+- La utilization di ciascuna delle code.
+
+** First Scenario
+Applicando il primo step nel primo scenario l'indice di maggiore interesse è la utilization. Dai risultati della simulazione risulta infatti che:
+- la stazione di processing ha un'utilization molto bassa, intorno a 0,012.
+- la stazione di ingestion ha un'utilization piuttosto alta, intorno a 0,89.
+
+Basandoci su questi risultati, effettuiamo la What-if analysis aumentando il service time della stazione di processing in 5 step successivi del 50%, simulando quindi un downgrade dell'architettura (dato che richiederebbe più tempo per analizzare ogni job).
+
+I risultati di questa procedura possono essere visti nelle Figure~[], dove per ogni performance index indicato in precedenza sono mostrati i valori al variare del service time.
+
+** Second Scenario
+Applicando il primo step nel secondo scenario, anche in questo caso, osserviamo che l'indice di maggiore interesse è la utilization: Pur trattandosi di una coda sola, essa si mantiene stabile con un valore intorno a 0,33.
+
+Questo ci fa pensare di poter considerare anche in questo caso un downgrade dell'architettura (avendo ancora una utilization bassa).
+Effettuiamo quindi la What-if analysis aumentando il service time in 5 step successivi da 0,448 secondi a 1 secondo, corrispondente ad un aumento del 123%.
+
+I risultati di questa procedura possono essere visti nelle Figure~[], dove per ogni performance index indicato in precedenza sono mostrati i valori al variare del service time.
+
+* Results
+I dati ottenuti dalle what-if analysis effettuate nella precedente sezione ci portano a dire che il downgrade può essere effettuato, ma limitatamente.
+
+Nel caso del \textbf{primo scenario} possiamo notare come l'aumento del service time abbia portato fino alla fine ad un aumento della utilization della coda di \textit{processing}, riflettendosi in un aumento del system response time, senza però portare ad un abbassamento sensibile del throughput del sistema.
+In questo scenario, il downgrade effettuato è una scelta sensata e può probabilmente essere ulteriore.
+
+Nel caso del \textbf{secondo scenario}, invece, possiamo notare come, aumentando il service time oltre il valore di 0,724, la utilization della coda di ingestion salga improvvisamente ad 1, rendendo il sistema instabile.
+
+Osservando inoltre il system throughput, possiamo notare che l'aumento del service time ha causato un calo inesorabile delle performance del sistema già prima del valore che lo ha portato all'instabilità.
+Per questo motivo, possiamo concludere che in questo scenario il downgrade possa essere effettuato, ma limitandosi a portare il service time della stazione di ingestion al più a 0,586s.
+
+
+Tramite gli esperimenti condotti sui due scenari descritti in questo capitolo siamo riusciti a mostrare due importanti qualità del simulatore appena creato:
+- Tramite il primo scenario abbiamo visto come, grazie alla sua architettura pensata come una libreria, può essere adattato a molteplici casi d'uso, permettendo la modifica e la presentazione degl eventi e delle waveform generate nei modi differenti.
+- Tramite il secondo, invece, abbiamo avuto modo di vedere il funzionamento della struttura a livelli e del controllo che essa permette sull'output generato dal simulatore.
+
+In generale, le scelte architetturali e implementative fatte per il simulatore hanno dato i risultati desiderati, raggiungendo le caratteristica goal di fine-tune the output e di adattaptability presentate in precedenza.

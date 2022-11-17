@@ -222,16 +222,16 @@ come si può notare, la creazione della classe Hospital è effettuata dall'utent
 # %#TODO: sequence diagrams
 
 ***** Interaction classes
-Abbiamo evidenziato durante l'analisi di MIMIC che alcuni tipi di eventi avvengono durante una permanenza ospedaliera, altri specificatamente durante una permanenza in ICU (vedi Sezione~[]).
+Abbiamo evidenziato durante l'analisi di MIMIC che alcuni tipi di eventi avvengono durante una permanenza ospedaliera, altri specificatamente durante una permanenza in ICU.
 
 Per riflettere questa differenza, la generazione delle interazioni è stata suddivisa nelle classi `StayInteraction` e `ICUStayInteraction`, accumunate dalla classe astratta `Interaction`.
 
 Entrambe le classi condividono il metodo `generic_events`, implementato nella classe astratta `Interaction`.
-Esso si occupa di generare le tipologie d'evento elencate nelle enumerazioni `ICUEvents` e `AdmissionEvents` (già mostrate in Sezione~[]) che, modellando tutte gli intertempi che intercorrono tra gli eventi della propria categoria, possono essere generate seguendo la medesima procedura.
+Esso si occupa di generare le tipologie d'evento elencate nelle enumerazioni `ICUEvents` e `AdmissionEvents` (mostrate in Tabella~[]) che, modellando tutte gli intertempi che intercorrono tra gli eventi della propria categoria, possono essere generate seguendo la medesima procedura.
 # %#TODO: sezione enumerations
 La classe `ICUStayInteraction` utilizza tale metodo per generare gli eventi elencati nell'enumerazione `ICUEvents`, mentre la classe `StayInteraction` lo utilizza per generare gli eventi elencati nell'enumerazione `AdmissionEvents`.
 
-Ciascuna delle due classi implementa inoltre il metodo `special_events`, utilizzato per la generazione degli eventi che rappresentano casi speciali e che richiedono che la loro generazione sia trattata diversamente (quali gli eventi di tipo "Callout" e "Transfer", come descritto nella Sezione~[]).
+Ciascuna delle due classi implementa inoltre il metodo `special_events`, utilizzato per la generazione degli eventi che rappresentano casi speciali e che richiedono che la loro generazione sia trattata diversamente (quali gli eventi di tipo "Callout" e "Transfer").
 # %#TODO: sezione enumeration
 
 La generazione delle Waveforms, che in MIMIC sono associate alla permanenza in ICU e non all'intera permanenza ospedaliera, è gestita dalla classe `ICUEvents` tramite il metodo `get_waveforms` (implementato per l'interfaccia `EventGenerator`), il quale si occupa di generare le Waveform e i relativi segnali seguendo le distribuzioni definite nella Sezione~[].
@@ -241,7 +241,7 @@ La generazione delle Waveforms, che in MIMIC sono associate alla permanenza in I
 # %#TODO: sezione analisi eventi
 
 ***** Inputs of each layer
-Come evidenziato in precedenza, la struttura a layers utilizzata per il development del simulatore offre all'utente la possibilità di decidere di quale livello creare un'istanza, fornendogli controllo sulla granularità e l'estensione dell'output.
+La struttura a layers utilizzata per il development del simulatore offre all'utente la possibilità di decidere di quale livello creare un'istanza, fornendogli controllo sulla granularità e l'estensione dell'output.
 
 Ciascun livello, tuttavia, richiede che diversi parametri siano forniti in fase di costruzione per essere in grado di generare tracce di eventi.
 L'unico parametro comune a tutti i livelli è l'istanza di un `Manager`, in quanto necessaria per ottenere le informazioni ottenute dall'analisi effettuata su MIMIC-III, come già indicato nella Sezione~[].
