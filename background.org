@@ -1,17 +1,14 @@
 #+title: Background
 
-The Kolmogorov-Smirnov test for two samples is a nonparametric statistical test used to test wether two underlying one-dimensional probability distributions differ.
-In particular, the test can be used to compare two samples to asses wether they were extracted from the same distribution or not.
+* K-S test
+The Kolmogorov-Smirnov test for two samples is a non-parametric statistical test used to compare those samples and assess whether they were extracted from the same continuous distribution.
 
-To do so, the test leverages the Kolmogorov-Smirnov statistic, which quantifies the maximal distance between the empirical distribution of the two samples, and establishes wether the
+To do so, the test computes the maximal distance between the cumulative empirical distribution functions (abbreviated ECDF) of the two samples, a function that associates to each observation x_i the sum of the ratios between the absolute value frequency and the cardinality of the sample.
 
+If such maximal distance is bigger than the critical value /D/, where
+# formula
+the Kolmogorov-Smirnov test rejects the null hypothesis that the two samples are extracted from the same distribution.
 
-
-verifies the statistical hypothesis H0 (null
-hypothesis) that they come from the same distribution. This test finds the maximum
-distance among the two distributions of the samples and establishes, with tabulated values
-depending on how big the sample is and the significance level α, if the distributions should
-be considered distinct. The significance level α indicates the maximum probability that
-is verified as a Type I error (H0 is rejected although it is true).
-
+The parameter $\alpha$ that appears in the formula for the critical value D is the significance level of the test, which indicates the maximum probability that the test will result in a false negative (the two samples come from the same distribution, but the test fails to detect it).
+The parameter /n/ and /m/ represent the cardinality of the two samples.
 # hai usato la libreria scipy.

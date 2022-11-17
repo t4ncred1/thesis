@@ -3,33 +3,30 @@
 * TODO Introduzione
 * TODO Stato dell'arte
 * TODO Background
-** Mimic
-*** Origins
+** DONE Mimic
+*** DONE Origins
 Beth Israel, time period
-*** What the dataset was designed to do/consists in
+*** DONE What the dataset was designed to do/consists in
 not performance analysis
 Definizione *Event*
-*** Mimic deidentification
+*** DONE Mimic deidentification
 What is kept
-*** Mimic III vs Mimic IV
-**** Why did we chose Mimic III
-*** Demo + corso
-*** What it contains
+*** NO Mimic III vs Mimic IV
+**** NO Why did we chose Mimic III
+*** DONE Demo + corso
+*** DONE What it contains
 Events mostly (also talk about dictionary tables etc)
-**** What do we mean when we say "events"
+**** DONE What do we mean when we say "events"
 Describe how tuples are formed:
 - row id
 - a reference to the admission id
 - eventually a reference to the icustay id
 - eventually a timing value (we will mostly focus on events that have this attribute)
-**** List Mimic tables (Entity-relationship diagram?)
-**** Waveforms
+**** DONE List Mimic tables
+**** DONE Waveforms
 headers vs data
 matched subset
 *** NO Discrepancies found
-*** How did we retrieve data
-**** Postgres Container
-**** Waveform (struttura del codice per ottenere i dati)
 ** Phase type distributions
 *** versatilità
 [cite:@bladtReviewPhasetypeDistributions2005]
@@ -42,7 +39,7 @@ matched subset
 *** Queuing network
 *** jobs and job classes
 *** Performance indexes
-*** Replayer
+*** WAIT Replayer
 * STRT Approach
 ** WAIT Intro
 *** DONE Thesis objective
@@ -90,6 +87,9 @@ reusability and extensibility
 **** Impossibilità di utilizzare valori reali
 
 * Analysis
+** Preprocessing steps
+*** Postgres Container
+*** Waveform (struttura del codice per ottenere i dati)
 ** DONE Analysis of the interactions
 *** Found interactions
 **** default interactions (single icustay, single admission)
@@ -178,7 +178,6 @@ Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lett
 Valori scelti
 *** Code structure
 *** Results
-
 
 * TODO Future Work
 ** Include values other than timings
