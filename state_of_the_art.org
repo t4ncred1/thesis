@@ -1,0 +1,32 @@
+#+title: State Of The Art
+* Definizioni preliminarie
+- Data Lake (vedi stato dell'arte Houdal)
+- Benchmark
+
+* Obiettivo generale
+Rendere possibile la valutazione delle performance di un'architettura Data Lake nell'ambito healthcare (da definire in precedenza).
+
+Abbiamo cercato architetture esistenti(?)
+Abbiamo provato cercando benchmark esistenti.
+
+* WAIT Existing Architectures
+Abbiamo provato a cercare delle implementazioni open
+
+* Benchmark
+Ci sono sotto forma di dataset da fornire a datalake esistenti, ma o sono poco eterogenei (caratteristica focale dei datalake) o non nell'ambito healthcare:
+
+** WAIT Bootable
+
+** DLBench
+Punto focale. È un benchmark per data lakes incentrato sulla scalabilità (*come il nostro simulatore*)
+# Potremmo definire il nostro lavoro in questo contesto, come parte di un benchmark più grande incentrato sulla scalabilità (?).
+
+** WAIT ADBench
+
+** BigDataBench
+
+** TODO On BigData Benchmarking
+
+* Available datasets for the medical environment
+
+** WAIT MIMIC-III
