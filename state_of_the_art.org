@@ -1,32 +1,136 @@
 #+title: State Of The Art
-* Definizioni preliminarie
+* Previous
+** Definizioni preliminarie
 - Data Lake (vedi stato dell'arte Houdal)
 - Benchmark
 
-* Obiettivo generale
+** Obiettivo generale
 Rendere possibile la valutazione delle performance di un'architettura Data Lake nell'ambito healthcare (da definire in precedenza).
 
 Abbiamo cercato architetture esistenti(?)
 Abbiamo provato cercando benchmark esistenti.
 
-* WAIT Existing Architectures
+** WAIT Existing Architectures
 Abbiamo provato a cercare delle implementazioni open
 
-* Benchmark
-Ci sono sotto forma di dataset da fornire a datalake esistenti, ma o sono poco eterogenei (caratteristica focale dei datalake) o non nell'ambito healthcare:
+** Benchmarks
+Ci sono sotto forma di dataset da fornire a datalake esistenti, ma o sono poco eterogenei (caratteristica focale dei datalake) o non nell'ambito healthcare
 
-** WAIT Bootable
+*** WAIT Bootable
 
-** DLBench
-Punto focale. È un benchmark per data lakes incentrato sulla scalabilità (*come il nostro simulatore*)
+*** DLBench
+È un benchmark per data lakes incentrato sulla scalabilità (*come il nostro simulatore*)
 # Potremmo definire il nostro lavoro in questo contesto, come parte di un benchmark più grande incentrato sulla scalabilità (?).
 
-** WAIT ADBench
+*** WAIT ADBench
 
-** BigDataBench
+*** BigDataBench
+"For the sake of fairness, big data benchmarks must include diversity of workloads and data sets, which is the prerequisite for evaluating big data systems and architecture"
 
-** TODO On BigData Benchmarking
+"If we want to produce numbers that are meaningful in the context of real applications, we need to use application-specific benchmarks, which in turn will need application-specific data generation tools".
 
-* Available datasets for the medical environment
+**** Big data generator suite
 
-** WAIT MIMIC-III
+*** NO Generation and evaluation of privacy preserving synthetic health data
+
+**** HealthGAN
+
+*** WAIT Big data benchmarking requirements
+
+*** TODO On BigData Benchmarking
+
+** Health specific data generation
+
+
+** Available datasets for the medical environment
+
+*** WAIT MIMIC-III
+
+* New
+# Preliminary term explanations
+Con il termine Data Lake si intende ..
+
+La valutazione delle performance di sistemi destinati ai Big Data è un problema che è stato affrontato in diversi ambiti e tramite diverse metodologie.
+# %#TODO: descrivi data lakes e big data
+Il modeling, il quale rappresenta a powerful technique to assess system performance, in quanto consente di effettuare tale valutazione astraendosi dalla specifica implementazione scelta, ne è un esempio [barbierato et al].
+# %#TODO: cit barbierato et al
+
+Una dei prerequisiti per una corretta valutazione delle performance, ancor più presente nell'ambito dei Big Data, è quella di includere in tale valutazione diversi inputs e workloads. [big data bench]
+# %#TODO: cit bigdatabence
+# Più in particolare, essendo il problema incentrato sulla valutazione di strutture destinate ad ospitare Data Lakes, tale necessità si accompagna a quella di utilizzare data sets _eterogenei_, che coprano quindi informazioni strutturate, semi-strutturate e non strutturate.
+Questo prerequisito si traduce nella necessità di grandi volumi di dati eterogenei, composti quindi da informazioni strutturate, semi-strutturate e non strutturate.
+
+In ogni ambito, i dataset pubblicamente disponibili composti da informazioni con forme e strutture diverse non sono molti, e per questo motivo la maggior parte degli strumenti per la performance evaluation si basano sulla _generazione dei dati_ per fornire ulteriori input ai sistemi da valutare.
+
+Questo vale ancora di più nell'ambito dell'healthcare dove, a causa della sensibilità dei dati d'interesse, i dataset a disposizione che godono delle caratteristiche indicate sono pochi.
+
+In questo capitolo andremo quindi ad analizzare i dataset a nostra disposizione nella Sezione~[], mostrando i vantaggi e le carenze di ciascuno, mentre analizzeremo gli strumenti esistenti per la generazione di dati da utilizzare per la valutazione delle performance di sistemi destinati ai BigData nella Sezione~[].
+
+** Datasets
+Come anticipato nella sezione precedente, i dataset a disposizione utilizzabili per la valutazione delle performance nell'ambito dei BigData e dotati quindi di dati eterogenei e di ampio volume sono pochi, e in questa sezione andremo a evidenziarne alcuni.
+
+*** DLBench datasets
+DLBench is a data-centric benchmark focused on the evaluation of data lake implementations[].
+# %#TODO: citazione DLBench
+
+Data Lakes are meant as Big Data storage systems capable of providing a "logical view of all data sources or datasets in their raw format" and that have to be "available and accessible by data scientists or statisticians to find new insights"[].
+# %#TODO: citazione the next information architecture evolution: The data lake wave.
+
+The benchmark is composed of a workload model and a data model.
+The first is a set of analytical operations relevant to the context of data lakes.
+The second is a set of both synthetic and real data in textual and tabular formats.
+
+I secondi sono il focus del nostro interesse in quanto potrebbero rappresentare una valida opzione da considerare come dataset di riferimento.
+
+I dataset presi in considerazione da DLBench sono documenti testuali e dati tabulari:
+- Textual documents are scientific articles written in French and English that span from few to tens of pages and with an overall volume of 62 GB.
+- Tabular data are synthetically derived from over 5000 CSV files containing Canadian government open data.
+
+Pur rispettando la clausola dell'eterogeneità dei dati e essendo stato ideato per essere applicato all'ambito big data e data lakes, esso non è in alcun modo legato all'ambito healthcare e, per questo motivo, non è da includere tra i dataset disponibili.
+
+*** ChestX-ray8 dataset
+The ChestX-ray8 database is composed by 108948 images which are frontal-view x-ray taken from a totality of 32717 patients [cit. chestxray8] extracted from the Picture Archiving and Communication System of the National Institutes of Health.
+# %#!TODO: cit chestx-ray8
+Some of the X-ray image contained in the dataset has been coupled with eight disease image labels, indicating the diseas which affects the patient.
+The labels have been mined from the associated radiological reports using natural language processing techniques.
+Due to the nature and sensibility of the data, the reports associated with each x-ray image are not provided.
+
+Although an incredibly useful dataset, expecially for the training of deep learning paradigms for compute-aided diagnosis systems, the lack of etherogeneity in the dataset makes it not suitable by itself for the performance evaluation of Big Data architectures.
+
+*** MIMIC-III dataset
+
+** Strumenti per Synthetic Data Generation
+Avendo evidenziato la mancanza di dataset utilizzabili per la valutazione delle performance di Big Data systems, ci concentriamo ora sulla possibilità di generare dataset sintetici per accompagnare i dataset esistenti analizzando gli strumenti a disposizione e mostrandone i pregi e le limitazioni.
+
+To the best of our knowledge, the only synthetic data generators capable of the production of heterogeneous data were comprised in the Big Data Generator Suite.
+
+*** BDGS
+The Big Data Generator Suite (BDGS) is a suite of data generators designed to provide input data for the evaluation of workloads in the context of a benchmark for data lake architectures called BigDataBench [cit bigdatabench] by creating synthetic data from existing datasets.
+
+Esso è costruito per mantenere sotto controllo proprietà dei dati generati quali il loro volume, la loro varietà (intesa come le tipologie messe a disposizione) e la loro velocità (il rateo con cui tali dati sono generati), il tutto rispettando la veridicità dei dati (mantenendone cioè le caratteristiche fondamentali).
+
+Attraverso different kinds of generators, BGDS è in grado di coprire diverse tipologie di datasets con struttura differente e campi di applicazione disparati.
+Tuttavia, i campi di applicazione coperti da BGDS ad oggi sono tutti nella categoria dei servizi internet, like search engines (where the datasets used are from Wikipedia and Google), E-commerces (which uses the data provided by Amazon Movie reviews and other E-commerces), and social networks (through Facebook datasets).
+
+Come si può notare, il tool ancora non è stato applicato a nessun ambito che si avvicini a quello medico.
+
+# *** HealthGAN (& medGAN)
+# HealthGAN is a data generation tool geared towards the generation of synthetic health-related data.
+
+# As the name implies, it is based on Generative Adversarial Networks, an emerging technique for unsupervised learning commonly used for image synthesis and editing[cit Generative Adversarial Networks].
+# # %#TODO: cit generative adversarial
+
+# The reference dataset used for the generation of data is MIMIC-III, a publicly available dataset consisting of the medical records of multiple intensive care unit patients.[cit mimic]
+# # %#TODO: cit mimic-III
+
+# It was applied on different case studies, such as:
+# - Education, for which the generator was used to produce synthetic datasets for the students of the Rensselaer Polytechnic Institute, that had to create a model capable of predicting the mortality for 20000 synthetic test patients records.
+# - Research, in which the synthetic data generated by HealthGAN was used to reproduce the results of three research studies performed on MIMIC-III (namely "the impact of race on ICU mortality"[?], the "mortality of elderly patients in ICU"[?] and "mortality of Acute Kidney Injury"[?]).
+
+# The limitation of the tool in the setting of performance evaluation is evident if we consider its outputs; the GAN, in fact, only generates a single health record per patient and, thus, is not representative of real medical records.
+
+# For this reason, it cannot be used for our performance evvaluation purposes.
+
+# **** Genera dati completi
+# **** Non è rappresentativa in quanto genera un solo record per paziente [cit synthetic event time series]
+# **** Anche lui è basato su MIMIC-III

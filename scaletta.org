@@ -1,6 +1,16 @@
 # -*- eval: (flyspell-mode 0) -*-
 #+title: Scaletta
 * TODO Introduzione
+- Prendi spunto da: "BDGS: A Scalable Big Data Generator Suite in Big Data Benchmarking"
+- parla della nascita del lavoro e di come è basato sulla valutazione delle performance di architetture destinate ad uso come Data Lake.
+- parla del fatto che siamo concentrati sulle tecniche di modelling
+- parla del fatto che non ci sono molti dataset a disposizione
+- parla del fatto che quindi si opta di generare questi dati sinteticamente
+  - uno dei pochi dataset a disposizione che introduce abbastanza eterogeneità è MIMIC-III
+  - non ci sono molti tool a disposizione per simulare tracce simili a quelle di mimic
+  - ne creiamo uno, ma che imita le tempistiche.
+  - Nonostante questa limitazione, può già potenzialmente essere utilizzato su modelli destinati alla performance evaluation di Data Lakes [barbierato et al].
+
 * TODO Stato dell'arte
 * TODO Background
 ** DONE Mimic
@@ -179,8 +189,14 @@ Valori scelti
 *** Code structure
 *** Results
 
-* TODO Future Work
-** Include values other than timings
-** Clustering
+* Conclusions
+I dati generati riguardano solo le tempistiche, ma va bene xk possono essere usati per i modelli.
+
+** TODO Future Work
+*** Include values other than timings
+*** Coprire MIMIC-IV, il quale contiene anche le radiografie (Chest X-RAY data)
+*** Clustering
 [[file:analysis.org::*Choosing the classes][Choosing the classes]]
 C'è da modificare anche le classi nel generatore (LIMITAZIONE). Potremmo passare una sola classe per livello (anziché admissionclass+userclass)?
+
+*** Inclusione di altri dataset (specificatamente MIMIC-IV o ChestX-ray8 dataset)
