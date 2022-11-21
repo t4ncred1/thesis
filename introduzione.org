@@ -1,0 +1,8 @@
+#+title: Introduzione
+
+# TODO: introduzione sui big data in healthcare e sulla valutazione delle performance di questi sistemi.
+
+# con essi, nasce anche la necessità di valutare le performance di questi sistemi.
+
+Le tecniche per la valutazione delle performance di un sistema si dividono, generalmente, in due categorie: empirical techniques and modeling techniques.
+Empirical techniques require that the system or network to be evaluated exists and direct measurements of the evaluation target have to be taken, while modeling techniques only require a model of the system, and therefore enable the performance evaluation of the architecture of the system in question before its implementation is completed.

@@ -6,13 +6,18 @@
 - parla del fatto che siamo concentrati sulle tecniche di modelling
 - parla del fatto che non ci sono molti dataset a disposizione
 - parla del fatto che quindi si opta di generare questi dati sinteticamente
-  - uno dei pochi dataset a disposizione che introduce abbastanza eterogeneità è MIMIC-III
-  - non ci sono molti tool a disposizione per simulare tracce simili a quelle di mimic
-  - ne creiamo uno, ma che imita le tempistiche.
-  - Nonostante questa limitazione, può già potenzialmente essere utilizzato su modelli destinati alla performance evaluation di Data Lakes [barbierato et al].
+- uno dei pochi dataset a disposizione che introduce abbastanza eterogeneità è MIMIC-III
+- non ci sono molti tool a disposizione per simulare tracce simili a quelle di mimic
+- ne creiamo uno, ma che imita le tempistiche, essendo interessati ai metodi di modelling.
+- Nonostante questa limitazione, può già potenzialmente essere utilizzato su modelli destinati alla performance evaluation di Data Lakes [barbierato et al].
+** Obiettivi del nostro lavoro
+Costruire un simulatore che sia fine-tunable e adaptable
+** Structure of the thesis
+- parla del fatto che la tesi è stata divisa in due parti e spiega perché (vedi approach)
+- indica la struttura formale (nel capitolo ... nel capitolo ...)
 
 * TODO Stato dell'arte
-* TODO Background
+* DONE Background
 ** DONE Mimic
 *** DONE Origins
 Beth Israel, time period
@@ -49,9 +54,10 @@ matched subset
 *** Queuing network
 *** jobs and job classes
 *** Performance indexes
-*** WAIT Replayer
-* STRT Approach
-** WAIT Intro
+*** NO Replayer
+
+* NO Approach
+** DONE Intro
 *** DONE Thesis objective
 **** thesis description
 Questo lavore rivolve intorno l'analisi di un set di dati health-related dei pazienti di un'ospedale,
@@ -60,9 +66,7 @@ Questo lavore rivolve intorno l'analisi di un set di dati health-related dei paz
 - rendere tale modello riutilizzabile
 **** How it was born
 Breve descrizione del progetto generale (benchmark)
-
 **** Why is it useful
-
 ** Design decisions
 *** The obstacle of mimic deidentification
 **** what is deidentified (briefly)
@@ -75,7 +79,7 @@ We had to consider the patients singularly.
 to gain additional knowledge about the structure of and the intricacies of the system we wanted to reproduce and to make sound decisions about the structure of the model we were about to create.
 **** how were the steps performed
 in succession, with smaller additional analyses perfomed during the development process.
-*** [?] Step 1: analysis
+*** NO Step 1: analysis
 **** Which analyses were performed
 ***** which informations of interest about our work can we retrieve
 ***** reconstruction of the patient-hospital interactions
@@ -85,7 +89,7 @@ Waveform analysis requires a section by itself (?)
 **** Classification
 **** NO How did we gather the distributions of events and interactions
 of both interaction times and events intertime
-*** [?] Step 2: model
+*** NO Step 2: model
 **** Main objectives of the generator model
 reusability and extensibility
 ***** Why reusability and extensibility?
@@ -96,8 +100,9 @@ reusability and extensibility
   An example usage will be showcased ...
 **** Impossibilità di utilizzare valori reali
 
-* Analysis
-** Preprocessing steps
+* TODO Analysis
+** Design of the analysis and preliminary steps
+***
 *** Postgres Container
 *** Waveform (struttura del codice per ottenere i dati)
 ** DONE Analysis of the interactions
@@ -138,7 +143,7 @@ metodologia standard + tabella
 ** Distribution fitting the Waveforms
 ** NO Evaluation of the classification made
 
-* Simulator development
+* DONE Simulator development
 - ripeti obiettivi:
   - granularità
   - adaptability
@@ -154,7 +159,7 @@ Centralize the configuration
 *** Diagramma UML ad alto livello
 Classi principali + classificazione
 
-*** [?] Utilizzo previsto
+*** NO Utilizzo previsto
 - Override (in linea con adaptability)
 - Uso su vari livelli per adattare (in linea con granularity)
 
@@ -182,14 +187,14 @@ Aggiunta del modulo utilities per raccogliere le funzioni utilizzate per la lett
 **** Requirements
 - che le classi nei file siano le stesse descritte dalle enum
 
-** Use case
+* DONE Use case
 - JMT
-*** Reference example
+** Reference example
 Valori scelti
-*** Code structure
-*** Results
+** Code structure
+** Results
 
-* Conclusions
+* TODO Conclusions
 I dati generati riguardano solo le tempistiche, ma va bene xk possono essere usati per i modelli.
 
 ** TODO Future Work
