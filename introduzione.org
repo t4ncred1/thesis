@@ -1,8 +1,98 @@
 #+title: Introduzione
 
+* TODO Intro
 # TODO: introduzione sui big data in healthcare e sulla valutazione delle performance di questi sistemi.
+# specifica che si tratta di dati eterogenei, con strutture differenti.
+# Lo sviluppo di tecnologie quali cloud computing, l'Internet of Things, e i social networks has made the amount of data generated daily increase continuously and accumulate at an alarming speed.
+The development of technologies such as cloud computing, IoT, and social networks has caused the amount of data generated daily to grow at an alarming rate.
+This rapid and unstoppable growth gave birth to the phenomenon known as Big Data.
+
+The term Big Data is used to describe a massive volume of both structured and unstructured data, difficult to process using traditional techniques [], but with the potential to help companies in any field to improve their operations and make faster, more intelligent decisions.
+# %TODO: Big Data: A Volume or Technology ?
+
+Big data has also entered the healthcare field, with the introduction of new tools for continuous patient monitoring producing massive amounts of structured and unstructured data every day.
+For this reason, medical facilities are moving towards data-based healthcare,
+# with lots of structured and unstructured data being produced every day,
+with the objective of leveraging this data to support clinical decision-making, disease surveillance and public health management [].
+# %TODO: cit "The use of Big Data Analytics in healthcare"
+
+# Questa nuova era della generazione dei dati ha portato alla nascita di nuovi sistemi per l'elaborazione degli stessi e, con essi, alla necessità di valutare le performance delle architetture necessarie per ospitarli.
+This new request to elaborate a moltitute of heterogeneous data has resulted in the emergence of new systems capable of processing it as well as the need to evaluate their performance.
 
 # con essi, nasce anche la necessità di valutare le performance di questi sistemi.
 
 Le tecniche per la valutazione delle performance di un sistema si dividono, generalmente, in due categorie: empirical techniques and modeling techniques.
-Empirical techniques require that the system or network to be evaluated exists and direct measurements of the evaluation target have to be taken, while modeling techniques only require a model of the system, and therefore enable the performance evaluation of the architecture of the system in question before its implementation is completed.
+
+Empirical techniques require that the system or network to be evaluated exists and direct measurements of the evaluation target have to be taken, while modeling techniques only require a model of the system, and therefore enable the performance evaluation of the architecture of the system in question before its implementation is completed [].
+# %#TODO: citazione 'An overview of the JMT Queuing Network Simulator'
+Qualsiasi sia la tecnica scelta per effettuare tale valutazione, per valutare le performance di sistemi che lavorano con i Big Data the diversity of data and workloads must be considered [] per fornire valutazioni pertinenti.
+# %#TODO: citazione "On Big Data Benchmarking"
+
+* Scenario and Problem statement
+
+In many practical scenarios, obtaining a variety of real data is not trivial because many data owners are not willing to share their data due to confidential issues.
+This is particularly true in the healthcare scenario, where the subjects of such data are people e la ricerca su quei dati is greatly restrained by laws protecting patients' privacy, such as the Health Insurance Portability and Accountability Act (HIPAA) in the United States and the General Data Protection regulation (GDPR) in Europe [].
+# %#TODO: citazione 'GenerationEvaluationPrivacyPreserving'
+Anche supponendo di avere accesso a tali dati, questi potrebbero non essere abbastanza o abbastanza rappresentativi per poter effettuare una valutazione corretta delle performance del sistema in analisi.
+
+Consideriamo per esempio a large hospital, with a moltitude of patients, che ha da poco cominciato ad utilizzare degli strumenti elettronici automatizzati per la rilevazione dei parametri vitali dei pazienti e a registrare tutte le loro terapie, iniezioni, referti radiografici etc.
+Supponiamo quindi che l'ospedale sia interessato a conservare questi dati per analizzarli in futuro, con l'obiettivo di effettuare previsioni sulla salute dei pazienti.
+
+If we suppose we were commissioned to build a sistem capable of achieving these goals, how could we size the architecture required by such a system?
+Since the tools would not have been used for long, the available data (assuming the hospital is willing to share it) would not be enough to conduct a comprehensive and thorough performance evaluation.
+
+For these reasons, while assessing the performance of Big Data systems, the consensus is to \textit{generate synthetic data} as inputs of our performance evaluation on the basis of the few real datasets available [].
+# %#TODO: citazione "On Big Data Benchmarking"
+
+Tuttavia, le tecniche evidenziate in precedenza per la valutazione delle performance richiedono che la generazione sia fatta in modi differenti: mentre per la valutazione delle performance tramite empirical techniques, essendo essa applicata a sistemi implementati e in funzione, è necessario che i dati generati abbiano le stesse caratteristiche dei dati originali in termini di features e valori dei dati, per la valutazione delle performance tramite modeling techniques risulta molto più importante, trattandosi di modelli non implementati, rispettare la distribuzione temporale dei dati che si vogliono simulare e avere il controllo del volume di questi.
+
+Nell'ambito dell'healthcare, c'é una marcata mancanza di entrambe le tipologie di generatori di dati sintetici.
+
+# Mentre esistono degli strumenti per la generazione di dati sintetici focalizzati sul rispettare le caratteristiche e i valori di dataset di riferimento specializzati per l'healthcare, to
+
+In this thesis, we will focus on the creation of a generator for synthetic data to be used for the performance evaluation through /modeling techniques/ of Big Data systems in the healthcare field.
+# During its development, we will use a specific dataset as a reference, but we will
+
+* Methodology
+
+Il dataset utilizzato come riferimento per la creazione del generatore è MIMIC-III, which comprises deidentified health-related data associated with over forty thousand patients that stayed at the Beth Israel Deaconess Medical Center between 2001 and 2012.
+
+Esso contiene dati strutturati quali dati demografici sui pazienti, risultati di laboratorio etc. e dati parzialmente e non strutturati quali caregiver notes scritte in linguaggio naturale and a moltitude of recordings of various physiologic signals. Proprio a causa dell'eterogeneità dei suoi dati, we consider it the most appropriate for the performance evaluation of Big Data systems.
+
+Dato che l'obiettivo é la creazione di un generatore di dati sintetici per la valutazione di performance tramite modeling techniques, our generator will focus on keeping the same time distribution of the data contained in MIMIC-III.
+
+Per ottenere tali distribuzioni temporali, ci baseremo su un'analisi di MIMIC-III (adattabile potenzialmente ad altri dataset simili) concentrata sul considerare le attività dei pazienti e i dati scambiati da questi ultimi con il sistema ospedaliero durante ogni permanenza ospedaliera coperta dal dataset, e utilizzeremo varie tecniche di distribution fitting e distribuzioni differenti per ciascuno delle attività identificate, adoperando ulteriori procedure per rendere i risultati aderenti alla realtà.
+
+Durante lo sviluppo del generatore, ci concentreremo sulla possibilità di scegliere parametri differenti per le distribuzioni utilizzate e sulla possibilità di tarare l'output del generatore per fornire la diversità necessaria alla valutazione delle performance di un sistema incentrato sui Big Data.
+
+* TODO Contributions
+
+# Il contributo di questo lavoro è un componente software in grado di riprodurre le tempistiche registrate durante il raccoglimento dei dati che compongono MIMIC-III, con l'obiettivo di aggiungere una nuova fonte di dati sintetici per la valutazione basata su modeling delle performance di Big Data systems allo stato dell'arte attuale.
+
+# Nel mentre, proporremo anche una metodologia per effettuare l'analisi temporale dei dati contenuti in MIMIC-III.
+
+Il contributo principale di questo lavoro è un componente software in grado di riprodurre le tempistiche registrate durante il raccoglimento dei dati che compongono MIMIC-III, con l'obiettivo di aggiungere una nuova fonte di dati sintetici per la valutazione basata su modeling delle performance di Big Data systems allo stato dell'arte attuale.
+
+Inoltre, nello spiegare la struttura del simulatore in questo documento ci siamo soffermati sulle sue capacità funzionali e sul collegamento di queste alle scelte architetturali fatte, così che il generatore possa essere adattato a dataset o casi d'uso diversi senza perdere tali capacità.
+
+# TODO dubbi?
+Infine, riteniamo una valida aggiunta allo stato dell'arte attuale anche la metodologia e le procedure seguite per effettuare l'analisi di MIMIC-III, sperando possano essere utili per riprodurre il lavoro su altri datasets.
+
+* Structure of the Thesis
+# specifica che la tesi è divisa in due parti e spiega perché (vedi approach).
+
+Per mostrare come il generatore è stato sviluppato e le idee alla base dell'architettura scelta, abbiamo deciso di dividere questo lavoro in due capitoli principali:
+\begin{itemize}
+    \item One dedicated to the analysis of the MIMIC-III dataset, a necessary step to gather the required informations for the creation of the generator.
+    \item One dedicated to the software development of the generator, where we use the information obtained from the analysis as the foundation for the design of its architecture.
+\end{itemize}
+
+La tesi é quindi strutturata come segue:
+\begin{itemize}
+    \item Chapter 2 mostra lo stato dell'arte, presentando altri generatori sintetici descritti nella letteratura e gli altri dataset disponibili considerati per la creazione del generatore sintetico oggetto di questo lavoro.
+    \item Chapter 3 introduce il background del lavoro, spiegando gli strumenti e le procedure utilizzate oltre che il background teorico necessario per capire il loro funzionamento, e mostrando nel dettaglio la struttura di MIMIC-III, a cui sarà fatto riferimento negli altri capitoli del lavoro.
+    \item Chapter 4 mostra le procedure seguite durante l'analisi effettuata su MIMIC-III, specificando gli output di questa analisi.
+    \item Chapter 5 mostra l'architettura software adottata per il generatore, elencando le funzionalità incluse e le scelte progettuali adottate.
+    \item Chapter 6, con l'obiettivo di presentare alcuni casi d'uso esemplificativi per il generatore creato e mostrando i vantaggi delle scelte progettuali mostrate in precedenza, presenta due scenari in cui il generatore viene utilizzato per risolvere i problemi che si presentano.
+    # \item Chapter 7 mostra le conclusione.
+\end{itemize}
