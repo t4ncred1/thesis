@@ -1,0 +1,71 @@
+#+title: Conclusioni
+
+This final chapter will summarize the contributions and the modalities of the work carried
+out before moving to the limits of the developed software, with consequential
+suggestions for future works.
+
+* Summary
+# obiettivo generale del lavoro
+# summary della metodologia
+Abbiamo visto come, nel field dell'healthcare, a causa della sensibilità dei dati trattati, non siano disponibili molti dataset di dominio pubblico a cui fare riferimento per la valutazione delle performance di un sistema incentrato sui Big Data.
+
+Mentre in altri campi questo problema viene risolto tramite l'uso di generatori di dati sintetici, nel campo dell'healthcare questi sono pochi e non specializzati nella valutazione delle performance.
+
+L'obiettivo principale di questa tesi consiste dunque nella creazione di un generatore di dati sintetici per la valutazione delle performance di sistemi Big Data tramite tecniche di /modeling/, interessate quindi alle informazioni sulle tempistiche dell'input del sistema in esame.
+
+Per la creazione del Generatore ci siamo basati su MIMIC-III, un dataset pubblicamente disponibile riguardante le permanenze ospedaliere di molteplici pazienti avvenute nell'arco di diversi anni, contenente le misurazioni e le osservazioni (chiamate  "eventi" dagli autori di MIMIC-III) effettuate in quel periodo sui pazienti e registrate dal data system dell'ospedale in questione.
+
+# ?
+Con l'obiettivo di ottenere informazioni aggiuntive sulla distribuzione temporale di tali eventi, abbiamo per prima cosa analizzato il processo di interazione tra i pazienti e il sistema ospedaliero, focusing sui periodi di tempo
+# % che intercorrono tra un'ingresso in ospedale e il successivo e un'ingresso in ICU e il 
+durante i quali gli eventi descritti in MIMIC-III sono stati acquisiti.
+# Dopodiché, tali periodi di tempo e la distribuzione temporale di ciascuna tipologia di evento sono state modellate  tramite diverse procedure di distribution fitting.
+Tali periodi di tempo sono poi stati modellati attraverso adeguate distribuzioni, sfruttando tecniche e strumenti di distribution fitting;
+le stesse sono poi state utilizzate per modellare il rate di acquisizione di ciascuna categoria di evento.
+# sui diversi stati in cui tale interazione può essere divisa.
+# Questo è stato fatto perché
+
+# concentrandoci sugli intervalli che intercorrono tra i dati (chiamati dagli autori di MIMIC-III "eventi") registrati nel sistema ospedaliero.
+
+# In questo contesto, abbiamo utilizzato diverse procedure di distribution fitting per ottenere delle distribuzioni che modellassero tali intervalli temporali.
+
+I risultati ottenuti, quali i parametri delle distribuzioni fittate e la struttura identificata per il processo di interazione tra i pazienti e il sistema ospedaliero, sono state utilizzate come fondamenta per le scelte architetturali del generatore.
+
+# Volendo permettere al generatore di accettare i risultati di analisi differenti e volendo rendere il suo output adattabile al sistema di cui si vuole effettuare la valutazione, le caratteristiche scelte come obiettivo per il suo sviluppo sono state l'adattabilità e la fine-tunability.
+# Durante lo sviluppo del generatore,
+Durante lo sviluppo di quest'ultimo,
+le caratteristiche obiettivo ricercate sono state due:
+- la fine-tunability, intesa come la possibilità di cambiare i parametri delle distribuzioni individuate rispetto a quelli ottenuti dall'analisi effettuata
+  # ottenuti applicando le procedure d'analisi presentate in precedenza
+  e la capacità di controllare i dati generati come output.
+
+- l'adaptability, intesa come la possibilità di adattare il generatore a procedure d'analisi differenti e, potenzialmente, dataset differenti, senza richiedere modifiche eccessive e complesse.
+
+Queste caratteristiche sono state raggiunte tramite l'adozione di un'architettura a livelli e tenendo a mente, durante lo sviluppo del generatore, la possibilità di modificare e personalizzare le sue componenti.
+
+Tale raggiungimento è stato infine provato attraverso due esperimenti, focalizzati sulla valutazione delle performance di un semplice modello di un sistema Big Data in due scenari differenti, che hanno permesso di mettere in luce le potenzialità del generatore.
+
+Infine, per testare le possibilità appena descritte, sono stati effettuati due esperimenti, focalizzati sulla valutazione delle performance di un semplice modello di un sistema Big Data in due scenari differenti.
+
+* Limitations and Future Works
+
+Come evidenziato nei precedenti capitoli, una delle limitazioni del nostro lavoro è data dalle features scelte per le classificazioni effettuate per sudividere il dataset prima di effettuare il distribution fitting; le features considerate, prese dai pazienti e delle permanenze ospedaliere, erano infatti state estratte tramite una semplice esplorazione superficiale dei contenuti di MIMIC-III.
+Tuttavia, nel descrivere lo sviluppo del generatore, abbiamo evidenziato la possibilità di introdurre nuove classificazioni sui dati, dimostrando anche tramite uno degli esperimenti effettuati che il cambio delle features di classificazione richiede modifiche minime a poche classi del generatore, almeno fintanto che tali classificazioni son basate su caratteristiche dei pazienti e delle hospital stays.
+# Il simulatore non permette l'uso di distribuzioni differenti in modo immediato. Le phase type distributions sono valide, ma le exponential distribution sono un po' approssimative.
+Tuttavia, nel descrivere lo sviluppo del generatore, abbiamo evidenziato come sia possibile di introdurre nuove classificazioni sui dati. In particolare, tramite uno degli esperimenti effettuati, abbiamo dimostrato che il cambio delle features di classificazione richiede modifiche minime a poche classi del generatore, almeno per classificazioni basate su caratteristiche dei pazienti e delle hospital stays.
+# Anche le distribuzioni utilizzate  del nostro lavoro . Per quanto infatti le phase-type distributions siano adattabili per la modellazione di qualsiasi tipo di distribuzione, come è stato presentato in precedenza esse richiedono diversi
+# Le classificazioni effettuate sui dati sono basate su features evidenti estratte da MIMIC-III. Esse dovrebbero poter essere sostituite da classificazioni più approfondite senza cambiamenti sostanziali all'architettura del simulatore e alle procedure usate per l'analisi.
+
+Un'altra limitazione, incentrata sulla versatilità del generatore, è rappresentata dall'impossibilità di utilizzare distribuzioni differenti rispetto a quelle scelte per modellare la durata dei vari stadi di interazione e l'intertempo tra i vari eventi.
+L'introduzione della possibilità di utilizzare distribuzioni differenti rispetto alle phase-type distributions e alle distribuzioni esponenziali rappresenterebbe un'interessante aggiunta al nostro lavoro, che potrebbe portare a dati sintetici più simili a quelli contenuti in MIMIC-III da un punto di vista temporale.
+
+# A causa della scarsità di dataset esistenti, non si è stati in grado di provare il generatore con dataset differenti per valutarne la riusabilità. Avendo tenuto una struttura abbastanza lineare, si spera che non sia troppo difficile adattarlo a nuovi
+
+Un altro dei futuri sviluppi di questo lavoro è rappresentato dal considerare l'adattamento del generatore ad altri dataset strutturati in modo simile a MIMIC-III.
+A tal proposito, nell'ultimo periodo è stato reso disponibile MIMIC-IV, un'evoluzione di MIMIC-III che, oltre a tante altre modifiche, copre un periodo di tempo più recente.
+Non è stato considerato per questo lavoro perché, at the time of writing, non è ancora stato pubblicato the waveform dataset associato alla nuova versione.
+
+Finally, a last future work concerns the use of the synthetic data generator presented here to evaluate the performances of a model of a Big Data system more complete than the simple one presented in this work for explaination purposes.
+A tale scopo, potrebbe essere preso in considerazione il lavoro presentato in~[], dove gli autori hanno reso il modello di un ipotetico Data Lake da utilizzare per il deposito di dati eterogenei dei pazienti di un ospedale su cui si intende effettuare delle analisi to predict the presence of cancer at an early stage.
+# Utilizzare il generatore per valutare le xformance del modello barbierato.
+#

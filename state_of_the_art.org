@@ -134,3 +134,63 @@ Come si può notare, il tool ancora non è stato applicato a nessun ambito che s
 # **** Genera dati completi
 # **** Non è rappresentativa in quanto genera un solo record per paziente [cit synthetic event time series]
 # **** Anche lui è basato su MIMIC-III
+
+* New New
+# TODO: intro
+Come evidenziato nel capitolo precedente, l'avvento dei Big Data nell'healthcare ha portato alla necessità di costruire nuovi sistemi adatti a elaborare tale nuovo carico di dati e, con essi, la necessità di valutarne le performance.
+
+# Tuttavia, la valutazione delle performance di tali sistemi e l'assessment delle architetture necessarie per implementarli è reso difficoltoso dalla natura sensibile dei dati trattati, che quindi non possono essere facilmente reperiti per caratterizzare il carico di lavoro che il sistema dovrà supportare.
+
+Quando si lavora con i Big Data, per effettuare una valutazione delle performance corretta e completa sorge la necessità di considerare grandi volumi di dati, che siano sia strutturati che non, e che abbiano una granularità temporale abbastanza fine da poter identificare i picchi di utilizzo del sistema in esame.
+
+La poca abbondanza di dataset pubblicamente disponibili che rispettano queste caratteristiche causa la necessità di considerare la generazione di dati sintetici per effettuare tale valutazione.
+
+In questo capitolo andremo quindi evidenziare, nella Sezione~[], i generatori presenti nella letteratura per l'ambito in esame.
+
+Dato che ogni generatore di dati sintetici deve essere basato su un dataset esistente per garantire la veridicità dei dati generati, andremo anche ad analizzare i dataset disponibili nella letteratura nella Sezione~[].
+Le features ricercate per questi dataset sono:
+\begin{itemize}
+    \item L'eterogeneità dei dati, intesa come la necessità di contenere dati strutturati, parzialmente strutturati e non strutturati.
+    \item Un alto livello di granularità temporale, inteso come la necessità di analizzare eventi che avvengono anche in intervalli di tempo abbastanza brevi.
+    \item Un volume di dati abbastanza grande da permettere di rendere il simulatore realistico.
+\end{itemize}
+
+** Dataset
+Nella letteratura, i dataset pubblicamente disponibili con le caratteristiche ricercate sono molto pochi.
+
+Il primo dataset considerato è stato il New Zealand National Minimal dataset, una "collection of public and private hospital discharge information, including clinical information, for inpatients and day patients" [].
+Per quanto rispettasse la richiesta del volume, coprendo le degenze di tutti i pazienti degli ospedali pubblici neozelandesi dal 1993, esso non è stato ritenuto abbastanza granulare per gli scopi presentati (non contiene le osservazioni raccolte sui pazienti durante la loro degenza ma solo le informazioni registrate durante il discharge) e non abbastanza eterogeneo (contenendo solo dati tabulari).
+# TODO cit new zealand national minimal dataset
+
+Un altro dataset considerato per l'analisi è stato il dataset ChestX-ray8, a dataset of X-ray images of over 30000 patients []. Purtroppo, i radiological reports associated a ciascuna immagine non sono inclusi nel dataset, limitandone fortemente l'eterogeneità e, quindi, l'utilità.
+# TODO cit chestxray8
+
+L'unico dataset ritenuto abbastanza vasto, eterogeneo e granulare da poter essere utilizzato come riferimento per la creazione del generatore è stato MIMIC-III [].
+Esso contiene i dati raccolti dall'ospedale Beth Israel di Boston nell'arco di 11 anni associati a oltre 40000 pazienti, e comprende, oltre a una grande quantità di dati tabulari strutturati rilevati e collocati temporalmente con precisione al minuto, anche le note mediche rilasciate dai caregiver dei pazienti.
+Inoltre, esso è associato a un database contenente una moltitudine di segnali fisiologici rilevati durante le permanenze dei pazienti, che aumenta ancora di più l'eterogeneità del dataset.
+
+** TODO Synthetic Generators
+
+Una metodologia di machine learning comunemente utilizzata per la generazione di dati sintetici nell'ambito dell'healthcare sono le Generative Adversarial Networks (abbreviate a GAN).
+A GAN is a kind of artificial intelligence algorithm based on an adversarial training system, where two competing models (a generator model and a discriminator model) are trained against each other [].
+# TODO citazione GAN
+
+They have been used in medGAN [], a generator that focuses on privacy preserving synthetic health data, che però è in grado di generare solo valori binari o, al più, interi, limitando fortemente la sua utilità.
+# TODO: medgan (multi-label)
+
+An evolution of medGAN is provided in healthGAN [], which is capable of the simulation of real-distributed values, rimanendo però limitato nell'eterogeneità dei dati simulati.
+# healthgan generation and evaluation of privacy
+
+In [] is proposed SmoothGAN, a new approach for the generation of high quality synthetic data that maintains important relations and factors in the original data, that is not focused on following the time distribution of the original data and that does not seem to have a functioning implementation.
+# cit smoothGAN
+
+Inoltre, in [], GANs were also used to model the MIMIC-III data set and generate heterogeneous data, but their focus was again not sulle tempistiche dei dati, che sono state omesse dall'output del generatore.
+# TODO generation of heterogeneous ...
+
+Between the synthetic data generators not based on GANs but that focus on the distribution of the data we can find Synthea [], a tool suite that focuses on the generation of health records during the entire life time of the patients, that lacks the granularity to be used for performance evaluation purposes.
+# TODO SYnthea
+
+*** Summary
+
+In questo capitolo abbiamo mostrato la mancanza di generatori sintetici adatti alla valutazione delle performance di sistemi BigData tramite metodi di modellazione, evidenziando la loro necessità.
+Abbiamo inoltre mostrato come la maggioranza dei pochi dataset a disposizione non possano essere presi come riferimento per lo sviluppo di un nuovo generatore, data la loro carenza in una o più caratteristiche necessarie.

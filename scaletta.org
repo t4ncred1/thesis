@@ -1,6 +1,6 @@
 # -*- eval: (flyspell-mode 0) -*-
 #+title: Scaletta
-* TODO Introduzione
+* WAIT Introduzione
 - Prendi spunto da: "BDGS: A Scalable Big Data Generator Suite in Big Data Benchmarking"
 - parla della nascita del lavoro e di come è basato sulla valutazione delle performance di architetture destinate ad uso come Data Lake.
 - parla del fatto che siamo concentrati sulle tecniche di modelling
@@ -100,7 +100,7 @@ reusability and extensibility
   An example usage will be showcased ...
 **** Impossibilità di utilizzare valori reali
 
-* TODO Analysis
+* WAIT Analysis
 ** Design of the analysis and preliminary steps
 ***
 *** Postgres Container
@@ -196,6 +196,10 @@ Valori scelti
 
 * TODO Conclusions
 I dati generati riguardano solo le tempistiche, ma va bene xk possono essere usati per i modelli.
+
+** Summary and lesson learned
+
+** Limitations
 
 ** TODO Future Work
 *** Include values other than timings

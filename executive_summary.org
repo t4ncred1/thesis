@@ -1,0 +1,92 @@
+#+title: Executive Summary
+* Introduction
+Big data has flooded the healthcare field, with the introduction of new tools for continuous patient monitoring producing massive amounts of structured and unstructured data every day.
+For this reason, medical facilities are moving towards data-based health-care, with the objective of leveraging this data to support clinical decision-making and public health management.
+
+This new request to elaborate a multitude of heterogeneous data has resulted in the
+emergence of new systems capable of processing it as well as the need to evaluate their
+performance.
+
+One kind of techniques commonly used for the evaluation of Big Data Systems is modeling, which performs the evaluation on a model of the system under analysis, with the clear advantages of allowing the assessment of the performances before the implementation has been completed and to allow their evaluation based solely on the time characteristics of the inputs of the system.
+
+In order to make an adequate performance assessment of Big Data-centered systems, though, we need a diversity of volumes and workloads that, due to the sensitivity of data concerning healthcare, might not be available.
+In other fields this problem is usually solved through the use of synthetic data
+generators, but in the field of healthcare these are few and not specialized for performance evaluation [].
+# %#TODO: cit healthGAN.
+
+The main objective of this thesis is, thus, to create a synthetic data generator for the
+evaluation of the performance of a Big Data system that, given an extract of the inputs
+of the system, is capable of reproducing its timings.
+
+The reference data for the generator will be gathered from the MIMIC-III dataset, a large, freely-available database comprising de-identified health-related data associated with over forty thousand patients who stayed in critical care units of the Beth Israel Deaconess Medical Center between 2001 and 2012 [], and the MIMIC-III Waveform Matched Dataset, a dataset associated to MIMIC-III containing the digitalized  vital signal (called ``waveforms'') recorded for the patients that stayed in the ICU wards of the hospital [].
+# %#TODO: Cit MIMIC-III and MIMIC-III WF.
+
+Since the architectural choices of the generator we intend to present are based on the insights we were able to gather from MIMIC-III, we decided to split the body of our work in two main chapters: one dedicated to the analysis performed on MIMIC-III, and one dedicated to the software development of the generatr itself.
+
+* Analysis of MIMIC-III
+The analysis performed on MIMIC-III are centered around gathering an understanding of the process behind the generation of its events, focusing on the interactions between the patients and the hospital data system and their duration.
+After the process has been outlined, we fit some distributions to the durations found so that they can be sampled by the generator we are going to create.
+
+Finally, the same work is done on the events contained in MIMIC-III to enable the generator to simulate their temporal distribution.
+
+** Design decisions for the analysis
+Due to the sensitive nature of the data that comprises MIMIC-III, it had to undergo a de-identification procedure before the dataset could be made available to the public.
+This deidentification procedure is shown in Figure~[].
+This procedure deeply influenced the structure of our work: an analysis of the exchange of data between the patients as a whole and the hospital system was in fact made basically impossible and, for this reason, we decided to focus on analysing the durations of the interactions of the patients singularly.
+
+** Stages of interaction with the hospital
+After multiple refinements, the identified time intervals of the interaction process are:
+#+begin_src latex
+\begin{enumerate}
+    \item The time passed in an ICU.
+    \item The time after the hospital admission and before the start of the first ICU stay
+    \item The time between two consecutive ICU stays.
+    \item The time between the end of the last ICU stay and the end of the entire hospital stay.
+    \item The total time in the hospital, which shall be considered as the sum of the times listed above (unless the patient is not admitted in an ICU, in which case the hospital time shall be computed separately).
+    \item The time between the end of a hospital stay and the beginning of the next one.
+\end{enumerate}
+#+end_src
+
+MIMIC-III considers two categories of events: those associated with the specific ICU stay of the patient (like automatic measurements of their blood pressure made during their ICU permanence) and those associated with the general admission of the patient (like laboratory results collected from their cultures).
+The former are generated only during the first time intervarl of the one just listed, while the latter are generated through all the other intervals (except the last one, during which no event is generated since the patient is not in the premise of the hospital).
+
+** Classification
+
+Before focusing on the distributions that can be fit to model the interactions identified in the previous section, we decide to split the events stored in MIMIC-III and the interactions found into ``classes'', fitting the events and the interactions using one distribution for each class, in the hope to make the geneartion of the events stick more to reality.
+
+The classes chosen are based on easily observable features of the data in order to maintain the grouping process simple. Though, such features shall be relevant to the medical field and distinctive enough to split the set of data in comparable portions.
+
+After a thorough analysis, the features chosen for the classification are:
+\begin{itemize}
+    \item the gender of the patient (Male or Female)
+    \item the age of the patient (0-45, 45-65, 65-75, 75-100 and over 100 years old)
+    \item the day of the week when the hospital stay begins.
+\end{itemize}
+
+These features lead to a total of 70 classes in which the patients and the admissions (and their events and interactions) are split.
+
+** Distribution fitting
+After the classification has been performed, we are ready to fit some distributions to the interactions previously defined and to the events registered in MIMIC-III.
+
+The interactions are fitted with Phase-Type distributions, commonly used in the performance evaluation world for their adaptability to any kind of empirical distribution [], using the tool HyperStar.
+# %#TODO: citazione versatilità
+Since the tool requires the intervention of the user during the fitting process and we have 70 distributions to consider (one for each class) for each of the interactions identified, we opted to bring together the classes that had similar empirical distributions.
+
+To find which classes might form a group, we use the Kolmogorov-Smirnov two sample test [], a test commonly used to assess wether two samples might come from the same distribution.
+# %#TODO: cit wikipedia
+
+For each interaction, we perform the test for each possible couple of classes, and group together those groups of classes which has all the same distribution.
+In Figure~[] is shown a sample of the result, where the arcs connect the classes that possess the same distribution and the circles represent the groups formed.
+
+The events, on the other hand, are fitted using exponential distribution, one for each kind of event registered in MIMIC-III and for each class.
+The waveforms, too, were fitted using exponential distributions.
+
+* Development of the Generator
+
+** Architettura
+*** Generator
+# immagine layers generatore
+***
+
+* Experiments and results
+* Conclusions
