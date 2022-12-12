@@ -1,0 +1,18 @@
+#+title: Todos
+* DONE Rivedere Abstract
+* DONE Completare le conclusioni
+* DONE riscrivere l'executive summary
+* [?] nuovo titolo per la tesi
+Generation of synthetic data from digital health records
+* DONE analisys introduzione
+Vedi introduzione executive
+* DONE Controlla di citare il termine "eventi" nell'analisi
+* DONE introduci meglio i motivi della classificazione
+Vedi executive
+* DONE aggiungi Immagine per il fitting delle waveforms
+* DONE Specifica la differenza tra classes e groups nell'implementazione
+* DONE Mettere i service times dove necessario nell'implementazione
+* DONE Riferimento a Health Big Data
+* DONE Controllare gli obiettivi dell'implementazione
+* DONE Metti a posto i risultati ottenuti dal simulatore
+Cerca di identificare meglio i risultati ottenuti, e di capire bene cosa sei andato a provare con quegli esperimenti.
